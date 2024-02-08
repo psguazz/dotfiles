@@ -682,3 +682,29 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- [[Additional custom settings]]
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+
+vim.keymap.set("n", "<leader>y", "\"+y")
+vim.keymap.set("v", "<leader>y", "\"+y")
+
+vim.keymap.set('n', '<leader>pf', require('telescope.builtin').git_files, {})
+vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {})
+vim.keymap.set('n', '<leader>fs', function()
+  require('telescope.builtin').grep_string({ search = vim.fn.input("Grep > ") })
+end)
+
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
+
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+vim.opt.scrolloff = 8
+
+vim.opt.colorcolumn = "80"
+
+vim.opt.nu = true
+vim.opt.relativenumber = true
