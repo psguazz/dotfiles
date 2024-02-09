@@ -684,6 +684,23 @@ cmp.setup {
 -- vim: ts=2 sts=2 sw=2 et
 
 -- [[Additional custom settings]]
+G = {}
+
+G.copy_file_path = function()
+  -- Get the full path of the current buffer
+  local file_path = vim.fn.expand('%:p')
+
+  -- Copy the file path to the system clipboard
+  vim.fn.setreg('+', file_path)
+end
+
+vim.opt.scrolloff = 8
+
+vim.opt.colorcolumn = "80"
+
+vim.opt.nu = true
+vim.opt.relativenumber = true
+
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 vim.keymap.set("n", "<leader>y", "\"+y")
@@ -702,9 +719,5 @@ vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
 
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
-vim.opt.scrolloff = 8
-
-vim.opt.colorcolumn = "80"
-
-vim.opt.nu = true
-vim.opt.relativenumber = true
+-- Map a keybinding to copy the file path
+vim.keymap.set('n', '<leader>cp', [[:lua G.copy_file_path()<CR>]], { noremap = true, silent = true })
