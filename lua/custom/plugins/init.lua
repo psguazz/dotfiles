@@ -29,5 +29,6 @@ return {
 		config = function()
 			vim.keymap.set("n", "<leader>nt", vim.cmd.Neotree)
 		end
-	}
+	},
+	{ "nvim-treesitter/nvim-treesitter-context" }
 }
