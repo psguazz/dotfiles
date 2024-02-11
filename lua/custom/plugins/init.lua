@@ -52,6 +52,10 @@ return {
             })
         end
     },
+    {
+        'numToStr/Comment.nvim',
+        lazy = false,
+    },
     { "nvim-treesitter/nvim-treesitter-context" },
     { "mg979/vim-visual-multi" }
 }
