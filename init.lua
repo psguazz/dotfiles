@@ -88,7 +88,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -124,7 +124,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -273,7 +273,7 @@ require('lazy').setup({
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
+  require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -282,7 +282,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
@@ -439,7 +439,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'html', 'css', 'python', 'graphql', 'ruby', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -592,7 +592,7 @@ local servers = {
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
-
+  standardrb = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -682,3 +682,44 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- [[Additional custom settings]]
+G = {}
+
+G.copy_file_path = function()
+  -- Get the full path of the current buffer
+  local file_path = vim.fn.expand('%:p')
+
+  -- Copy the file path to the system clipboard
+  vim.fn.setreg('+', file_path)
+end
+
+vim.opt.scrolloff = 8
+
+vim.opt.colorcolumn = "80"
+
+vim.opt.nu = true
+vim.opt.relativenumber = true
+
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+
+vim.keymap.set("n", "<leader>y", "\"+y")
+vim.keymap.set("v", "<leader>y", "\"+y")
+
+vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {})
+vim.keymap.set('n', '<leader>pf', function()
+  require('telescope.builtin').git_files({ show_untracked = true })
+end)
+vim.keymap.set('n', '<leader>fs', function()
+  require('telescope.builtin').grep_string({ search = vim.fn.input("Grep > ") })
+end)
+
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
+
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+-- Map a keybinding to copy the file path
+vim.keymap.set('n', '<leader>cp', [[:lua G.copy_file_path()<CR>]], { noremap = true, silent = true })
