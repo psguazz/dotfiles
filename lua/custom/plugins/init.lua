@@ -31,7 +31,13 @@ return {
             require("neo-tree").setup({
                 filesystem = {
                     follow_current_file = { enabled = true },
-                    filtered_items = { visible = true },
+                    filtered_items = {
+                        visible = true,
+                        never_show = {
+                            ".DS_Store",
+                            "thumbs.db"
+                        },
+                    },
                 }
             })
         end

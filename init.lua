@@ -707,7 +707,7 @@ vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
 
 vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {})
-vim.keymap.set('n', '<leader>pf', function()
+vim.keymap.set('n', '<leader><space>', function()
   require('telescope.builtin').git_files({ show_untracked = true })
 end)
 vim.keymap.set('n', '<leader>fs', function()
