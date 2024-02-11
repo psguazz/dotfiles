@@ -711,7 +711,7 @@ vim.keymap.set('n', '<leader><space>', function()
   require('telescope.builtin').git_files({ show_untracked = true })
 end)
 vim.keymap.set('n', '<leader>fs', function()
-  require('telescope.builtin').grep_string({ search = vim.fn.input("Grep > ") })
+  require('telescope.builtin').grep_string({ use_regex = true, search = vim.fn.input("Grep > ") })
 end)
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
