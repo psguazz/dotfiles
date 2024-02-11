@@ -28,6 +28,12 @@ return {
 		},
 		config = function()
 			vim.keymap.set("n", "<leader>nt", vim.cmd.Neotree)
+			require("neo-tree").setup({
+				filesystem = {
+					follow_current_file = { enabled = true },
+					filtered_items = { visible = true },
+				}
+			})
 		end
 	},
 	{ "nvim-treesitter/nvim-treesitter-context" }
