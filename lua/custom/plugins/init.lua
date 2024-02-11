@@ -3,38 +3,38 @@
 --
 -- See the kickstart.nvim README for more information
 return {
-	{
-		"loctvl842/monokai-pro.nvim",
-		config = function()
-			require("monokai-pro").setup()
-			vim.cmd([[colorscheme monokai-pro]])
-		end
+    {
+        "loctvl842/monokai-pro.nvim",
+        config = function()
+            require("monokai-pro").setup()
+            vim.cmd([[colorscheme monokai-pro]])
+        end
 
-	},
-	{
-		"mbbill/undotree",
-		config = function()
-			vim.keymap.set("n", "<leader>ut", vim.cmd.UndotreeToggle)
-		end
-	},
-	{
-		"nvim-neo-tree/neo-tree.nvim",
-		branch = "v3.x",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-			"MunifTanjim/nui.nvim",
-			-- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
-		},
-		config = function()
-			vim.keymap.set("n", "<leader>nt", vim.cmd.Neotree)
-			require("neo-tree").setup({
-				filesystem = {
-					follow_current_file = { enabled = true },
-					filtered_items = { visible = true },
-				}
-			})
-		end
-	},
-	{ "nvim-treesitter/nvim-treesitter-context" }
+    },
+    {
+        "mbbill/undotree",
+        config = function()
+            vim.keymap.set("n", "<leader>ut", vim.cmd.UndotreeToggle)
+        end
+    },
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+            "MunifTanjim/nui.nvim",
+            -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+        },
+        config = function()
+            vim.keymap.set("n", "<leader>nt", vim.cmd.Neotree)
+            require("neo-tree").setup({
+                filesystem = {
+                    follow_current_file = { enabled = true },
+                    filtered_items = { visible = true },
+                }
+            })
+        end
+    },
+    { "nvim-treesitter/nvim-treesitter-context" }
 }
