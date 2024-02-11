@@ -717,6 +717,9 @@ end)
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
+vim.keymap.set("n", "<leader>j", "<c-d>")
+vim.keymap.set("n", "<leader>k", "<c-u>")
+
 vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
 
 vim.keymap.set("x", "<leader>p", [["_dP]])
