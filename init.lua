@@ -705,6 +705,7 @@ vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
+vim.keymap.set("x", "<leader>p", [["_dP]])
 
 vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {})
 vim.keymap.set('n', '<leader><space>', function()
@@ -725,7 +726,6 @@ vim.keymap.set("n", "<leader>k", "<c-u>zz")
 
 vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
 
-vim.keymap.set("x", "<leader>p", [["_dP]])
 
 -- Map a keybinding to copy the file path
 vim.keymap.set('n', '<leader>cp', [[:lua G.copy_file_path()<CR>]], { noremap = true, silent = true })
