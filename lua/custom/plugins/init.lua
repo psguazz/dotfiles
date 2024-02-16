@@ -57,5 +57,6 @@ return {
         lazy = false,
     },
     { "nvim-treesitter/nvim-treesitter-context" },
-    { "mg979/vim-visual-multi" }
+    { "mg979/vim-visual-multi" },
+    { "tpope/vim-surround" }
 }

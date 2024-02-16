@@ -726,6 +726,5 @@ vim.keymap.set("n", "<leader>k", "<c-u>zz")
 
 vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
 
-
 -- Map a keybinding to copy the file path
 vim.keymap.set('n', '<leader>cp', [[:lua G.copy_file_path()<CR>]], { noremap = true, silent = true })
