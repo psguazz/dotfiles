@@ -75,6 +75,7 @@ return {
             vim.api.nvim_set_keymap('n', '<Leader>l', '<Cmd>noh<CR>', kopts)
         end
     },
+    { "gennaro-tedesco/nvim-peekup" },
     { "nvim-treesitter/nvim-treesitter-context" },
     { "mg979/vim-visual-multi" },
     { "tpope/vim-surround" },
