@@ -734,3 +734,6 @@ end)
 vim.keymap.set("n", "<leader>fS", function()
   require("telescope.builtin").live_grep({ use_regex = false, })
 end)
+
+-- Can't put this in the plugin configs I guess!
+vim.keymap.set("n", "<leader>FS", vim.cmd.MurenOpen)
