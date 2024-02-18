@@ -703,12 +703,29 @@ vim.opt.colorcolumn = "80"
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
+-- File viewer
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
+-- Copy/paste to/from clipboard
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
+-- Moving selected lines
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+-- Page jumps (centered)
+vim.keymap.set("n", "<leader>j", "<c-d>zz")
+vim.keymap.set("n", "<leader>k", "<c-u>zz")
+
+-- Map a keybinding to copy the file path
+vim.keymap.set('n', '<leader>cp', [[:lua G.copy_file_path()<CR>]], { noremap = true, silent = true })
+
+-- Git Status
+vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
+
+-- Telescope tweaks
 vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, {})
 vim.keymap.set("n", "<leader><space>", function()
   require("telescope.builtin").git_files({ show_untracked = true })
@@ -719,16 +736,3 @@ end)
 vim.keymap.set("n", "<leader>fS", function()
   require("telescope.builtin").live_grep({ use_regex = false, })
 end)
-
-vim.keymap.set("n", "<leader>FS", vim.cmd.MurenOpen)
-
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
-
-vim.keymap.set("n", "<leader>j", "<c-d>zz")
-vim.keymap.set("n", "<leader>k", "<c-u>zz")
-
-vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
-
--- Map a keybinding to copy the file path
-vim.keymap.set('n', '<leader>cp', [[:lua G.copy_file_path()<CR>]], { noremap = true, silent = true })

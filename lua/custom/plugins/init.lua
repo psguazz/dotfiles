@@ -77,7 +77,9 @@ return {
     },
     {
         'AckslD/muren.nvim',
-        config = true,
+        config = function()
+            vim.keymap.set("n", "<leader>FS", vim.cmd.MurenOpen)
+        end
     },
     { "gennaro-tedesco/nvim-peekup" },
     { "nvim-treesitter/nvim-treesitter-context" },
