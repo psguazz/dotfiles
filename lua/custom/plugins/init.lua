@@ -85,4 +85,5 @@ return {
     { "nvim-treesitter/nvim-treesitter-context" },
     { "mg979/vim-visual-multi" },
     { "tpope/vim-surround" },
+    { "sudormrfbin/cheatsheet.nvim" },
 }
