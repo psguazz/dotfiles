@@ -79,6 +79,21 @@ return {
         'AckslD/muren.nvim',
         config = true
     },
+    {
+        "m4xshen/hardtime.nvim",
+        dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+        opts = {},
+        config = function()
+            require("hardtime").setup()
+        end
+    },
+    {
+        "rcarriga/nvim-notify",
+        config = function()
+            require("notify").setup()
+            vim.notify = require("notify")
+        end
+    },
     { "gennaro-tedesco/nvim-peekup" },
     { "nvim-treesitter/nvim-treesitter-context" },
     { "mg979/vim-visual-multi" },
