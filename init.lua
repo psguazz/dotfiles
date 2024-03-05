@@ -701,6 +701,8 @@ vim.opt.colorcolumn = "80"
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
+vim.opt.cursorline = true
+
 -- File viewer
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
