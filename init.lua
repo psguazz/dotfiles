@@ -592,6 +592,8 @@ local servers = {
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+  tsserver = {},
+  eslint = {},
   standardrb = {},
   lua_ls = {
     Lua = {
