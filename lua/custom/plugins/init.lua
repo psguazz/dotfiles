@@ -158,6 +158,7 @@ return {
             vim.keymap.set("n", "<leader>.", function() harpoon:list():next() end, { desc = "Next Harpoon buffer" })
         end
     },
+    { "michaeljsmith/vim-indent-object" },
     { "gennaro-tedesco/nvim-peekup" },
     { "nvim-treesitter/nvim-treesitter-context" },
     { "mg979/vim-visual-multi" },
