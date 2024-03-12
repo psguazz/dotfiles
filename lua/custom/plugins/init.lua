@@ -100,8 +100,18 @@ return {
         end
     },
     {
-        'AckslD/muren.nvim',
-        config = true
+        "nvim-pack/nvim-spectre",
+        config = function()
+            require('spectre').setup({
+                replace_engine = {
+                    ["sed"] = {
+                        cmd = "sed",
+                        args = nil
+                    },
+                }
+            })
+            vim.keymap.set("n", "<leader>FS", require("spectre").toggle, { desc = "Toggle Spectre" })
+        end
     },
     {
         "m4xshen/hardtime.nvim",
