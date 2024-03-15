@@ -713,6 +713,8 @@ vim.opt.relativenumber = true
 
 vim.opt.cursorline = true
 
+vim.wo.wrap = false
+
 -- File viewer
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
