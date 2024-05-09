@@ -37,33 +37,28 @@ return {
         end
     },
     {
-        "nvim-neo-tree/neo-tree.nvim",
-        branch = "v3.x",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-            "MunifTanjim/nui.nvim",
-            "3rd/image.nvim",              -- Optional image support in preview window: See `# Preview Mode` for more information
-        },
-        window = {
-            mappings = {
-                ["P"] = { "toggle_preview", config = { use_float = true, use_image_nvim = true } },
-            }
-        },
+        "nvim-tree/nvim-tree.lua",
         config = function()
-            vim.keymap.set("n", "<leader>nt", vim.cmd.Neotree)
-            require("neo-tree").setup({
-                filesystem = {
-                    follow_current_file = { enabled = true },
-                    filtered_items = {
-                        visible = true,
-                        never_show = {
-                            ".DS_Store",
-                            "thumbs.db"
-                        },
-                    },
+            require("nvim-tree").setup({
+                sort = {
+                    sorter = "case_sensitive",
+                },
+                view = {
+                    width = 30,
+                },
+                renderer = {
+                    group_empty = true,
+                },
+                filters = {
+                    dotfiles = false,
+                    git_ignored = false,
+                },
+                update_focused_file = {
+                    enable = true,
                 }
             })
+
+            vim.keymap.set("n", "<leader>nt", vim.cmd.NvimTreeFocus)
         end
     },
     {
