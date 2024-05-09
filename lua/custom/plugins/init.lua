@@ -48,6 +48,7 @@ return {
                 },
                 renderer = {
                     group_empty = true,
+                    highlight_git = "name",
                 },
                 filters = {
                     dotfiles = false,
