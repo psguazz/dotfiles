@@ -109,27 +109,6 @@ return {
         end
     },
     {
-        "m4xshen/hardtime.nvim",
-        dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-        opts = {},
-        config = function()
-            require("hardtime").setup({
-                restricted_keys = {
-                    ["<Up>"] = { "i", "n", "x" },
-                    ["<Down>"] = { "i", "n", "x" },
-                    ["<Left>"] = { "i", "n", "x" },
-                    ["<Right>"] = { "i", "n", "x" },
-                },
-                disabled_keys = {
-                    ["<Up>"] = {},
-                    ["<Down>"] = {},
-                    ["<Left>"] = {},
-                    ["<Right>"] = {},
-                }
-            })
-        end
-    },
-    {
         "rcarriga/nvim-notify",
         config = function()
             require("notify").setup()
