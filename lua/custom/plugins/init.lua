@@ -143,20 +143,17 @@ return {
         end
     },
     {
-        "ThePrimeagen/harpoon",
-        branch = "harpoon2",
-        dependencies = { "nvim-lua/plenary.nvim" },
+        'romgrk/barbar.nvim',
+        dependencies = {
+            'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
+            'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+        },
+        init = function() vim.g.barbar_auto_setup = true end,
         config = function()
-            local harpoon = require("harpoon")
-            harpoon:setup()
-
-            vim.keymap.set("n", "<leader>o", function() harpoon:list():append() end, { desc = "Add to Harpoon" })
-            vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end,
-                { desc = "Open harpoon window" })
-
-            vim.keymap.set("n", "<leader>,", function() harpoon:list():prev() end, { desc = "Previous Harpoon buffer" })
-            vim.keymap.set("n", "<leader>.", function() harpoon:list():next() end, { desc = "Next Harpoon buffer" })
-        end
+            vim.keymap.set("n", "<leader>,", vim.cmd.BufferPrevious, { desc = "Previous buffer" })
+            vim.keymap.set("n", "<leader>.", vim.cmd.BufferNext, { desc = "Next buffer" })
+        end,
+        version = '^1.0.0', -- optional: only update when a new 1.x version is released
     },
     { "michaeljsmith/vim-indent-object" },
     { "gennaro-tedesco/nvim-peekup" },
