@@ -715,6 +715,8 @@ vim.opt.cursorline = true
 
 vim.wo.wrap = false
 
+vim.opt.mouse = ""
+
 -- File viewer
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
