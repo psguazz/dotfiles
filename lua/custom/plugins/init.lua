@@ -135,6 +135,12 @@ return {
         end,
         version = '^1.0.0', -- optional: only update when a new 1.x version is released
     },
+    {
+        "goolord/alpha-nvim",
+        config = function()
+            require "alpha".setup(require "alpha.themes.startify".config)
+        end
+    },
     { "michaeljsmith/vim-indent-object" },
     { "gennaro-tedesco/nvim-peekup" },
     { "nvim-treesitter/nvim-treesitter-context" },
