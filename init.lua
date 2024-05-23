@@ -596,7 +596,7 @@ require('mason-lspconfig').setup()
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  pyright = {},
+  pylsp = {},
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
@@ -625,6 +625,14 @@ local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
+  settings = {
+    pylsp = {
+      plugins = {
+        black = { enabled = true },
+        isort = { enabled = true, profile = "black" }
+      }
+    }
+  }
 }
 
 mason_lspconfig.setup_handlers {
