@@ -1,0 +1,13 @@
+[shell]
+program = "/usr/local/bin/fish"
+args = ["-l","-c","tmux a -t base || tmux new -s base"]
+
+[window]
+dynamic_title = true
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+normal.family = "Monaco Nerd Font Mono"
+size = 12
