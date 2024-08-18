@@ -56,8 +56,18 @@ return {
         main = "ibl",
         opts = {},
         config = function()
+            local hooks = require("ibl.hooks")
+            local highlight = { "FadeWhite" }
+
+            hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+                vim.api.nvim_set_hl(0, "FadeWhite", { fg = "#3c3c4d" })
+            end)
+
             require("ibl").setup({
-                indent = { char = "│" }
+                indent = {
+                    char = "│",
+                    highlight = highlight
+                }
             })
         end
     },
