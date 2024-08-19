@@ -11,3 +11,7 @@ TERM = "xterm-256color"
 [font]
 normal.family = "Monaco Nerd Font Mono"
 size = 12
+
+[colors.primary]
+background = "#222327"
+foreground = "#E2E2E3"
