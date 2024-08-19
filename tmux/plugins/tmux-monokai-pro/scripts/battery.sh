@@ -87,16 +87,16 @@ battery_status()
 
   case $status in
     discharging|Discharging)
-      echo ''
+      echo '󰁿'
       ;;
     high|Full)
-      echo ''
+      echo '󰁹'
       ;;
     charging|Charging)
-      echo 'AC'
+      echo '󱐌'
       ;;
     *)
-      echo 'AC'
+      echo '󱐌'
       ;;
   esac
   ### Old if statements didn't work on BSD, they're probably not POSIX compliant, not sure
@@ -111,16 +111,15 @@ battery_status()
 
 main()
 {
-  bat_label=$(get_tmux_option "@monokai-battery-label" "♥")
   bat_stat=$(battery_status)
   bat_perc=$(battery_percent)
 
   if [ -z "$bat_stat" ]; then # Test if status is empty or not
-    echo "$bat_label $bat_perc"
+    echo "$bat_perc"
   elif [ -z "$bat_perc" ]; then # In case it is a desktop with no battery percent, only AC power
-    echo "$bat_label $bat_stat"
+    echo "$bat_stat"
   else
-    echo "$bat_label $bat_stat $bat_perc"
+    echo "$bat_stat $bat_perc"
   fi
 }
 

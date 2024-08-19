@@ -51,7 +51,7 @@ main()
     smiley)
       left_icon="☺";;
     session)
-      left_icon="#S";;
+      left_icon=" #S";;
     window)
       left_icon="#W";;
     hostname)
