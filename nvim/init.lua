@@ -762,4 +762,4 @@ vim.keymap.set("n", "<leader>fo", function()
   require("telescope.builtin").buffers()
 end)
 
-vim.cmd("colorscheme kanagawa")
+vim.cmd("colorscheme sonokai")

@@ -4,20 +4,7 @@
 -- See the kickstart.nvim README for more information
 return {
     {
-        "rebelot/kanagawa.nvim",
-        config = function()
-            require('kanagawa').setup({
-                colors = {
-                    theme = {
-                        all = {
-                            ui = {
-                                bg_gutter = "none"
-                            }
-                        }
-                    }
-                }
-            })
-        end
+        "sainnhe/sonokai"
     },
     {
         "mbbill/undotree",
