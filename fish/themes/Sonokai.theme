@@ -1,6 +1,6 @@
 fish_color_normal E2E2E3
 fish_color_command 85D3F2
-fish_color_quote 4F432F
+fish_color_quote E7C664
 fish_color_redirection B39DF3
 fish_color_end FF6077
 fish_color_error E2E2E3 --background=FF6077
@@ -15,7 +15,7 @@ fish_color_escape B39DF3
 fish_color_cwd B39DF3
 fish_color_cwd_root red
 fish_color_valid_path --underline
-fish_color_autosuggestion 414550
+fish_color_autosuggestion 595F6F
 fish_color_user
 fish_color_host
 fish_color_cancel
