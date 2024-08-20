@@ -39,6 +39,7 @@ main()
   black='#2d2a2e'
   dark_gray='#30323b'
   gray='#7f8490'
+  gray_dim='#595F6F'
   red='#fc5d7c'
   green='#a7df78'
   yellow='#e7c664'
@@ -132,7 +133,7 @@ main()
     tmux set-option -g status-left "#[fg=${green},bg=${black}]#{?client_prefix,#[fg=${magenta}],}#[bg=${green},fg=${black},bold]#{?client_prefix,#[bg=${magenta}],} ${left_icon} #[fg=${green},bg=${dark_gray}]#{?client_prefix,#[fg=${magenta}],}${left_sep}"
     powerbg=${dark_gray}
   else
-    tmux set-option -g status-left "#[bg=${green},fg=${black},bold]#{?client_prefix,#[bg=${magenta}],} ${left_icon} "
+    tmux set-option -g status-left "#[fg=${green},bg=${black}]#{?client_prefix,#[fg=${magenta}],}#[bg=${green},fg=${black},bold]#{?client_prefix,#[bg=${magenta}],}${left_icon}#[fg=${green},bg=${black}]#{?client_prefix,#[fg=${magenta}],}"
   fi
 
   # Status right
@@ -285,7 +286,7 @@ main()
       powerbg=${!colors[0]}
     else
       if $show_empty_plugins; then
-        tmux set-option -ga status-right "#[fg=${!colors[1]},bg=${!colors[0]}] $script "
+        tmux set-option -ga status-right " #[fg=${!colors[0]},bg=${dark_gray}]#[fg=${!colors[1]},bg=${!colors[0]}]$script#[fg=${!colors[0]},bg=${dark_gray}]"
       else
         tmux set-option -ga status-right "#{?#{==:$script,},,#[fg=${!colors[1]},bg=${!colors[0]}] $script }"
       fi
@@ -298,16 +299,19 @@ main()
   #   tmux set-option -ga status-right "#[fg=${green},bg=${blue}]${right_sep}#[bg=${green},fg=${black},bold] #h "
   # fi
 
-  tmux set-option -ga status-right "#[bg=${black},fg=${!colors[0]}]"
+  if $show_powerline; then
+    tmux set-option -ga status-right "#[bg=${black},fg=${!colors[0]}]"
+  fi
 
   # Window option
   if $show_powerline; then
-    tmux set-window-option -g window-status-current-format "#[bg=${gray},fg=${dark_gray}]${left_sep} #[fg=${white},bg=${gray}]#I #W${current_flags} #[bg=${dark_gray},fg=${gray}]${left_sep}"
+    tmux set-window-option -g window-status-current-format "#[bg=${magenta},fg=${dark_gray}]${left_sep} #[fg=${black},bg=${magenta}]#I #[bg=${gray},fg=${magenta}]${left_sep} #[fg=${white},bg=${gray}]#W${current_flags} #[bg=${dark_gray},fg=${gray}]${left_sep}"
+    tmux set-window-option -g window-status-format "#[bg=${gray_dim},fg=${dark_gray}]${left_sep} #[fg=${white},bg=${gray_dim}]#I #[bg=${dark_gray},fg=${gray_dim}]${left_sep}#[fg=${white},bg=${dark_gray}] #W${current_flags} #[bg=${dark_gray},fg=${dark_gray}]${left_sep}"
   else
-    tmux set-window-option -g window-status-current-format "#[fg=${white},bg=${gray}] #I #W${current_flags} "
+    tmux set-window-option -g window-status-current-format " #[fg=${magenta},bg=${dark_gray}]#[fg=${black},bg=${magenta}]#I #[fg=${white},bg=${gray}] #W${current_flags}#[fg=${gray},bg=${dark_gray}]"
+    tmux set-window-option -g window-status-format " #[fg=${gray_dim},bg=${dark_gray}]#[fg=${white},bg=${gray_dim}]#I #[fg=${white},bg=${dark_gray}] #W${current_flags}#[fg=${dark_gray},bg=${dark_gray}]"
   fi
 
-  tmux set-window-option -g window-status-format "#[bg=${dark_gray},fg=${dark_gray}]${left_sep} #[fg=${white},bg=${dark_gray}]#I #W${flags} #[bg=${dark_gray},fg=${dark_gray}]${left_sep}"
   tmux set-window-option -g window-status-activity-style "bold"
   tmux set-window-option -g window-status-bell-style "bold"
   tmux set-window-option -g window-status-separator ""
