@@ -778,10 +778,12 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 vim.cmd("colorscheme sonokai")
 
 vim.cmd([[
-  hi NvimTreeFolderName ctermfg=250 guifg=#e2e2eg
-  hi NvimTreeEmptyFolderName ctermfg=250 guifg=#e2e2eg
-  hi NvimTreeOpenedFolderName ctermfg=250 guifg=#e2e2eg
-  hi NvimTreeSymlinkFolderName ctermfg=250 guifg=#e2e2eg
+  hi NvimTreeNormal ctermfg=250 guifg=#cbcbcd
+  hi NvimTreeSpecialFile ctermfg=250 guifg=#cbcbcd
+  hi NvimTreeFolderName ctermfg=250 guifg=#cbcbcd
+  hi NvimTreeEmptyFolderName ctermfg=250 guifg=#cbcbcd
+  hi NvimTreeOpenedFolderName ctermfg=250 guifg=#cbcbcd
+  hi NvimTreeSymlinkFolderName ctermfg=250 guifg=#cbcbcd
   hi NvimTreeGitIgnoredIcon ctermfg=250 guifg=#7f8490
   hi NvimTreeGitFileDeletedHL ctermfg=250 guifg=#fc5d7c
   hi NvimTreeGitFileDirtyHL ctermfg=250 guifg=#e7c664
