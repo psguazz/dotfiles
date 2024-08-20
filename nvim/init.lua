@@ -219,6 +219,7 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
     opts = {
+      extensions = { 'nvim-tree' },
       options = {
         icons_enabled = true,
         theme = 'auto',
@@ -763,3 +764,25 @@ vim.keymap.set("n", "<leader>fo", function()
 end)
 
 vim.cmd("colorscheme sonokai")
+
+vim.cmd([[
+  hi NvimTreeFolderName ctermfg=250 guifg=#e2e2eg
+  hi NvimTreeEmptyFolderName ctermfg=250 guifg=#e2e2eg
+  hi NvimTreeOpenedFolderName ctermfg=250 guifg=#e2e2eg
+  hi NvimTreeSymlinkFolderName ctermfg=250 guifg=#e2e2eg
+  hi NvimTreeGitIgnoredIcon ctermfg=250 guifg=#7f8490
+  hi NvimTreeGitFileDeletedHL ctermfg=250 guifg=#fc5d7c
+  hi NvimTreeGitFileDirtyHL ctermfg=250 guifg=#e7c664
+  hi NvimTreeGitFileIgnoredHL ctermfg=250 guifg=#7f8490
+  hi NvimTreeGitFileMergeHL ctermfg=250 guifg=#76cde0
+  hi NvimTreeGitFileNewHL ctermfg=250 guifg=#9ed072
+  hi NvimTreeGitFileRenamedHL ctermfg=250 guifg=#e7c664
+  hi NvimTreeGitFileStagedHL ctermfg=250 guifg=#76cde0
+  hi NvimTreeGitFolderDeletedHL ctermfg=250 guifg=#fc5d7c
+  hi NvimTreeGitFolderDirtyHL ctermfg=250 guifg=#e7c664
+  hi NvimTreeGitFolderIgnoredHL ctermfg=250 guifg=#7f8490
+  hi NvimTreeGitFolderMergeHL ctermfg=250 guifg=#76cde0
+  hi NvimTreeGitFolderNewHL ctermfg=250 guifg=#9ed072
+  hi NvimTreeGitFolderRenamedHL ctermfg=250 guifg=#e7c664
+  hi NvimTreeGitFolderStagedHL ctermfg=250 guifg=#76cde0
+]])

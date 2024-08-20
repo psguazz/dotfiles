@@ -25,6 +25,19 @@ return {
                 renderer = {
                     group_empty = true,
                     highlight_git = "name",
+                    icons = {
+                        glyphs = {
+                            git = {
+                                unstaged = "",
+                                staged = "",
+                                unmerged = "",
+                                renamed = "",
+                                untracked = "",
+                                deleted = "",
+                                ignored = "",
+                            }
+                        }
+                    }
                 },
                 filters = {
                     dotfiles = false,
