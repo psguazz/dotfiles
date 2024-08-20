@@ -292,11 +292,13 @@ main()
     fi
   done
 
-  if $show_powerline; then
-    tmux set-option -ga status-right "#[fg=${green},bg=${red}]${right_sep}#[bg=${green},fg=${black},bold] #h #[bg=${black},fg=${green}]"
-  else
-    tmux set-option -ga status-right "#[fg=${green},bg=${blue}]${right_sep}#[bg=${green},fg=${black},bold] #h "
-  fi
+  # if $show_powerline; then
+  #   tmux set-option -ga status-right "#[fg=${green},bg=${red}]${right_sep}#[bg=${green},fg=${black},bold] #h #[bg=${black},fg=${green}]"
+  # else
+  #   tmux set-option -ga status-right "#[fg=${green},bg=${blue}]${right_sep}#[bg=${green},fg=${black},bold] #h "
+  # fi
+
+  tmux set-option -ga status-right "#[bg=${black},fg=${!colors[0]}]"
 
   # Window option
   if $show_powerline; then
