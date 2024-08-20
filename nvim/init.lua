@@ -763,6 +763,18 @@ vim.keymap.set("n", "<leader>fo", function()
   require("telescope.builtin").buffers()
 end)
 
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = vim.api.nvim_create_augroup("custom_highlights_sonokai", {}),
+  pattern = "sonokai",
+  callback = function()
+    local config = vim.fn["sonokai#get_configuration"]()
+    local palette = vim.fn["sonokai#get_palette"](config.style, config.colors_override)
+    local set_hl = vim.fn["sonokai#highlight"]
+
+    set_hl("@string.special.symbol.ruby", palette.purple, palette.none)
+  end
+})
+
 vim.cmd("colorscheme sonokai")
 
 vim.cmd([[
