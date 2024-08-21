@@ -218,23 +218,66 @@ require('lazy').setup({
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
-    opts = {
-      extensions = { 'nvim-tree' },
-      options = {
-        icons_enabled = true,
-        theme = 'auto',
-        component_separators = '|',
-        section_separators = { left = '', right = '' }
-      },
-      sections = {
-        lualine_a = { { 'mode', separator = { left = '' }, right_padding = 2 } },
-        lualine_b = { 'branch', 'diff', 'diagnostics' },
-        lualine_c = { { 'filename', path = 1 } },
-        lualine_x = { 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = { { 'location', separator = { right = '' }, left_padding = 2 }, },
-      },
-    },
+    config = function()
+      local utils = require('lualine.utils.utils')
+
+      local colors = {
+        normal  = utils.extract_color_from_hllist('bg', { 'PmenuSel', 'PmenuThumb', 'TabLineSel' }, '#000000'),
+        insert  = utils.extract_color_from_hllist('fg', { 'String', 'MoreMsg' }, '#000000'),
+        replace = utils.extract_color_from_hllist('fg', { 'Number', 'Type' }, '#000000'),
+        visual  = utils.extract_color_from_hllist('fg', { 'Special', 'Boolean', 'Constant' }, '#000000'),
+        command = utils.extract_color_from_hllist('fg', { 'Identifier' }, '#000000'),
+        back1   = utils.extract_color_from_hllist('bg', { 'Normal', 'StatusLineNC' }, '#000000'),
+        fore    = utils.extract_color_from_hllist('fg', { 'Normal', 'StatusLine' }, '#000000'),
+        back2   = utils.extract_color_from_hllist('bg', { 'StatusLine' }, '#000000'),
+      }
+
+      local theme = {
+        normal = {
+          a = { bg = colors.normal, fg = colors.back1 },
+          b = { bg = colors.back1, fg = colors.normal },
+          c = { bg = colors.back2, fg = colors.fore },
+        },
+        insert = {
+          a = { bg = colors.insert, fg = colors.back1 },
+          b = { bg = colors.back1, fg = colors.insert },
+          c = { bg = colors.back2, fg = colors.fore },
+        },
+        replace = {
+          a = { bg = colors.replace, fg = colors.back1 },
+          b = { bg = colors.back1, fg = colors.replace },
+          c = { bg = colors.back2, fg = colors.fore },
+        },
+        visual = {
+          a = { bg = colors.visual, fg = colors.back1 },
+          b = { bg = colors.back1, fg = colors.visual },
+          c = { bg = colors.back2, fg = colors.fore },
+        },
+        command = {
+          a = { bg = colors.command, fg = colors.back1 },
+          b = { bg = colors.back1, fg = colors.command },
+          c = { bg = colors.back2, fg = colors.fore },
+        },
+      }
+
+      require('lualine').setup({
+        extensions = { 'nvim-tree' },
+        options = {
+          theme = theme,
+          icons_enabled = true,
+          component_separators = '|',
+          section_separators = { left = '', right = '' }
+        },
+        sections = {
+          lualine_a = { { 'mode', separator = { left = '' }, right_padding = 2 } },
+          lualine_b = { 'branch', 'diff', 'diagnostics' },
+          lualine_c = { { 'filename', path = 1 } },
+          lualine_x = { 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = { { 'location', separator = { right = '' }, left_padding = 2 }, },
+        }
+      })
+    end,
   },
 
   {
