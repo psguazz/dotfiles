@@ -60,6 +60,34 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local sonokai_palette = {
+  bg0 = "#2c2e34",
+  bg1 = "#33353f",
+  bg2 = "#363944",
+  bg3 = "#3b3e48",
+  bg4 = "#414550",
+  bg_blue = "#85d3f2",
+  bg_dim = "#222327",
+  bg_green = "#a7df78",
+  bg_red = "#ff6077",
+  black = "#181819",
+  blue = "#76cce0",
+  diff_blue = "#354157",
+  diff_green = "#394634",
+  diff_red = "#55393d",
+  diff_yellow = "#4e432f",
+  fg = "#e2e2e3",
+  green = "#9ed072",
+  grey = "#7f8490",
+  grey_dim = "#595f6f",
+  none = "NONE",
+  orange = "#f39660",
+  purple = "#b39df3",
+  red = "#fc5d7c",
+  yellow = "#e7c664",
+}
+
+
 -- [[ Configure plugins ]]
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
@@ -219,44 +247,31 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
     config = function()
-      local utils = require('lualine.utils.utils')
-
-      local colors = {
-        normal  = utils.extract_color_from_hllist('bg', { 'PmenuSel', 'PmenuThumb', 'TabLineSel' }, '#000000'),
-        insert  = utils.extract_color_from_hllist('fg', { 'String', 'MoreMsg' }, '#000000'),
-        replace = utils.extract_color_from_hllist('fg', { 'Identifier' }, '#000000'),
-        visual  = utils.extract_color_from_hllist('fg', { 'Label', 'Constant' }, '#000000'),
-        command = utils.extract_color_from_hllist('fg', { 'Number', 'Type' }, '#000000'),
-        back1   = utils.extract_color_from_hllist('bg', { 'Normal', 'StatusLineNC' }, '#000000'),
-        fore    = utils.extract_color_from_hllist('fg', { 'Normal', 'StatusLine' }, '#000000'),
-        back2   = utils.extract_color_from_hllist('bg', { 'StatusLine' }, '#000000'),
-      }
-
       local theme = {
         normal = {
-          a = { bg = colors.normal, fg = colors.back1 },
-          b = { bg = colors.back1, fg = colors.normal },
-          c = { bg = colors.back2, fg = colors.fore },
+          a = { bg = sonokai_palette.bg_blue, fg = sonokai_palette.black },
+          b = { bg = sonokai_palette.bg0, fg = sonokai_palette.blue },
+          c = { bg = sonokai_palette.bg1, fg = sonokai_palette.grey },
         },
         insert = {
-          a = { bg = colors.insert, fg = colors.back1 },
-          b = { bg = colors.back1, fg = colors.insert },
-          c = { bg = colors.back2, fg = colors.fore },
+          a = { bg = sonokai_palette.bg_green, fg = sonokai_palette.black },
+          b = { bg = sonokai_palette.bg0, fg = sonokai_palette.green },
+          c = { bg = sonokai_palette.bg1, fg = sonokai_palette.grey },
         },
         replace = {
-          a = { bg = colors.replace, fg = colors.back1 },
-          b = { bg = colors.back1, fg = colors.replace },
-          c = { bg = colors.back2, fg = colors.fore },
+          a = { bg = sonokai_palette.bg_red, fg = sonokai_palette.black },
+          b = { bg = sonokai_palette.bg0, fg = sonokai_palette.red },
+          c = { bg = sonokai_palette.bg1, fg = sonokai_palette.grey },
         },
         visual = {
-          a = { bg = colors.visual, fg = colors.back1 },
-          b = { bg = colors.back1, fg = colors.visual },
-          c = { bg = colors.back2, fg = colors.fore },
+          a = { bg = sonokai_palette.purple, fg = sonokai_palette.black },
+          b = { bg = sonokai_palette.bg0, fg = sonokai_palette.purple },
+          c = { bg = sonokai_palette.bg1, fg = sonokai_palette.grey },
         },
         command = {
-          a = { bg = colors.command, fg = colors.back1 },
-          b = { bg = colors.back1, fg = colors.command },
-          c = { bg = colors.back2, fg = colors.fore },
+          a = { bg = sonokai_palette.yellow, fg = sonokai_palette.black },
+          b = { bg = sonokai_palette.bg0, fg = sonokai_palette.yellow },
+          c = { bg = sonokai_palette.bg1, fg = sonokai_palette.grey },
         },
       }
 
@@ -819,31 +834,29 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     set_hl("@variable.parameter.python", palette.orange, palette.none)
     set_hl("@variable.member.python", palette.fg, palette.none)
     set_hl("@variable.builtin.python", palette.grey, palette.none)
+
+    set_hl("NvimTreeNormal", palette.fg, palette.bg_dim)
+    set_hl("NvimTreeSpecialFile", palette.fg, palette.bg_dim)
+    set_hl("NvimTreeFolderName", palette.fg, palette.bg_dim)
+    set_hl("NvimTreeEmptyFolderName", palette.fg, palette.bg_dim)
+    set_hl("NvimTreeOpenedFolderName", palette.fg, palette.bg_dim)
+    set_hl("NvimTreeSymlinkFolderName", palette.fg, palette.bg_dim)
+    set_hl("NvimTreeGitIgnoredIcon", palette.grey, palette.bg_dim)
+    set_hl("NvimTreeGitFileDeletedHL", palette.red, palette.bg_dim)
+    set_hl("NvimTreeGitFileDirtyHL", palette.yellow, palette.bg_dim)
+    set_hl("NvimTreeGitFileIgnoredHL", palette.grey, palette.bg_dim)
+    set_hl("NvimTreeGitFileMergeHL", palette.blue, palette.bg_dim)
+    set_hl("NvimTreeGitFileNewHL", palette.green, palette.bg_dim)
+    set_hl("NvimTreeGitFileRenamedHL", palette.yellow, palette.bg_dim)
+    set_hl("NvimTreeGitFileStagedHL", palette.blue, palette.bg_dim)
+    set_hl("NvimTreeGitFolderDeletedHL", palette.red, palette.bg_dim)
+    set_hl("NvimTreeGitFolderDirtyHL", palette.yellow, palette.bg_dim)
+    set_hl("NvimTreeGitFolderIgnoredHL", palette.grey, palette.bg_dim)
+    set_hl("NvimTreeGitFolderMergeHL", palette.blue, palette.bg_dim)
+    set_hl("NvimTreeGitFolderNewHL", palette.green, palette.bg_dim)
+    set_hl("NvimTreeGitFolderRenamedHL", palette.yellow, palette.bg_dim)
+    set_hl("NvimTreeGitFolderStagedHL", palette.blue, palette.bg_dim)
   end
 })
 
 vim.cmd("colorscheme sonokai")
-
-vim.cmd([[
-  hi NvimTreeNormal ctermfg=250 guifg=#cbcbcd
-  hi NvimTreeSpecialFile ctermfg=250 guifg=#cbcbcd
-  hi NvimTreeFolderName ctermfg=250 guifg=#cbcbcd
-  hi NvimTreeEmptyFolderName ctermfg=250 guifg=#cbcbcd
-  hi NvimTreeOpenedFolderName ctermfg=250 guifg=#cbcbcd
-  hi NvimTreeSymlinkFolderName ctermfg=250 guifg=#cbcbcd
-  hi NvimTreeGitIgnoredIcon ctermfg=250 guifg=#7f8490
-  hi NvimTreeGitFileDeletedHL ctermfg=250 guifg=#fc5d7c
-  hi NvimTreeGitFileDirtyHL ctermfg=250 guifg=#e7c664
-  hi NvimTreeGitFileIgnoredHL ctermfg=250 guifg=#7f8490
-  hi NvimTreeGitFileMergeHL ctermfg=250 guifg=#76cde0
-  hi NvimTreeGitFileNewHL ctermfg=250 guifg=#9ed072
-  hi NvimTreeGitFileRenamedHL ctermfg=250 guifg=#e7c664
-  hi NvimTreeGitFileStagedHL ctermfg=250 guifg=#76cde0
-  hi NvimTreeGitFolderDeletedHL ctermfg=250 guifg=#fc5d7c
-  hi NvimTreeGitFolderDirtyHL ctermfg=250 guifg=#e7c664
-  hi NvimTreeGitFolderIgnoredHL ctermfg=250 guifg=#7f8490
-  hi NvimTreeGitFolderMergeHL ctermfg=250 guifg=#76cde0
-  hi NvimTreeGitFolderNewHL ctermfg=250 guifg=#9ed072
-  hi NvimTreeGitFolderRenamedHL ctermfg=250 guifg=#e7c664
-  hi NvimTreeGitFolderStagedHL ctermfg=250 guifg=#76cde0
-]])
