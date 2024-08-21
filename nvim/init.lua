@@ -261,7 +261,7 @@ require('lazy').setup({
       }
 
       require('lualine').setup({
-        extensions = { 'nvim-tree' },
+        extensions = { 'nvim-tree', 'fugitive' },
         options = {
           theme = theme,
           icons_enabled = true,
