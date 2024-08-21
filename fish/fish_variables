@@ -12,11 +12,11 @@ SETUVAR _fisher_pure_2D_fish_2F_pure_files:\x7e/\x2econfig/fish/functions/_pure_
 SETUVAR _fisher_upgraded_to_4_4:\x1d
 SETUVAR fish_color_autosuggestion:595F6F
 SETUVAR fish_color_cancel:\x1d
-SETUVAR fish_color_command:85D3F2
+SETUVAR fish_color_command:76CDE0
 SETUVAR fish_color_comment:7F8490
 SETUVAR fish_color_cwd:B39DF3
-SETUVAR fish_color_cwd_root:red
-SETUVAR fish_color_end:FF6077
+SETUVAR fish_color_cwd_root:FC5D7C
+SETUVAR fish_color_end:FC5D7C
 SETUVAR fish_color_error:E2E2E3\x1e\x2d\x2dbackground\x3dFF6077
 SETUVAR fish_color_escape:B39DF3
 SETUVAR fish_color_gray:6e738d
