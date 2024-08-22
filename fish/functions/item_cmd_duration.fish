@@ -7,7 +7,7 @@ function item_cmd_duration
     set m (math -s0 $CMD_DURATION/60000 % 60)
     set s (math -s0 $CMD_DURATION/1000 % 60) 
 
-    set_color "#F39660"
+    set_color $palette_orange
     echo -n "󰔟 "
     
     if test $h != "0"

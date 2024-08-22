@@ -3,10 +3,10 @@ function item_git_branch
         return
     end
     
-    set_color '#A9DD76'
+    set_color $palette_green
 
     if not set -l branch (command git symbolic-ref --short HEAD 2>/dev/null)
-        set_color '#F79860'
+        set_color $palette_orange
         set branch (command git describe --contains --all HEAD 2>/dev/null)
     end
 

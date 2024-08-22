@@ -1,5 +1,5 @@
 function item_time 
-    set_color '#5A5E7A'
+    set_color $palette_grey
     echo -n " "
     echo -n (date +%H:%M)
     echo -n " "
