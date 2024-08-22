@@ -830,6 +830,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     local set_hl = vim.fn["sonokai#highlight"]
 
     set_hl("@string.special.symbol.ruby", palette.purple, palette.none)
+    set_hl("@variable.parameter.ruby", palette.orange, palette.none)
 
     set_hl("@variable.parameter.python", palette.orange, palette.none)
     set_hl("@variable.member.python", palette.fg, palette.none)
