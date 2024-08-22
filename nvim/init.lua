@@ -856,6 +856,14 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     set_hl("NvimTreeGitFolderNewHL", palette.green, palette.bg_dim)
     set_hl("NvimTreeGitFolderRenamedHL", palette.yellow, palette.bg_dim)
     set_hl("NvimTreeGitFolderStagedHL", palette.blue, palette.bg_dim)
+
+    set_hl('Visual', palette.none, palette.grey_dim)
+    set_hl('IncSearch', palette.bg0, palette.yellow)
+    set_hl('Search', palette.none, palette.diff_yellow)
+
+    set_hl("HlSearchNear", palette.bg0, palette.yellow)
+    set_hl("HlSearchLens", palette.grey, palette.diff_yellow)
+    set_hl("HlSearchLensNear", palette.bg0, palette.yellow)
   end
 })
 
