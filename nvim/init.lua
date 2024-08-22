@@ -249,27 +249,27 @@ require('lazy').setup({
     config = function()
       local theme = {
         normal = {
-          a = { bg = sonokai_palette.bg_blue, fg = sonokai_palette.black },
+          a = { bg = sonokai_palette.bg_blue, fg = sonokai_palette.bg0 },
           b = { bg = sonokai_palette.bg0, fg = sonokai_palette.blue },
           c = { bg = sonokai_palette.bg1, fg = sonokai_palette.grey },
         },
         insert = {
-          a = { bg = sonokai_palette.bg_green, fg = sonokai_palette.black },
+          a = { bg = sonokai_palette.bg_green, fg = sonokai_palette.bg0 },
           b = { bg = sonokai_palette.bg0, fg = sonokai_palette.green },
           c = { bg = sonokai_palette.bg1, fg = sonokai_palette.grey },
         },
         replace = {
-          a = { bg = sonokai_palette.bg_red, fg = sonokai_palette.black },
+          a = { bg = sonokai_palette.bg_red, fg = sonokai_palette.bg0 },
           b = { bg = sonokai_palette.bg0, fg = sonokai_palette.red },
           c = { bg = sonokai_palette.bg1, fg = sonokai_palette.grey },
         },
         visual = {
-          a = { bg = sonokai_palette.purple, fg = sonokai_palette.black },
+          a = { bg = sonokai_palette.purple, fg = sonokai_palette.bg0 },
           b = { bg = sonokai_palette.bg0, fg = sonokai_palette.purple },
           c = { bg = sonokai_palette.bg1, fg = sonokai_palette.grey },
         },
         command = {
-          a = { bg = sonokai_palette.yellow, fg = sonokai_palette.black },
+          a = { bg = sonokai_palette.yellow, fg = sonokai_palette.bg0 },
           b = { bg = sonokai_palette.bg0, fg = sonokai_palette.yellow },
           c = { bg = sonokai_palette.bg1, fg = sonokai_palette.grey },
         },
