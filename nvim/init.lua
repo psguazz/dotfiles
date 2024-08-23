@@ -836,6 +836,11 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     set_hl("@variable.member.python", palette.fg, palette.none)
     set_hl("@variable.builtin.python", palette.grey, palette.none)
 
+    set_hl("DiagnosticVirtualTextError", palette.grey, palette.diff_red)
+    set_hl("DiagnosticVirtualTextWarn", palette.grey, palette.diff_red)
+    set_hl("DiagnosticVirtualTextInfo", palette.grey, palette.diff_red)
+    set_hl("DiagnosticVirtualTextHint", palette.grey, palette.diff_red)
+
     set_hl("NvimTreeNormal", palette.fg, palette.bg_dim)
     set_hl("NvimTreeSpecialFile", palette.fg, palette.none)
     set_hl("NvimTreeFolderName", palette.fg, palette.none)
