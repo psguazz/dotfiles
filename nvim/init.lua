@@ -836,6 +836,15 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     set_hl("@variable.member.python", palette.fg, palette.none)
     set_hl("@variable.builtin.python", palette.grey, palette.none)
 
+    set_hl("@keyword.javascript", palette.blue, palette.none)
+    set_hl("@keyword.function.javascript", palette.blue, palette.none)
+    set_hl("@variable.member.javascript", palette.fg, palette.none)
+
+    set_hl("@variable.member.tsx", palette.fg, palette.none)
+    set_hl("@keyword.tsx", palette.blue, palette.none)
+    set_hl("@type.tsx", palette.fg, palette.none)
+    set_hl("@tag.tsx", palette.blue, palette.none)
+
     set_hl("DiagnosticVirtualTextError", palette.grey, palette.diff_red)
     set_hl("DiagnosticVirtualTextWarn", palette.grey, palette.diff_red)
     set_hl("DiagnosticVirtualTextInfo", palette.grey, palette.diff_red)
