@@ -151,6 +151,11 @@ return {
             },
         }
     },
+    {
+        "MeanderingProgrammer/render-markdown.nvim",
+        opts = {},
+        dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+    },
     { "michaeljsmith/vim-indent-object" },
     { "gennaro-tedesco/nvim-peekup" },
     { "nvim-treesitter/nvim-treesitter-context" },

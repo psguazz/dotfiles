@@ -883,3 +883,6 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 vim.cmd("colorscheme sonokai")
+
+vim.api.nvim_create_autocmd("FileType", { pattern = "markdown", command = "setlocal spell" })
+vim.api.nvim_create_autocmd("FileType", { pattern = "markdown", command = "setlocal textwidth=80" })
