@@ -98,7 +98,6 @@ require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
   -- Git related plugins
-  'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
@@ -165,6 +164,10 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      current_line_blame = true,
+      current_line_blame_opts = {
+        delay = 500
+      },
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
 
@@ -211,7 +214,7 @@ require('lazy').setup({
         map('n', '<leader>hR', gs.reset_buffer, { desc = 'git Reset buffer' })
         map('n', '<leader>hp', gs.preview_hunk, { desc = 'preview git hunk' })
         map('n', '<leader>hb', function()
-          gs.blame_line { full = false }
+          gs.blame_line { full = true }
         end, { desc = 'git blame line' })
         map('n', '<leader>hd', gs.diffthis, { desc = 'git diff against index' })
         map('n', '<leader>hD', function()
@@ -276,7 +279,7 @@ require('lazy').setup({
       }
 
       require('lualine').setup({
-        extensions = { 'nvim-tree', 'fugitive' },
+        extensions = { 'nvim-tree' },
         options = {
           theme = theme,
           icons_enabled = true,
@@ -863,6 +866,8 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     set_hl("NvimTreeGitFolderNewHL", palette.green, palette.none)
     set_hl("NvimTreeGitFolderRenamedHL", palette.yellow, palette.none)
     set_hl("NvimTreeGitFolderStagedHL", palette.blue, palette.none)
+
+    set_hl("GitSignsCurrentLineBlame", palette.grey_dim, palette.none)
 
     set_hl('Visual', palette.none, palette.grey_dim)
     set_hl('IncSearch', palette.bg0, palette.yellow)
