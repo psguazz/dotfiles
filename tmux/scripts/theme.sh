@@ -41,6 +41,7 @@ tmux set-option -g status-interval 5
 tmux set-option -g automatic-rename on
 tmux set-option -g automatic-rename-format "#{pane_current_command} | #{b:pane_current_path}"
 
+tmux set-option -g mode-style "bg=${yellow},fg=${black}"
 tmux set-option -g pane-active-border-style "fg=${green}"
 tmux set-option -g pane-border-style "fg=${grey}"
 tmux set-option -g message-style "bg=${grey_dim},fg=${fg}"
