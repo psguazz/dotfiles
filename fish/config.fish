@@ -8,4 +8,3 @@ eval /Users/psg/opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 
 alias vim="nvim"
 alias vi="nvim"
-alias gg="lazygit"
