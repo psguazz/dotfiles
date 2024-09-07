@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-echo "Go to Session >"
+current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-SESSION_DESC=$(tmux list-sessions | fzf --prompt "Switch Session > " --exit-0 --reverse)
-SESSION=${SESSION_DESC%%:*}
+SESSION=$(tmux list-sessions -F "#{session_name}" | fzf --prompt "Switch Session > " --exit-0 --reverse --preview "$current_dir/tmux-tree.sh {}")
 
-tmux switch-client -t $SESSION
+tmux switch-client -t $SESSION 2>/dev/null
+

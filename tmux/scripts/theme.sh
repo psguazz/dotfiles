@@ -2,30 +2,7 @@
 
 current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-bg0="#2c2e34"
-bg1="#33353f"
-bg2="#363944"
-bg3="#3b3e48"
-bg4="#414550"
-bg_blue="#85d3f2"
-bg_dim="#222327"
-bg_green="#a7df78"
-bg_red="#ff6077"
-black="#181819"
-blue="#76cce0"
-diff_blue="#354157"
-diff_green="#394634"
-diff_red="#55393d"
-diff_yellow="#4e432f"
-fg="#e2e2e3"
-green="#9ed072"
-grey="#7f8490"
-grey_dim="#595f6f"
-none="NONE"
-orange="#f39660"
-purple="#b39df3"
-red="#fc5d7c"
-yellow="#e7c664"
+source "$current_dir/palette.sh"
 
 # MISC
 
