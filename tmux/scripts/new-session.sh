@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-START_PATH=$1
-
-CURRENT_SESSION="$(tmux display-message -p '#S')"
+START_PATH=$(find ~ ~/paradem ~/projects ~/master_ai -mindepth 1 -maxdepth 1 -type d | fzf --prompt "New Session > " --exit-0 --reverse)
 
 TARGET_SESSION="$(basename $START_PATH)"
 TARGET_SESSION=${TARGET_SESSION//\./}
@@ -11,14 +9,6 @@ tmux has-session -t "$TARGET_SESSION" 2>/dev/null
 
 if [ $? != 0 ]; then
     tmux new-session -d -s $TARGET_SESSION -c $START_PATH
-    tmux switch-client -t $TARGET_SESSION
-    tmux switch-client -t $CURRENT_SESSION
-
-    tmux move-window -t $TARGET_SESSION
-    tmux switch-client -t $TARGET_SESSION:2
-    tmux kill-window -a
-else
-    tmux move-window -t $TARGET_SESSION
-    tmux switch-client -t $TARGET_SESSION
 fi
 
+tmux switch-client -t $TARGET_SESSION

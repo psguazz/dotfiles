@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-SESSION_DESC=$(tmux list-sessions | fzf --exit-0 --reverse)
+echo "Go to Session >"
+
+SESSION_DESC=$(tmux list-sessions | fzf --prompt "Switch Session > " --exit-0 --reverse)
 SESSION=${SESSION_DESC%%:*}
 
 tmux switch-client -t $SESSION
