@@ -1,0 +1,62 @@
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = vim.api.nvim_create_augroup("custom_highlights_sonokai", {}),
+  pattern = "sonokai",
+  callback = function()
+    local config = vim.fn["sonokai#get_configuration"]()
+    local palette = vim.fn["sonokai#get_palette"](config.style, config.colors_override)
+    local set_hl = vim.fn["sonokai#highlight"]
+
+    set_hl("@string.special.symbol.ruby", palette.purple, palette.none)
+    set_hl("@variable.parameter.ruby", palette.orange, palette.none)
+
+    set_hl("@variable.parameter.python", palette.orange, palette.none)
+    set_hl("@variable.member.python", palette.fg, palette.none)
+    set_hl("@variable.builtin.python", palette.grey, palette.none)
+
+    set_hl("@keyword.javascript", palette.blue, palette.none)
+    set_hl("@keyword.function.javascript", palette.blue, palette.none)
+    set_hl("@variable.member.javascript", palette.fg, palette.none)
+
+    set_hl("@variable.member.tsx", palette.fg, palette.none)
+    set_hl("@keyword.tsx", palette.blue, palette.none)
+    set_hl("@type.tsx", palette.fg, palette.none)
+    set_hl("@tag.tsx", palette.blue, palette.none)
+
+    set_hl("DiagnosticVirtualTextError", palette.grey, palette.diff_red)
+    set_hl("DiagnosticVirtualTextWarn", palette.grey, palette.diff_red)
+    set_hl("DiagnosticVirtualTextInfo", palette.grey, palette.diff_red)
+    set_hl("DiagnosticVirtualTextHint", palette.grey, palette.diff_red)
+
+    set_hl("NvimTreeNormal", palette.fg, palette.bg_dim)
+    set_hl("NvimTreeSpecialFile", palette.fg, palette.none)
+    set_hl("NvimTreeFolderName", palette.fg, palette.none)
+    set_hl("NvimTreeEmptyFolderName", palette.fg, palette.none)
+    set_hl("NvimTreeOpenedFolderName", palette.fg, palette.none)
+    set_hl("NvimTreeSymlinkFolderName", palette.fg, palette.none)
+    set_hl("NvimTreeGitIgnoredIcon", palette.grey, palette.none)
+    set_hl("NvimTreeGitFileDeletedHL", palette.red, palette.none)
+    set_hl("NvimTreeGitFileDirtyHL", palette.yellow, palette.none)
+    set_hl("NvimTreeGitFileIgnoredHL", palette.grey, palette.none)
+    set_hl("NvimTreeGitFileMergeHL", palette.blue, palette.none)
+    set_hl("NvimTreeGitFileNewHL", palette.green, palette.none)
+    set_hl("NvimTreeGitFileRenamedHL", palette.yellow, palette.none)
+    set_hl("NvimTreeGitFileStagedHL", palette.blue, palette.none)
+    set_hl("NvimTreeGitFolderDeletedHL", palette.red, palette.none)
+    set_hl("NvimTreeGitFolderDirtyHL", palette.yellow, palette.none)
+    set_hl("NvimTreeGitFolderIgnoredHL", palette.grey, palette.none)
+    set_hl("NvimTreeGitFolderMergeHL", palette.blue, palette.none)
+    set_hl("NvimTreeGitFolderNewHL", palette.green, palette.none)
+    set_hl("NvimTreeGitFolderRenamedHL", palette.yellow, palette.none)
+    set_hl("NvimTreeGitFolderStagedHL", palette.blue, palette.none)
+
+    set_hl("GitSignsCurrentLineBlame", palette.grey_dim, palette.none)
+
+    set_hl('Visual', palette.none, palette.grey_dim)
+    set_hl('IncSearch', palette.bg0, palette.yellow)
+    set_hl('Search', palette.none, palette.diff_yellow)
+
+    set_hl("HlSearchNear", palette.bg0, palette.yellow)
+    set_hl("HlSearchLens", palette.grey, palette.diff_yellow)
+    set_hl("HlSearchLensNear", palette.bg0, palette.yellow)
+  end
+})
