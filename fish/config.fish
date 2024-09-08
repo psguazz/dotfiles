@@ -9,7 +9,6 @@ load_palette
 eval /Users/psg/opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 
-
 export FZF_DEFAULT_OPTS="
 	--color=bg+:$palette_bg1,bg:$palette_bg_dim,spinner:$palette_purple,hl:$palette_blue
 	--color=fg:$palette_fg,header:$palette_orange,info:$palette_grey,pointer:$palette_bg_red

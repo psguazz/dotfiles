@@ -17,4 +17,5 @@ tmux ls -F "#{session_name}: #{T:tree_mode_format}" | while read -r DESC; do
 
     set_color $grey
     tmux lsw -t "$NAME" -F "   󱞩 #{window_name}" 
+    reset_color
 done

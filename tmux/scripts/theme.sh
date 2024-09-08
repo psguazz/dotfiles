@@ -23,6 +23,8 @@ tmux set-option -g pane-active-border-style "fg=${green}"
 tmux set-option -g pane-border-style "fg=${grey}"
 tmux set-option -g message-style "bg=${grey_dim},fg=${fg}"
 tmux set-option -g status-style "bg=${bg1},fg=${fg}"
+tmux set -g popup-border-style "fg=${grey}"
+tmux set -g popup-border-lines rounded
 
 # SESSION
 

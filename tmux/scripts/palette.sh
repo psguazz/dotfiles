@@ -39,9 +39,12 @@ set_color() {
     echo -ne "\033[38;2;${rgb}m"
 }
 
+reset_color() {
+    echo -ne "\033[0m"
+}
+
 color_echo() {
-    local rgb=$(hex_to_rgb "$1")
-    local text=$2
-    
-    echo -e "\033[38;2;${rgb}m${text}\033[0m"
+    set_color $1
+    echo $2
+    reset_color
 }
