@@ -22,6 +22,8 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     set_hl("@type.tsx", palette.fg, palette.none)
     set_hl("@tag.tsx", palette.blue, palette.none)
 
+    set_hl("sqlKeyword", palette.red, palette.none)
+
     set_hl("DiagnosticVirtualTextError", palette.grey, palette.diff_red)
     set_hl("DiagnosticVirtualTextWarn", palette.grey, palette.diff_red)
     set_hl("DiagnosticVirtualTextInfo", palette.grey, palette.diff_red)
