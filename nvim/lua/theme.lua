@@ -62,3 +62,5 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     set_hl("HlSearchLensNear", palette.bg0, palette.yellow)
   end
 })
+
+vim.cmd("colorscheme sonokai")

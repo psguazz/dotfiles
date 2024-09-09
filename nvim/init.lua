@@ -20,8 +20,5 @@ require("lazy").setup({
   { import = "plugins" }
 }, {})
 
-require("lsp")
 require("mappings")
 require("theme")
-
-vim.cmd("colorscheme sonokai")
