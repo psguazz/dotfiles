@@ -27,46 +27,6 @@ local sonokai_palette = {
 
 return {
   {
-    "nvim-tree/nvim-tree.lua",
-    config = function()
-      require("nvim-tree").setup({
-        sort = {
-          sorter = "case_sensitive",
-        },
-        view = {
-          width = 30,
-        },
-        renderer = {
-          group_empty = true,
-          highlight_git = "name",
-          icons = {
-            glyphs = {
-              git = {
-                unstaged = "",
-                staged = "",
-                unmerged = "",
-                renamed = "",
-                untracked = "",
-                deleted = "",
-                ignored = "",
-              }
-            }
-          }
-        },
-        filters = {
-          dotfiles = false,
-          git_ignored = false,
-        },
-        update_focused_file = {
-          enable = true,
-        }
-      })
-
-      vim.keymap.set("n", "<leader>nt", vim.cmd.NvimTreeFocus)
-    end
-  },
-
-  {
     "nvim-lualine/lualine.nvim",
     config = function()
       local theme = {
@@ -115,19 +75,5 @@ return {
         }
       })
     end,
-  },
-
-  {
-    "romgrk/barbar.nvim",
-    dependencies = {
-      "lewis6991/gitsigns.nvim",
-      "nvim-tree/nvim-web-devicons",
-    },
-    init = function() vim.g.barbar_auto_setup = true end,
-    config = function()
-      vim.keymap.set("n", "<leader>,", vim.cmd.BufferPrevious, { desc = "Previous buffer" })
-      vim.keymap.set("n", "<leader>.", vim.cmd.BufferNext, { desc = "Next buffer" })
-    end,
-    version = "^1.0.0",
   },
 }
