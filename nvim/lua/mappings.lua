@@ -9,7 +9,11 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "<leader>j", "<c-d>zz")
 vim.keymap.set("n", "<leader>k", "<c-u>zz")
 
-vim.keymap.set('n', '<leader>cp', function()
+vim.api.nvim_create_user_command("QA", function()
+  vim.cmd "%bd|e#|bd#"
+end, {})
+
+vim.api.nvim_create_user_command("CP", function()
   local file_path = vim.fn.expand('%:p')
   vim.fn.setreg('+', file_path)
-end)
+end, {})
