@@ -14,7 +14,13 @@ return {
     },
     config = function()
       vim.keymap.set("n", "<leader><space>", function()
-        require("telescope.builtin").git_files({ use_git_root = false, show_untracked = true })
+        local telescope = require('telescope.builtin')
+
+        local ok = pcall(telescope.git_files, { use_git_root = false, show_untracked = true })
+
+        if not ok then
+          telescope.find_files()
+        end
       end)
       vim.keymap.set("n", "<leader>m", function()
         require("telescope.builtin").git_files({ git_command = { "git", "ls-files", "-m" } })
