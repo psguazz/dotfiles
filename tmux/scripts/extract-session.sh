@@ -7,7 +7,7 @@ CURRENT_SESSION="$(tmux display-message -p '#S')"
 TARGET_SESSION="$(basename $START_PATH)"
 TARGET_SESSION=${TARGET_SESSION//\./}
 
-tmux has-session -t "$TARGET_SESSION" 2>/dev/null
+tmux has-session -t="$TARGET_SESSION" 2>/dev/null
 
 if [ $? != 0 ]; then
     tmux new-session -d -s $TARGET_SESSION -c $START_PATH
