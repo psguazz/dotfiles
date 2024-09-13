@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-function battery_level() {
-    local level=$(pmset -g batt | grep -o "\d*%" | head -n 1)
-
-    echo "${level}"
-}
-
 function battery_status() {
     local status=$(pmset -g batt | sed -n 2p | cut -d ';' -f 2 | tr -d " ")
 
@@ -25,4 +19,4 @@ function battery_status() {
     esac
 }
 
-echo "$(battery_status) $(battery_level)"
+echo "$(battery_status)"
