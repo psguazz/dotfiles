@@ -9,6 +9,9 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "<leader>j", "<c-d>zz")
 vim.keymap.set("n", "<leader>k", "<c-u>zz")
 
+vim.keymap.set("n", "<leader>\"", ":split<CR>")
+vim.keymap.set("n", "<leader>%", ":vsplit<CR>")
+
 vim.api.nvim_create_user_command("QA", function()
   vim.cmd "%bd|e#|bd#"
 end, {})
