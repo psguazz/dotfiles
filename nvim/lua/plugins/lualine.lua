@@ -25,6 +25,15 @@ local sonokai_palette = {
   yellow = "#e7c664",
 }
 
+local function short_cwd()
+  return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
+end
+
+local function git_branch()
+  local icon = ""
+  return icon .. ' ' .. vim.fn.FugitiveHead()
+end
+
 return {
   {
     "nvim-lualine/lualine.nvim",
@@ -57,8 +66,21 @@ return {
         },
       }
 
+      local tree_extension = {
+        sections = { lualine_a = { short_cwd }, },
+        inactive_sections = { lualine_b = { short_cwd } },
+        filetypes = { "NvimTree" }
+      }
+
+      local git_extension = {
+        sections = { lualine_a = { git_branch }, lualine_z = { "location" }, },
+        inactive_sections = { lualine_b = { git_branch }, lualine_y = { "location" }, },
+        filetypes = { "fugitive" }
+      }
+
+
       require("lualine").setup({
-        extensions = { "nvim-tree", "fugitive" },
+        extensions = { tree_extension, git_extension },
         options = {
           theme = theme,
           icons_enabled = true,
