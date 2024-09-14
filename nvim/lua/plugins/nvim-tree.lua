@@ -1,8 +1,17 @@
+local function on_attach(bufnr)
+  require("nvim-tree.api").config.mappings.default_on_attach(bufnr)
+
+  local opts = { buffer = bufnr, noremap = true, silent = true, nowait = true }
+
+  vim.keymap.set('n', '<C-k>', ":TmuxNavigateUp<CR>", opts)
+end
+
 return {
   {
     "nvim-tree/nvim-tree.lua",
     config = function()
       require("nvim-tree").setup({
+        on_attach = on_attach,
         sort = {
           sorter = "case_sensitive",
         },
