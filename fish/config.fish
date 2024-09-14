@@ -4,10 +4,12 @@ source ~/.config/fish/functions/load_palette.fish
 
 load_palette
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-eval /Users/psg/opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
-# <<< conda initialize <<<
+if status --is-interactive
+	# >>> conda initialize >>>
+	# !! Contents within this block are managed by 'conda init' !!
+	eval /Users/psg/opt/anaconda3/bin/conda "shell.fish" "hook" $argv | source
+	# <<< conda initialize <<<
+end
 
 export FZF_DEFAULT_OPTS="
 	--color=bg+:$palette_bg1,bg:$palette_bg_dim,spinner:$palette_purple,hl:$palette_blue
