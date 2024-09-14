@@ -13,6 +13,9 @@ function battery_status() {
         charging|Charging)
             echo "󱐌"
             ;;
+        acattached|ACattached)
+            echo ""
+            ;;
         *)
             echo "󱐌"
             ;;
