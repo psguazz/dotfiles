@@ -14,7 +14,7 @@ return {
     },
     config = function()
       vim.keymap.set("n", "<leader><space>", function()
-        local telescope = require('telescope.builtin')
+        local telescope = require("telescope.builtin")
 
         local ok = pcall(telescope.git_files, { use_git_root = false, show_untracked = true })
 

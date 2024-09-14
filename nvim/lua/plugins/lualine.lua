@@ -26,12 +26,12 @@ local sonokai_palette = {
 }
 
 local function short_cwd()
-  return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
+  return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
 end
 
 local function git_branch()
   local icon = ""
-  return icon .. ' ' .. vim.fn.FugitiveHead()
+  return icon .. " " .. vim.fn.FugitiveHead()
 end
 
 return {

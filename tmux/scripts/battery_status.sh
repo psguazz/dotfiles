@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 
 function battery_status() {
-    local status=$(pmset -g batt | sed -n 2p | cut -d ';' -f 2 | tr -d " ")
+    local status=$(pmset -g batt | sed -n 2p | cut -d ";" -f 2 | tr -d " ")
 
     case $status in
         discharging|Discharging)
-            echo '󰁿'
+            echo "󰁿"
             ;;
         high|Full)
-            echo '󰁹'
+            echo "󰁹"
             ;;
         charging|Charging)
-            echo '󱐌'
+            echo "󱐌"
             ;;
         *)
-            echo '󱐌'
+            echo "󱐌"
             ;;
     esac
 }
