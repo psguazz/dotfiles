@@ -14,6 +14,7 @@ vim.opt.mouse = ""
 vim.opt.nu = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 8
+vim.opt.sidescrolloff = 10
 vim.wo.number = true
 vim.wo.signcolumn = "yes"
 vim.wo.wrap = false
@@ -27,5 +28,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   pattern = "*",
 })
 
-vim.api.nvim_create_autocmd("FileType", { pattern = "markdown", command = "setlocal spell" })
-vim.api.nvim_create_autocmd("FileType", { pattern = "markdown", command = "setlocal textwidth=80" })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.wrap = true
+    vim.opt_local.textwidth = 80
+  end,
+})
