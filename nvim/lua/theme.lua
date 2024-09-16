@@ -23,6 +23,8 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     set_hl("@type.tsx", palette.fg, palette.none)
     set_hl("@tag.tsx", palette.blue, palette.none)
 
+    set_hl("@tag.css", palette.green, palette.none)
+    set_hl("@type.css", palette.green, palette.none)
     set_hl("cssPositioningProp", palette.orange, palette.none)
     set_hl("cssPagedMediaProp", palette.orange, palette.none)
     set_hl("cssPageMarginProp", palette.orange, palette.none)
