@@ -27,6 +27,7 @@ return {
           "typescript",
           "vim",
           "vimdoc",
+          "zig",
         },
         auto_install = false,
         sync_install = false,
