@@ -50,7 +50,7 @@ tmux set-option -g status-left "#{?client_prefix,${session_prefix},${session_reg
 
 # WINDOWS 
 
-current_window=$(pill $yellow $diff_yellow "#I" "#W")
+current_window=$(pill $purple $diff_blue "#I" "#W")
 tmux set-window-option -g window-status-current-format "$current_window"
 
 other_windows=$(pill $grey_dim $bg_dim "#[fg=${fg}]#I" "#W")
@@ -60,7 +60,7 @@ tmux set-window-option -g window-status-format "$other_windows"
 
 tmux set-option -g status-right ""
 
-time=$(pill $blue $diff_blue "󰃭" "%a %-e %b %-l:%M %p")
+time=$(pill $yellow $diff_yellow "󰃭" "%a %-e %b %-l:%M %p")
 tmux set-option -ga status-right " $time"
 
 battery=$(pill $bg_red $diff_red "#($current_dir/battery_status.sh)" "#($current_dir/battery_level.sh)")
