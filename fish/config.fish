@@ -19,5 +19,4 @@ export FZF_DEFAULT_OPTS="
 	--multi
 "
 
-alias vim="nvim"
-alias vi="nvim"
+set -x PATH $PATH $HOME/go/bin

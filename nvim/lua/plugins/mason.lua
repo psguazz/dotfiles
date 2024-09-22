@@ -45,6 +45,15 @@ return {
         tsserver = {},
         eslint = {},
         standardrb = {},
+        gopls = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+          },
+        },
         lua_ls = {
           Lua = {
             workspace = { checkThirdParty = false },
@@ -64,6 +73,9 @@ return {
       mason_lspconfig.setup {
         ensure_installed = vim.tbl_keys(servers),
         settings = {
+          gopls = {
+            gofumpt = true,
+          },
           pylsp = {
             plugins = {
               black = { enabled = true },
