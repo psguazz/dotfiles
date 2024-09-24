@@ -13,23 +13,26 @@ return {
       },
     },
     config = function()
-      vim.keymap.set("n", "<leader><space>", function()
-        local telescope = require("telescope.builtin")
+      local ts = require("telescope.builtin")
 
-        local ok = pcall(telescope.git_files, { use_git_root = false, show_untracked = true })
+      vim.keymap.set("n", "<leader><space>", function()
+        local ok = pcall(ts.git_files, { use_git_root = false, show_untracked = true })
 
         if not ok then
-          telescope.find_files()
+          ts.find_files()
         end
       end)
       vim.keymap.set("n", "<leader>m", function()
-        require("telescope.builtin").git_files({ git_command = { "git", "ls-files", "-m" } })
+        ts.git_files({ git_command = { "git", "ls-files", "-m" } })
       end)
       vim.keymap.set("n", "<leader>fs", function()
-        require("telescope.builtin").live_grep({ use_regex = true, })
+        ts.live_grep({ use_regex = true, })
       end)
       vim.keymap.set("n", "<leader>fS", function()
-        require("telescope.builtin").live_grep({ use_regex = false, })
+        ts.live_grep({ use_regex = false, })
+      end)
+      vim.keymap.set("n", "<leader>dd", function()
+        ts.diagnostics()
       end)
 
       require("telescope").load_extension("fzf")
