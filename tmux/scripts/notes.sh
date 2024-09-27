@@ -2,7 +2,7 @@
 
 cd ~/vaults/
 
-nvim +ObsidianToday
+nvim +"Telescope find_files search_dirs=.,glob_pattern=*.md"
 
 git add .
 git commit -m "$(date +"%Y-%m-%d %H:%M")"
