@@ -20,3 +20,19 @@ vim.api.nvim_create_user_command("CP", function()
   local file_path = vim.fn.expand("%:p")
   vim.fn.setreg("+", file_path)
 end, {})
+
+local zen = false
+vim.api.nvim_create_user_command("Z", function()
+  if zen then
+    zen = false
+    vim.cmd('set showtabline=2')
+    vim.cmd("Neominimap on")
+    vim.cmd("NvimTreeOpen")
+    vim.cmd("wincmd l")
+  else
+    zen = true
+    vim.cmd('set showtabline=0')
+    vim.cmd("Neominimap off")
+    vim.cmd("NvimTreeClose")
+  end
+end, {})
