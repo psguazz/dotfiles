@@ -15,6 +15,7 @@ return {
           "dockerfile",
           "elixir",
           "embedded_template",
+          "gitcommit",
           "go",
           "graphql",
           "heex",
