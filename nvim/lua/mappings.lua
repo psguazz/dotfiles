@@ -12,8 +12,14 @@ vim.keymap.set("n", "<leader>%", ":vsplit<CR>")
 vim.keymap.set("n", "<leader>d.", "<cmd>lua vim.diagnostic.goto_next({ float = false })<CR>")
 vim.keymap.set("n", "<leader>d,", "<cmd>lua vim.diagnostic.goto_prev({ float = false })<CR>")
 
+local zen = false
+
 vim.api.nvim_create_user_command("QA", function()
-  vim.cmd "%bd|e#|bd#"
+  vim.cmd "%bd|e#|bd#|'\""
+  if not zen then
+    vim.cmd("NvimTreeOpen")
+    vim.cmd("wincmd l")
+  end
 end, {})
 
 vim.api.nvim_create_user_command("CP", function()
@@ -21,7 +27,6 @@ vim.api.nvim_create_user_command("CP", function()
   vim.fn.setreg("+", file_path)
 end, {})
 
-local zen = false
 vim.api.nvim_create_user_command("Z", function()
   if zen then
     zen = false
