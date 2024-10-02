@@ -25,6 +25,7 @@ return {
           "python",
           "ruby",
           "rust",
+          "sql",
           "toml",
           "tsx",
           "typescript",
