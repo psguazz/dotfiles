@@ -107,6 +107,14 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
     set_hl("NeominimapWarnLine", palette.fg, palette.diff_yellow)
     set_hl("NeominimapErrorLine", palette.fg, palette.diff_red)
+
+    set_hl("BufferCurrentMod", palette.yellow, palette.bg0)
+    set_hl("BufferCurrentADDED", palette.green, palette.bg0)
+    set_hl("BufferCurrentCHANGED", palette.yellow, palette.bg0)
+    set_hl("BufferCurrentDELETED", palette.red, palette.bg0)
+    set_hl("BufferInactiveADDED", palette.diff_green, palette.bg_dim)
+    set_hl("BufferInactiveCHANGED", palette.diff_yellow, palette.bg_dim)
+    set_hl("BufferInactiveDELETED", palette.diff_red, palette.bg_dim)
   end
 })
 

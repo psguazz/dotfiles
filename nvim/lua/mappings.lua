@@ -14,13 +14,7 @@ vim.keymap.set("n", "<leader>d,", "<cmd>lua vim.diagnostic.goto_prev({ float = f
 
 local zen = false
 
-vim.api.nvim_create_user_command("QA", function()
-  vim.cmd "%bd|e#|bd#|'\""
-  if not zen then
-    vim.cmd("NvimTreeOpen")
-    vim.cmd("wincmd l")
-  end
-end, {})
+vim.api.nvim_create_user_command("QA", "BufferCloseAllButCurrent", {})
 
 vim.api.nvim_create_user_command("CP", function()
   local file_path = vim.fn.expand("%:p")
