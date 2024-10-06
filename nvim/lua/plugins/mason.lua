@@ -42,7 +42,6 @@ return {
 
       local servers = {
         pylsp = {},
-        tsserver = {},
         eslint = {},
         standardrb = {},
         gopls = {
