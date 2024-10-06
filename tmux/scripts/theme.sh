@@ -4,7 +4,7 @@ current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "$current_dir/palette.sh"
 
-function pill () {
+function pill() {
     local icon_color=$1
     local content_color=$2
     local icon=$3

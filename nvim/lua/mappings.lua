@@ -12,14 +12,17 @@ vim.keymap.set("n", "<leader>%", ":vsplit<CR>")
 vim.keymap.set("n", "<leader>d.", "<cmd>lua vim.diagnostic.goto_next({ float = false })<CR>")
 vim.keymap.set("n", "<leader>d,", "<cmd>lua vim.diagnostic.goto_prev({ float = false })<CR>")
 
-local zen = false
-
 vim.api.nvim_create_user_command("QA", "BufferCloseAllButCurrent", {})
 
 vim.api.nvim_create_user_command("CP", function()
   local file_path = vim.fn.expand("%:p")
   vim.fn.setreg("+", file_path)
 end, {})
+
+
+-- Home made Zen mode
+
+local zen = true
 
 vim.api.nvim_create_user_command("Z", function()
   if zen then

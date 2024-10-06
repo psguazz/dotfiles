@@ -13,6 +13,8 @@ return {
 
       vim.keymap.set("n", "<leader>,", vim.cmd.BufferPrevious, { desc = "Previous buffer" })
       vim.keymap.set("n", "<leader>.", vim.cmd.BufferNext, { desc = "Next buffer" })
+
+      vim.cmd('set showtabline=0')
     end,
   },
 }
