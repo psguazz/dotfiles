@@ -28,17 +28,25 @@ end, {})
 
 local zen = true
 
+vim.api.nvim_create_user_command("Zon", function()
+  zen = true
+  vim.cmd("set showtabline=0")
+  vim.cmd("Neominimap off")
+  vim.cmd("NvimTreeClose")
+end, {})
+
+vim.api.nvim_create_user_command("Zoff", function()
+  zen = false
+  vim.cmd("set showtabline=2")
+  vim.cmd("Neominimap on")
+  vim.cmd("NvimTreeOpen")
+  vim.cmd("wincmd l")
+end, {})
+
 vim.api.nvim_create_user_command("Z", function()
   if zen then
-    zen = false
-    vim.cmd('set showtabline=2')
-    vim.cmd("Neominimap on")
-    vim.cmd("NvimTreeOpen")
-    vim.cmd("wincmd l")
+    vim.cmd("Zoff")
   else
-    zen = true
-    vim.cmd('set showtabline=0')
-    vim.cmd("Neominimap off")
-    vim.cmd("NvimTreeClose")
+    vim.cmd("Zon")
   end
 end, {})
