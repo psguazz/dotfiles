@@ -78,7 +78,6 @@ return {
         filetypes = { "fugitive" }
       }
 
-
       require("lualine").setup({
         extensions = { tree_extension, git_extension },
         options = {
@@ -89,10 +88,10 @@ return {
         },
         sections = {
           lualine_a = { { "mode", separator = { left = "" }, right_padding = 2 } },
-          lualine_b = { "branch", "diff", "diagnostics" },
-          lualine_c = { { "filename", path = 1 } },
+          lualine_b = { { "filename", path = 1 } },
+          lualine_c = { "diff", "diagnostics" },
           lualine_x = { "filetype" },
-          lualine_y = { "progress" },
+          lualine_y = { "branch" },
           lualine_z = { { "location", separator = { right = "" }, left_padding = 2 }, },
         }
       })
