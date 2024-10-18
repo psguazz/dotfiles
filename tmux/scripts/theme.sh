@@ -20,6 +20,9 @@ function pill() {
 
 # MISC
 
+tmux set-environment -g TMUX_SESSION_NAME "$(tmux display-message -p '#S')"
+tmux set-hook -g client-session-changed 'run-shell "tmux set-environment -g TMUX_SESSION_NAME $(tmux display-message -p #S)"'
+
 tmux set-option -g status-left-length 100
 tmux set-option -g status-right-length 100
 
@@ -30,7 +33,7 @@ tmux set-option -g renumber-windows on
 
 tmux set-option -g status-interval 5
 tmux set-option -g automatic-rename on
-tmux set-option -g automatic-rename-format "#{pane_current_command} | #{b:pane_current_path}"
+tmux set-option -g automatic-rename-format "#{pane_current_command}#{?#{mr:\.?#{E:TMUX_SESSION_NAME},#{b:pane_current_path}},, | #{b:pane_current_path}}"
 
 tmux set-option -g mode-style "bg=${yellow},fg=${black}"
 tmux set-option -g pane-active-border-style "fg=${green}"
