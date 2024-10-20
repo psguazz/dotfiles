@@ -21,6 +21,7 @@ return {
           "heex",
           "html",
           "javascript",
+          "json",
           "lua",
           "python",
           "ruby",

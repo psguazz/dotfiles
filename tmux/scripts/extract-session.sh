@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 
-START_PATH=$1
+start_path=$1
 
-CURRENT_SESSION="$(tmux display-message -p "#S")"
+current_session="$(tmux display-message -p "#S")"
 
-TARGET_SESSION="$(basename $START_PATH)"
-TARGET_SESSION=${TARGET_SESSION//\./}
+target_session="$(basename $start_path)"
+target_session=${target_session//\./}
 
-tmux has-session -t="$TARGET_SESSION" 2>/dev/null
+tmux has-session -t="$target_session" 2>/dev/null
 
 if [ $? != 0 ]; then
-    tmux new-session -d -s $TARGET_SESSION -c $START_PATH
-    tmux switch-client -t $TARGET_SESSION
-    tmux switch-client -t $CURRENT_SESSION
+    tmux new-session -d -s $target_session -c $start_path
+    tmux switch-client -t $target_session
+    tmux switch-client -t $current_session
 
-    tmux move-window -t $TARGET_SESSION
-    tmux switch-client -t $TARGET_SESSION:2
+    tmux move-window -t $target_session
+    tmux switch-client -t $target_session:2
     tmux kill-window -a
 else
-    tmux move-window -t $TARGET_SESSION
-    tmux switch-client -t $TARGET_SESSION
+    tmux move-window -t $target_session
+    tmux switch-client -t $target_session
 fi
 
