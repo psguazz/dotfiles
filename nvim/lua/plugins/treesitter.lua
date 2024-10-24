@@ -22,6 +22,7 @@ return {
           "html",
           "javascript",
           "json",
+          "latex",
           "lua",
           "python",
           "ruby",
