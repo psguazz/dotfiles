@@ -2,7 +2,7 @@ return {
   {
     "nvimtools/none-ls.nvim",
     dependencies = {
-      { "williamboman/mason.nvim",    config = true },
+      { "williamboman/mason.nvim" },
       { "jay-babu/mason-null-ls.nvim" },
     },
     config = function()
