@@ -89,9 +89,9 @@ return {
         sections = {
           lualine_a = { { "mode", separator = { left = "" }, right_padding = 2 } },
           lualine_b = { { "filename", path = 1 } },
-          lualine_c = { "diff", "diagnostics" },
+          lualine_c = { "diagnostics" },
           lualine_x = { "filetype" },
-          lualine_y = { "branch" },
+          lualine_y = { "branch", "diff" },
           lualine_z = { { "location", separator = { right = "" }, left_padding = 2 }, },
         }
       })
