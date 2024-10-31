@@ -6,20 +6,6 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     local palette = vim.fn["sonokai#get_palette"](config.style, config.colors_override)
     local set_hl = vim.fn["sonokai#highlight"]
 
-    set_hl("TablineBackground", palette.none, palette.bg_dim)
-    set_hl("TablineNumber", palette.grey, palette.bg_dim)
-    set_hl("TablineName", palette.grey, palette.bg_dim)
-    set_hl("TablineNameModified", palette.grey, palette.bg_dim)
-    set_hl("TablineNameStaged", palette.grey, palette.bg_dim)
-    set_hl("TablineNameNew", palette.grey, palette.bg_dim)
-    set_hl("TablineNameDeleted", palette.grey, palette.bg_dim)
-    set_hl("TablineSelectedNumber", palette.grey, palette.bg0)
-    set_hl("TablineSelectedName", palette.fg, palette.bg0)
-    set_hl("TablineSelectedNameModified", palette.yellow, palette.bg0)
-    set_hl("TablineSelectedNameStaged", palette.blue, palette.bg0)
-    set_hl("TablineSelectedNameNew", palette.green, palette.bg0)
-    set_hl("TablineSelectedNameDeleted", palette.red, palette.bg0)
-
     set_hl("@string.special.symbol.ruby", palette.purple, palette.none)
     set_hl("@variable.parameter.ruby", palette.orange, palette.none)
     set_hl("@string.regexp.ruby", palette.yellow, palette.none)

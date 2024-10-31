@@ -1,6 +1,8 @@
 local harpoon = require("harpoon")
-local git = require("lib.git")
 local devicons = require("nvim-web-devicons")
+
+local git = require("lib.git")
+local palette = require("lib.palette")
 
 local function is_unsaved(file_path)
   local buf = vim.fn.bufnr(file_path)
@@ -17,15 +19,15 @@ local function format(group, text)
 end
 
 local function icon(name, apply_color)
-  local icon, icon_color = devicons.get_icon_color(name, vim.fn.fnamemodify(name, ":e"), { default = true })
+  local char, icon_color = devicons.get_icon_color(name, vim.fn.fnamemodify(name, ":e"), { default = true })
 
   if apply_color then
     local group_name = "TabLineColor" .. icon_color:gsub("#", "")
     vim.api.nvim_set_hl(0, group_name, { fg = icon_color })
 
-    return format(group_name, icon)
+    return format(group_name, char)
   else
-    return icon
+    return char
   end
 end
 
@@ -66,5 +68,20 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     git.refresh()
   end
 })
+
+vim.api.nvim_set_hl(0, "TablineBackground", { bg = palette.bg_dim })
+vim.api.nvim_set_hl(0, "TablineNumber", { fg = palette.grey, bg = palette.bg_dim })
+vim.api.nvim_set_hl(0, "TablineName", { fg = palette.grey, bg = palette.bg_dim })
+vim.api.nvim_set_hl(0, "TablineNameModified", { fg = palette.off_yellow, bg = palette.bg_dim })
+vim.api.nvim_set_hl(0, "TablineNameStaged", { fg = palette.off_blue, bg = palette.bg_dim })
+vim.api.nvim_set_hl(0, "TablineNameNew", { fg = palette.off_green, bg = palette.bg_dim })
+vim.api.nvim_set_hl(0, "TablineNameDeleted", { fg = palette.off_red, bg = palette.bg_dim })
+vim.api.nvim_set_hl(0, "TablineSelectedNumber", { fg = palette.grey, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "TablineSelectedName", { fg = palette.fg, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "TablineSelectedNameModified", { fg = palette.yellow, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "TablineSelectedNameStaged", { fg = palette.blue, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "TablineSelectedNameNew", { fg = palette.green, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "TablineSelectedNameDeleted", { fg = palette.red, bg = palette.bg0 })
+
 
 vim.o.tabline = '%!v:lua.my_tabline()'

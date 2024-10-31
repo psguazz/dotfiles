@@ -23,4 +23,9 @@ return {
   purple = "#b39df3",
   red = "#fc5d7c",
   yellow = "#e7c664",
+  -- Custom colors
+  off_blue = "#55869b",
+  off_green = "#6b8b53",
+  off_red = "#a84b5c",
+  off_yellow = "#9a8449",
 }
