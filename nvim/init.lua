@@ -22,3 +22,4 @@ require("lazy").setup({
 
 require("mappings")
 require("theme")
+require("tabline")
