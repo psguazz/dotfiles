@@ -48,7 +48,8 @@ return {
           if is_current then group = group .. "Selected" end
 
           local number_group = group .. "Number"
-          local name_group = group .. "Name" .. status
+          local name_group = group .. "Name"
+          if status ~= "None" then name_group = name_group .. status end
 
           local tab = string.format("%%#%s#  %d%%#%s# %s  ", number_group, i, name_group, tab_name)
 
@@ -60,6 +61,12 @@ return {
         return tabline
       end
 
+      function refresh()
+        git.refresh()
+        vim.fn.timer_start(2000, function() refresh() end)
+      end
+
+      refresh()
       vim.o.tabline = '%!v:lua.harpoon_tabline()'
     end
   }
