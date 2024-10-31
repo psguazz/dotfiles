@@ -2,11 +2,21 @@ local harpoon = require("harpoon")
 local git = require("lib.git")
 local devicons = require("nvim-web-devicons")
 
-function format(group, text)
+local function is_unsaved(file_path)
+  local buf = vim.fn.bufnr(file_path)
+
+  if buf == -1 then
+    return false
+  end
+
+  return vim.api.nvim_buf_get_option(buf, "modified")
+end
+
+local function format(group, text)
   return "%#" .. group .. "#" .. text
 end
 
-function icon(name, apply_color)
+local function icon(name, apply_color)
   local icon, icon_color = devicons.get_icon_color(name, vim.fn.fnamemodify(name, ":e"), { default = true })
 
   if apply_color then
@@ -19,7 +29,7 @@ function icon(name, apply_color)
   end
 end
 
-function _G.harpoon_tabline()
+function _G.my_tabline()
   local names = harpoon:list():display()
   local current_name = vim.fn.bufname()
 
@@ -40,12 +50,15 @@ function _G.harpoon_tabline()
     local icon = icon(name, is_current)
     local tab_name = format(name_group, vim.fn.fnamemodify(name, ":t"))
 
-    local tab = "  " .. number .. " " .. icon .. " " .. tab_name .. "  "
+    local suffix = "  "
+    if is_unsaved(name) then suffix = format(number_group, "* ") end
+
+    local tab = "  " .. number .. " " .. icon .. " " .. tab_name .. suffix
 
     tabline = tabline .. tab
   end
 
-  return tabline .. "%#TablineBackground#"
+  return "%#TablineBackground#" .. tabline .. "%#TablineBackground#"
 end
 
 vim.api.nvim_create_autocmd("BufWritePost", {
@@ -54,4 +67,4 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   end
 })
 
-vim.o.tabline = '%!v:lua.harpoon_tabline()'
+vim.o.tabline = '%!v:lua.my_tabline()'
