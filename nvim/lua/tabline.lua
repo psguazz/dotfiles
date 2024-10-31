@@ -18,16 +18,16 @@ local function format(group, text)
   return "%#" .. group .. "#" .. text
 end
 
-local function icon(name, apply_color)
-  local char, icon_color = devicons.get_icon_color(name, vim.fn.fnamemodify(name, ":e"), { default = true })
+local function colored_icon(name, apply_color)
+  local icon, icon_color = devicons.get_icon_color(name, vim.fn.fnamemodify(name, ":e"), { default = true })
 
   if apply_color then
     local group_name = "TabLineColor" .. icon_color:gsub("#", "")
     vim.api.nvim_set_hl(0, group_name, { fg = icon_color })
 
-    return format(group_name, char)
+    return format(group_name, icon)
   else
-    return char
+    return icon
   end
 end
 
@@ -48,19 +48,22 @@ function _G.my_tabline()
     local name_group = group .. "Name"
     if status ~= "None" then name_group = name_group .. status end
 
-    local number = format(number_group, i)
-    local icon = icon(name, is_current)
+    local number = format(number_group, " " .. i)
+    local icon = colored_icon(name, is_current)
     local tab_name = format(name_group, vim.fn.fnamemodify(name, ":t"))
+
+    local prefix = " "
+    if is_current then prefix = format("TablinePrefix", "▐") end
 
     local suffix = "  "
     if is_unsaved(name) then suffix = format(number_group, "* ") end
 
-    local tab = "  " .. number .. " " .. icon .. " " .. tab_name .. suffix
+    local tab = "%#TablineBackground#" .. prefix .. number .. " " .. icon .. " " .. tab_name .. suffix
 
     tabline = tabline .. tab
   end
 
-  return "%#TablineBackground#" .. tabline .. "%#TablineBackground#"
+  return tabline .. "%#TablineBackground#"
 end
 
 vim.api.nvim_create_autocmd("BufWritePost", {
@@ -70,6 +73,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 })
 
 vim.api.nvim_set_hl(0, "TablineBackground", { bg = palette.bg_dim })
+vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.red, bg = palette.bg_dim })
 vim.api.nvim_set_hl(0, "TablineNumber", { fg = palette.grey, bg = palette.bg_dim })
 vim.api.nvim_set_hl(0, "TablineName", { fg = palette.grey, bg = palette.bg_dim })
 vim.api.nvim_set_hl(0, "TablineNameModified", { fg = palette.off_yellow, bg = palette.bg_dim })
