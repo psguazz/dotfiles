@@ -1,6 +1,7 @@
 local M = {}
 
 local git_cache = {}
+local timer
 
 function M.status(file_path)
   if git_cache[file_path] then
@@ -28,8 +29,30 @@ function M.status(file_path)
   return status
 end
 
-function M.refresh()
+function M.clear_cache()
   git_cache = {}
 end
+
+local function refresh()
+  M.clear_cache()
+  timer = vim.defer_fn(refresh, 10000)
+end
+
+refresh()
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+  callback = function()
+    M.clear_cache()
+  end
+})
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  callback = function()
+    if timer then
+      timer:stop()
+      timer:close()
+    end
+  end,
+})
 
 return M

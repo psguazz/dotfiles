@@ -66,12 +66,6 @@ function _G.my_tabline()
   return tabline .. "%#TablineBackground#"
 end
 
-vim.api.nvim_create_autocmd("BufWritePost", {
-  callback = function()
-    git.refresh()
-  end
-})
-
 vim.api.nvim_set_hl(0, "TablineBackground", { bg = palette.bg_dim })
 vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.red, bg = palette.bg_dim })
 vim.api.nvim_set_hl(0, "TablineNumber", { fg = palette.grey, bg = palette.bg_dim })
@@ -86,6 +80,5 @@ vim.api.nvim_set_hl(0, "TablineSelectedNameModified", { fg = palette.yellow, bg 
 vim.api.nvim_set_hl(0, "TablineSelectedNameStaged", { fg = palette.blue, bg = palette.bg0 })
 vim.api.nvim_set_hl(0, "TablineSelectedNameNew", { fg = palette.green, bg = palette.bg0 })
 vim.api.nvim_set_hl(0, "TablineSelectedNameDeleted", { fg = palette.red, bg = palette.bg0 })
-
 
 vim.o.tabline = '%!v:lua.my_tabline()'
