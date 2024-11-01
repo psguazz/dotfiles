@@ -4,6 +4,8 @@ local devicons = require("nvim-web-devicons")
 local git = require("lib.git")
 local palette = require("lib.palette")
 
+local hl_groups = {}
+
 local function is_unsaved(file_path)
   local buf = vim.fn.bufnr(file_path)
 
@@ -14,6 +16,14 @@ local function is_unsaved(file_path)
   return vim.api.nvim_buf_get_option(buf, "modified")
 end
 
+local function define_group(name, opts)
+  if not hl_groups[name] then
+    hl_groups[name] = opts
+    vim.api.nvim_set_hl(0, name, opts)
+  end
+end
+
+
 local function format(group, text)
   return "%#" .. group .. "#" .. text
 end
@@ -23,7 +33,7 @@ local function colored_icon(name, apply_color)
 
   if apply_color then
     local group_name = "TabLineColor" .. icon_color:gsub("#", "")
-    vim.api.nvim_set_hl(0, group_name, { fg = icon_color })
+    define_group(group_name, { fg = icon_color })
 
     return format(group_name, icon)
   else
