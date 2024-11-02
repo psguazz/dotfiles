@@ -28,8 +28,17 @@ return {
       })
 
       vim.api.nvim_create_user_command("A", function() harpoon:list():add() end, {})
-      vim.api.nvim_create_user_command("Q", function() harpoon:list():remove() end, {})
-      vim.api.nvim_create_user_command("QA", function() harpoon:list():clear() end, {})
+
+      vim.api.nvim_create_user_command("Q", function()
+        harpoon:list():remove()
+        vim.cmd("bd!")
+        harpoon:list():prev()
+      end, {})
+
+      vim.api.nvim_create_user_command("QA", function()
+        harpoon:list():clear()
+        vim.cmd("%bd")
+      end, {})
     end
   }
 }
