@@ -49,9 +49,16 @@ return {
       end, {})
 
       vim.api.nvim_create_user_command("Q", function()
-        harpoon:list():remove()
+        local list = harpoon:list()
+
+        list:remove()
         vim.cmd("bd!")
-        harpoon:list():prev()
+        list:prev()
+
+        local names = vim.tbl_filter(function(n) return n ~= "" end, list:display())
+
+        list:resolve_displayed(names, #names)
+        harpoon:sync()
       end, {})
 
       vim.api.nvim_create_user_command("QA", function()
