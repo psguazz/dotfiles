@@ -42,6 +42,7 @@ return {
 
       local servers = {
         pylsp = {},
+        ruby_lsp = {},
         standardrb = {},
         gopls = {
           gopls = {
