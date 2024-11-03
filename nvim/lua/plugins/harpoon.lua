@@ -1,70 +1,68 @@
 return {
-  {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      local harpoon = require("harpoon")
+  "ThePrimeagen/harpoon",
+  branch = "harpoon2",
+  dependencies = { "nvim-lua/plenary.nvim" },
+  config = function()
+    local harpoon = require("harpoon")
 
-      harpoon:setup()
+    harpoon:setup()
 
-      vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end)
-      vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end)
-      vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end)
-      vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end)
-      vim.keymap.set("n", "<leader>5", function() harpoon:list():select(5) end)
-      vim.keymap.set("n", "<leader>6", function() harpoon:list():select(6) end)
-      vim.keymap.set("n", "<leader>7", function() harpoon:list():select(7) end)
-      vim.keymap.set("n", "<leader>8", function() harpoon:list():select(8) end)
-      vim.keymap.set("n", "<leader>9", function() harpoon:list():select(9) end)
+    vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end)
+    vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end)
+    vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end)
+    vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end)
+    vim.keymap.set("n", "<leader>5", function() harpoon:list():select(5) end)
+    vim.keymap.set("n", "<leader>6", function() harpoon:list():select(6) end)
+    vim.keymap.set("n", "<leader>7", function() harpoon:list():select(7) end)
+    vim.keymap.set("n", "<leader>8", function() harpoon:list():select(8) end)
+    vim.keymap.set("n", "<leader>9", function() harpoon:list():select(9) end)
 
-      vim.keymap.set("n", "<leader>,", function() harpoon:list():prev() end)
-      vim.keymap.set("n", "<leader>.", function() harpoon:list():next() end)
+    vim.keymap.set("n", "<leader>,", function() harpoon:list():prev() end)
+    vim.keymap.set("n", "<leader>.", function() harpoon:list():next() end)
 
-      vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
-        callback = function()
-          local current_name = vim.fn.bufname()
-          local names = harpoon:list():display()
-          local index = -1
+    vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
+      callback = function()
+        local current_name = vim.fn.bufname()
+        local names = harpoon:list():display()
+        local index = -1
 
-          for i, name in ipairs(names) do
-            local is_current = string.match(current_name, name .. "$")
-            if is_current then
-              index = i
-            end
+        for i, name in ipairs(names) do
+          local is_current = string.match(current_name, name .. "$")
+          if is_current then
+            index = i
           end
-
-          harpoon:list()._index = index
         end
-      })
 
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        callback = function()
-          harpoon:list():add()
-        end
-      })
+        harpoon:list()._index = index
+      end
+    })
 
-      vim.api.nvim_create_user_command("A", function()
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      callback = function()
         harpoon:list():add()
-      end, {})
+      end
+    })
 
-      vim.api.nvim_create_user_command("Q", function()
-        local list = harpoon:list()
+    vim.api.nvim_create_user_command("A", function()
+      harpoon:list():add()
+    end, {})
 
-        list:remove()
-        vim.cmd("bd!")
-        list:prev()
+    vim.api.nvim_create_user_command("Q", function()
+      local list = harpoon:list()
 
-        local names = vim.tbl_filter(function(n) return n ~= "" end, list:display())
+      list:remove()
+      vim.cmd("bd!")
+      list:prev()
 
-        list:resolve_displayed(names, #names)
-        harpoon:sync()
-      end, {})
+      local names = vim.tbl_filter(function(n) return n ~= "" end, list:display())
 
-      vim.api.nvim_create_user_command("QA", function()
-        harpoon:list():clear()
-        vim.cmd("%bd")
-      end, {})
-    end
-  }
+      list:resolve_displayed(names, #names)
+      harpoon:sync()
+    end, {})
+
+    vim.api.nvim_create_user_command("QA", function()
+      harpoon:list():clear()
+      vim.cmd("%bd")
+    end, {})
+  end
 }

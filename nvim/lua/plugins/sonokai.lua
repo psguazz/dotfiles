@@ -1,3 +1,3 @@
 return {
-  { "sainnhe/sonokai", },
+  "sainnhe/sonokai"
 }
