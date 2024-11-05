@@ -40,6 +40,7 @@ return {
     require("mason-lspconfig").setup()
 
     local servers = {
+      elixirls = {},
       pylsp = {},
       ruby_lsp = {},
       standardrb = {},
