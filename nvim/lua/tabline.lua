@@ -41,36 +41,47 @@ local function colored_icon(name, apply_color)
   end
 end
 
+local function tab(name, index, is_current)
+  local status = git.status(name)
+
+  local group = "Tabline"
+  if is_current then group = group .. "Selected" end
+
+  local number_group = group .. "Number"
+  local name_group = group .. "Name"
+  if status ~= "None" then name_group = name_group .. status end
+
+  local number = format(number_group, " " .. index)
+  local icon = colored_icon(name, is_current)
+  local tab_name = format(name_group, vim.fn.fnamemodify(name, ":t"))
+
+  local prefix = " "
+  if is_current then prefix = format("TablinePrefix", "▐") end
+
+  local suffix = "  "
+  if is_unsaved(name) then suffix = format(number_group, "* ") end
+
+  return "%#TablineBackground#" .. prefix .. number .. " " .. icon .. " " .. tab_name .. suffix
+end
+
 function _G.my_tabline()
   local names = harpoon:list():display()
   local current_name = vim.fn.bufname()
 
   local tabline = ""
+  local current_found = false
 
   for i, name in ipairs(names) do
     local is_current = string.match(current_name, name .. "$")
-    local status = git.status(name)
+    tabline = tabline .. tab(name, i, is_current)
 
-    local group = "Tabline"
-    if is_current then group = group .. "Selected" end
+    if is_current then
+      current_found = true
+    end
+  end
 
-    local number_group = group .. "Number"
-    local name_group = group .. "Name"
-    if status ~= "None" then name_group = name_group .. status end
-
-    local number = format(number_group, " " .. i)
-    local icon = colored_icon(name, is_current)
-    local tab_name = format(name_group, vim.fn.fnamemodify(name, ":t"))
-
-    local prefix = " "
-    if is_current then prefix = format("TablinePrefix", "▐") end
-
-    local suffix = "  "
-    if is_unsaved(name) then suffix = format(number_group, "* ") end
-
-    local tab = "%#TablineBackground#" .. prefix .. number .. " " .. icon .. " " .. tab_name .. suffix
-
-    tabline = tabline .. tab
+  if not current_found then
+    tabline = tabline .. tab(current_name, " ", true)
   end
 
   return tabline .. "%#TablineBackground#"
