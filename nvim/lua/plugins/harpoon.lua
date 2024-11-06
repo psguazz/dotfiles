@@ -17,8 +17,20 @@ return {
     vim.keymap.set("n", "<leader>8", function() harpoon:list():select(8) end)
     vim.keymap.set("n", "<leader>9", function() harpoon:list():select(9) end)
 
-    vim.keymap.set("n", "<leader>,", function() harpoon:list():prev() end)
-    vim.keymap.set("n", "<leader>.", function() harpoon:list():next() end)
+    vim.keymap.set("n", "<leader>,", function()
+      if harpoon:list()._index <= 1 then
+        harpoon:list()._index = harpoon:list()._length + 1
+      end
+
+      harpoon:list():prev()
+    end)
+
+    vim.keymap.set("n", "<leader>.", function()
+      if harpoon:list()._index < 0 or harpoon:list()._index >= harpoon:list()._length then
+        harpoon:list()._index = 0
+      end
+      harpoon:list():next()
+    end)
 
     vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
       callback = function()
