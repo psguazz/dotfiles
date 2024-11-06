@@ -80,7 +80,7 @@ function _G.my_tabline()
     end
   end
 
-  if not current_found then
+  if not current_found and current_name ~= "" and current_name ~= "NvimTree_1" then
     tabline = tabline .. tab(current_name, " ", true)
   end
 

@@ -64,7 +64,6 @@ return {
 
       list:remove()
       vim.cmd("bd!")
-      list:prev()
 
       local names = vim.tbl_filter(function(n) return n ~= "" end, list:display())
 
