@@ -23,7 +23,6 @@ local function define_group(name, opts)
   end
 end
 
-
 local function format(group, text)
   return "%#" .. group .. "#" .. text
 end
@@ -86,6 +85,26 @@ function _G.my_tabline()
 
   return tabline .. "%#TablineBackground#"
 end
+
+local show = false
+
+vim.api.nvim_create_user_command("T", function()
+  if show then
+    vim.cmd("Toff")
+  else
+    vim.cmd("Ton")
+  end
+end, {})
+
+vim.api.nvim_create_user_command("Ton", function()
+  show = true
+  vim.cmd("set showtabline=2")
+end, {})
+
+vim.api.nvim_create_user_command("Toff", function()
+  show = false
+  vim.cmd("set showtabline=0")
+end, {})
 
 vim.api.nvim_set_hl(0, "TablineBackground", { bg = palette.bg_dim })
 vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.red, bg = palette.bg_dim })
