@@ -9,6 +9,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     set_hl("@string.special.symbol.ruby", palette.purple, palette.none)
     set_hl("@variable.parameter.ruby", palette.orange, palette.none)
     set_hl("@string.regexp.ruby", palette.yellow, palette.none)
+    set_hl("@lsp.type.parameter.ruby", palette.orange, palette.none)
 
     set_hl("@variable.parameter.python", palette.orange, palette.none)
     set_hl("@variable.member.python", palette.fg, palette.none)
