@@ -73,7 +73,7 @@ return {
 
     vim.api.nvim_create_user_command("QA", function()
       harpoon:list():clear()
-      vim.cmd("%bd")
+      vim.cmd("bufdo if bufname() !~ 'NvimTree_1' | bd | endif")
     end, {})
   end
 }
