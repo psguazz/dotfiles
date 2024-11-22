@@ -8,6 +8,7 @@ vim.o.termguicolors = true
 vim.o.timeoutlen = 300
 vim.o.undofile = true
 vim.o.updatetime = 250
+vim.o.shortmess = "ltToOCFI"
 vim.opt.colorcolumn = "80"
 vim.opt.cursorline = true
 vim.opt.mouse = ""
