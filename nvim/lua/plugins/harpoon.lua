@@ -73,7 +73,14 @@ return {
 
     vim.api.nvim_create_user_command("QA", function()
       harpoon:list():clear()
-      vim.cmd("bufdo if bufname() !~ 'NvimTree_1' | bd | endif")
+      vim.cmd("NvimTreeFocus")
+
+      for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+        if not buf_name:match("NvimTree_1$") then
+          vim.api.nvim_buf_delete(buf, { force = true })
+        end
+      end
     end, {})
   end
 }
