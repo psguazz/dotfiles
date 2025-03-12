@@ -50,7 +50,7 @@ local function tab(name, index, is_current, status)
 
   local number = format(number_group, " " .. index)
   local icon = colored_icon(name, is_current)
-  local tab_name = format(name_group, name)
+  local tab_name = format(name_group, vim.fn.fnamemodify(name, ":t"))
 
   local prefix = " "
   if is_current then prefix = format("TablinePrefix", "▐") end
@@ -63,16 +63,13 @@ end
 
 function _G.my_tabline()
   local names = harpoon:list():display()
-  local current_status = git.status(vim.fn.bufname())
-  local current_name = vim.fn.fnamemodify(vim.fn.bufname(), ":t")
+  local current_name = vim.fn.fnamemodify(vim.fn.bufname(), ':.')
 
   local tabline = ""
   local current_found = false
 
   for i, name in ipairs(names) do
     local status = git.status(name)
-
-    name = vim.fn.fnamemodify(name, ":t")
     local is_current = current_name == name
     tabline = tabline .. tab(name, i, is_current, status)
 
@@ -82,6 +79,7 @@ function _G.my_tabline()
   end
 
   if not current_found and current_name ~= "" and current_name ~= "NvimTree_1" then
+    local current_status = git.status(vim.fn.bufname())
     tabline = tabline .. tab(current_name, " ", true, current_status)
   end
 

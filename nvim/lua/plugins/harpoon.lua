@@ -34,13 +34,12 @@ return {
 
     vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
       callback = function()
-        local current_name = vim.fn.bufname()
+        local current_name = vim.fn.fnamemodify(vim.fn.bufname(), ':.')
         local names = harpoon:list():display()
         local index = -1
 
         for i, name in ipairs(names) do
-          local is_current = string.match(current_name, name .. "$")
-          if is_current then
+          if current_name == name then
             index = i
           end
         end
