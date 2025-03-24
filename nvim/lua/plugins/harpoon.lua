@@ -52,10 +52,11 @@ return {
 
     local harpoon_add = function()
       local list = harpoon:list()
+      local limit = math.max(table_size(pinned) + 5, 9)
 
       list:add()
 
-      if list:length() > table_size(pinned) + 5 then
+      if list:length() > limit then
         local index = find_index(list:display(), function(n) return pinned[n] == nil end)
         list:remove_at(index)
         resolve_displayed()
