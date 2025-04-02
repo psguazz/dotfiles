@@ -44,3 +44,23 @@ vim.api.nvim_create_user_command("Z", function()
     vim.cmd("Zon")
   end
 end, {})
+
+-- Multi-cursor replacement
+
+local function replace(text)
+  local replacement = vim.fn.input("Replace `" .. text .. "` with: ")
+  if replacement ~= "" then
+    vim.cmd("%s/" .. text .. "/" .. replacement .. "/gc")
+  end
+end
+
+vim.keymap.set("n", "<C-n>", function()
+  local word = vim.fn.expand("<cword>")
+  replace(word)
+end, { noremap = true, silent = true })
+
+vim.keymap.set("v", "<C-n>", function()
+  vim.cmd('noau normal! "vy"')
+  local selected_text = vim.fn.getreg("v")
+  replace(selected_text)
+end, { noremap = true, silent = true })
