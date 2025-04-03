@@ -82,12 +82,39 @@ local function filename(buf, is_active, current_mode)
   return pill(base_group, is_active, text)
 end
 
-local function file_type(is_active)
-  local icon = f.colored_icon(vim.fn.expand("%:p"), is_active)
-  local text = vim.bo.filetype
+local function diagnostics(buf)
+  local errors = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.ERROR })
+  local warnings = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.WARN })
+  local hints = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.HINT })
+  local info = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.INFO })
 
-  local group = "StatuslinePlain"
-  return f.format(group, icon) .. f.format(group, text)
+  local counts = ""
+
+  if errors > 0 then
+    counts = counts .. f.format("DiagnosticError", " " .. errors)
+  end
+  if warnings > 0 then
+    counts = counts .. f.format("DiagnosticWarn", " " .. warnings)
+  end
+  if hints > 0 then
+    counts = counts .. f.format("DiagnosticHint", " " .. hints)
+  end
+  if info > 0 then
+    counts = counts .. f.format("DiagnosticInfo", " " .. info)
+  end
+
+  if counts ~= "" then
+    counts = pill("Plain", false, counts)
+  end
+
+  return counts
+end
+
+local function file_type(buf, is_active)
+  local icon = f.colored_icon(vim.fn.expand("%:p"), is_active)
+  local text = " " .. vim.bo[buf].filetype
+
+  return pill("Plain", false, icon .. f.format("StatuslinePlain", text))
 end
 
 local function git_branch(is_active, current_mode)
@@ -105,30 +132,6 @@ local function location(is_active, current_mode)
 
   local base_group = mode_groups[current_mode]
   return pill(base_group, is_active, text)
-end
-
-local function diagnostics(buf)
-  local errors = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.ERROR })
-  local warnings = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.WARN })
-  local hints = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.HINT })
-  local info = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.INFO })
-
-  local counts = " "
-
-  if errors > 0 then
-    counts = counts .. f.format("DiagnosticError", " " .. errors)
-  end
-  if warnings > 0 then
-    counts = counts .. f.format("DiagnosticWarn", " " .. warnings)
-  end
-  if hints > 0 then
-    counts = counts .. f.format("DiagnosticHint", " " .. hints)
-  end
-  if info > 0 then
-    counts = counts .. f.format("DiagnosticInfo", " " .. info)
-  end
-
-  return counts
 end
 
 local function placeholder_line(is_active, current_mode)
@@ -161,7 +164,7 @@ local function full_line(buf, is_active, current_mode)
 
     line = line .. space .. "%=" .. space
 
-    line = line .. file_type(is_active)
+    line = line .. file_type(buf, is_active)
     line = line .. space
     line = line .. git_branch(is_active, current_mode)
     line = line .. space
@@ -207,7 +210,9 @@ vim.api.nvim_create_user_command("Soff", function()
 end, {})
 
 vim.api.nvim_set_hl(0, "StatuslineBackground", { bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslinePlain", { fg = palette.grey, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslinePlain", { fg = palette.grey, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillPlain", { fg = palette.bg0, bg = palette.bg1 })
 
 vim.api.nvim_set_hl(0, "StatuslineNormalActive", { fg = palette.bg0, bg = palette.bg_blue })
 vim.api.nvim_set_hl(0, "StatuslinePillNormalActive", { fg = palette.bg_blue, bg = palette.bg1 })
