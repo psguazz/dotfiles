@@ -1,0 +1,267 @@
+local palette = require("lib.palette")
+local f = require("lib.format")
+
+local full = false
+
+local mode_groups = {
+  n = "Normal",
+  no = "Normal",
+  v = "Visual",
+  V = "Visual",
+  [""] = "Visual",
+  i = "Insert",
+  R = "Replace",
+  Rv = "Replace",
+  c = "Command",
+  s = "Select",
+  S = "Select",
+  [""] = "Select",
+  t = "Terminal",
+
+}
+
+local mode_labels = {
+  n = "NORMAL",
+  no = "NORMAL",
+  v = "VISUAL",
+  V = "V-LINE",
+  [""] = "V-BLOCK",
+  i = "INSERT",
+  R = "REPLACE",
+  Rv = "V-REPLACE",
+  c = "COMMAND",
+  s = "SELECT",
+  S = "S-LINE",
+  [""] = "S-BLOCK",
+  t = "TERMINAL",
+}
+
+local left_pill = ""
+local right_pill = ""
+local space = "%#StatuslineBackground# "
+
+local disabled_filetypes = { "NvimTree", "fugitive" }
+
+local function should_hide(buf)
+  local filetype = vim.bo[buf].filetype
+
+  for _, ft in ipairs(disabled_filetypes) do
+    if filetype == ft then
+      return true
+    end
+  end
+
+  return false
+end
+
+local function pill(base_group, is_active, text)
+  if is_active then base_group = base_group .. "Active" end
+  text = " " .. text .. " "
+
+  local group = "Statusline" .. base_group
+  local pill_group = "StatuslinePill" .. base_group
+
+  return f.format(pill_group, left_pill) .. f.format(group, text) .. f.format(pill_group, right_pill)
+end
+
+
+local function mode(is_active, current_mode, big)
+  local text = ""
+  if big then text = mode_labels[current_mode] or "Unknown" end
+
+  local base_group = mode_groups[current_mode]
+  return pill(base_group, is_active, text)
+end
+
+local function filename(buf, is_active, current_mode)
+  local text = vim.api.nvim_buf_get_name(buf)
+  text = vim.fn.fnamemodify(text, ":p")
+  text = text:gsub("^" .. vim.pesc(vim.fn.getcwd() .. "/"), "")
+
+  local base_group = mode_groups[current_mode] .. "Inverted"
+  return pill(base_group, is_active, text)
+end
+
+local function diagnostics(buf)
+  local errors = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.ERROR })
+  local warnings = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.WARN })
+  local hints = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.HINT })
+  local info = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.INFO })
+
+  local counts = ""
+
+  if errors > 0 then
+    counts = counts .. f.format("DiagnosticError", " " .. errors)
+  end
+  if warnings > 0 then
+    counts = counts .. f.format("DiagnosticWarn", " " .. warnings)
+  end
+  if hints > 0 then
+    counts = counts .. f.format("DiagnosticHint", " " .. hints)
+  end
+  if info > 0 then
+    counts = counts .. f.format("DiagnosticInfo", " " .. info)
+  end
+
+  if counts ~= "" then
+    counts = pill("Plain", false, counts)
+  end
+
+  return counts
+end
+
+local function file_type(buf, is_active)
+  local icon = f.colored_icon(vim.fn.expand("%:p"), is_active)
+  local text = " " .. vim.bo[buf].filetype
+
+  return pill("Plain", false, icon .. f.format("StatuslinePlain", text))
+end
+
+local function git_branch(is_active, current_mode)
+  local text = " " .. vim.fn.FugitiveHead()
+
+  local base_group = mode_groups[current_mode] .. "Inverted"
+  return pill(base_group, is_active, text)
+end
+
+local function location(is_active, current_mode)
+  local r, c = unpack(vim.api.nvim_win_get_cursor(0))
+  local row = string.format("%2d", r)
+  local col = string.format("%-2d", c)
+  local text = row .. ":" .. col
+
+  local base_group = mode_groups[current_mode]
+  return pill(base_group, is_active, text)
+end
+
+local function placeholder_line(is_active, current_mode)
+  return mode(is_active, current_mode, false)
+end
+
+local function bare_line(buf, is_active, current_mode)
+  local line = ""
+
+  line = line .. mode(is_active, current_mode, false)
+
+  if is_active then
+    line = line .. space
+    line = line .. filename(buf, false, current_mode)
+  end
+
+  return line
+end
+
+local function full_line(buf, is_active, current_mode)
+  local line = ""
+
+  line = line .. mode(is_active, current_mode, true)
+  line = line .. space
+  line = line .. filename(buf, is_active, current_mode)
+
+  if is_active then
+    line = line .. space
+    line = line .. diagnostics(buf)
+
+    line = line .. space .. "%=" .. space
+
+    line = line .. file_type(buf, is_active)
+    line = line .. space
+    line = line .. git_branch(is_active, current_mode)
+    line = line .. space
+    line = line .. location(is_active, current_mode)
+  end
+
+  return line
+end
+
+function _G.my_statusline()
+  local winid = vim.g.statusline_winid
+  local buf = vim.api.nvim_win_get_buf(winid)
+  local is_active = winid == vim.fn.win_getid()
+  local current_mode = vim.api.nvim_get_mode().mode
+
+  local line = ""
+
+  if should_hide(buf) then
+    line = placeholder_line(is_active, current_mode)
+  elseif full then
+    line = full_line(buf, is_active, current_mode)
+  else
+    line = bare_line(buf, is_active, current_mode)
+  end
+
+  return "%#StatuslineBackground#" .. line .. "%#StatuslineBackground#"
+end
+
+vim.api.nvim_create_user_command("S", function()
+  if full then
+    vim.cmd("Soff")
+  else
+    vim.cmd("Son")
+  end
+end, {})
+
+vim.api.nvim_create_user_command("Son", function()
+  full = true
+end, {})
+
+vim.api.nvim_create_user_command("Soff", function()
+  full = false
+end, {})
+
+vim.api.nvim_set_hl(0, "StatuslineBackground", { bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslinePlain", { fg = palette.grey, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillPlain", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineNormalActive", { fg = palette.bg0, bg = palette.bg_blue })
+vim.api.nvim_set_hl(0, "StatuslinePillNormalActive", { fg = palette.bg_blue, bg = palette.bg1 })
+vim.api.nvim_set_hl(0, "StatuslineNormalInvertedActive", { fg = palette.bg_blue, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillNormalInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineVisualActive", { fg = palette.bg0, bg = palette.purple })
+vim.api.nvim_set_hl(0, "StatuslinePillVisualActive", { fg = palette.purple, bg = palette.bg1 })
+vim.api.nvim_set_hl(0, "StatuslineVisualInvertedActive", { fg = palette.purple, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillVisualInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineInsertActive", { fg = palette.bg0, bg = palette.bg_green })
+vim.api.nvim_set_hl(0, "StatuslinePillInsertActive", { fg = palette.bg_green, bg = palette.bg1 })
+vim.api.nvim_set_hl(0, "StatuslineInsertInvertedActive", { fg = palette.bg_green, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillInsertInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineCommandActive", { fg = palette.bg0, bg = palette.yellow })
+vim.api.nvim_set_hl(0, "StatuslinePillCommandActive", { fg = palette.yellow, bg = palette.bg1 })
+vim.api.nvim_set_hl(0, "StatuslineCommandInvertedActive", { fg = palette.yellow, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillCommandInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineReplaceActive", { fg = palette.bg0, bg = palette.bg_red })
+vim.api.nvim_set_hl(0, "StatuslinePillReplaceActive", { fg = palette.bg_red, bg = palette.bg1 })
+vim.api.nvim_set_hl(0, "StatuslineReplaceInvertedActive", { fg = palette.bg_red, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillReplaceInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineNormal", { fg = palette.bg0, bg = palette.grey })
+vim.api.nvim_set_hl(0, "StatuslinePillNormal", { fg = palette.grey, bg = palette.bg1 })
+vim.api.nvim_set_hl(0, "StatuslineNormalInverted", { fg = palette.grey, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillNormalInverted", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineVisual", { fg = palette.bg0, bg = palette.grey })
+vim.api.nvim_set_hl(0, "StatuslinePillVisual", { fg = palette.grey, bg = palette.bg1 })
+vim.api.nvim_set_hl(0, "StatuslineVisualInverted", { fg = palette.grey, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillVisualInverted", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineInsert", { fg = palette.bg0, bg = palette.grey })
+vim.api.nvim_set_hl(0, "StatuslinePillInsert", { fg = palette.grey, bg = palette.bg1 })
+vim.api.nvim_set_hl(0, "StatuslineInsertInverted", { fg = palette.grey, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillInsertInverted", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineCommand", { fg = palette.bg0, bg = palette.grey })
+vim.api.nvim_set_hl(0, "StatuslinePillCommand", { fg = palette.grey, bg = palette.bg1 })
+vim.api.nvim_set_hl(0, "StatuslineCommandInverted", { fg = palette.grey, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillCommandInverted", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineReplace", { fg = palette.bg0, bg = palette.grey })
+vim.api.nvim_set_hl(0, "StatuslinePillReplace", { fg = palette.grey, bg = palette.bg1 })
+vim.api.nvim_set_hl(0, "StatuslineReplaceInverted", { fg = palette.grey, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslinePillReplaceInverted", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.o.statusline = '%!v:lua.my_statusline()'
