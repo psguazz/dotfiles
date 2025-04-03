@@ -1,6 +1,3 @@
-local harpoon = require("harpoon")
-
-local git = require("lib.git")
 local palette = require("lib.palette")
 local f = require("lib.format")
 
@@ -110,6 +107,30 @@ local function location(is_active, current_mode)
   return pill(base_group, is_active, text)
 end
 
+local function diagnostics(buf)
+  local errors = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.ERROR })
+  local warnings = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.WARN })
+  local hints = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.HINT })
+  local info = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.INFO })
+
+  local counts = " "
+
+  if errors > 0 then
+    counts = counts .. f.format("DiagnosticError", " " .. errors)
+  end
+  if warnings > 0 then
+    counts = counts .. f.format("DiagnosticWarn", " " .. warnings)
+  end
+  if hints > 0 then
+    counts = counts .. f.format("DiagnosticHint", " " .. hints)
+  end
+  if info > 0 then
+    counts = counts .. f.format("DiagnosticInfo", " " .. info)
+  end
+
+  return counts
+end
+
 local function placeholder_line(is_active, current_mode)
   return mode(is_active, current_mode, false)
 end
@@ -135,6 +156,9 @@ local function full_line(buf, is_active, current_mode)
   line = line .. filename(buf, is_active, current_mode)
 
   if is_active then
+    line = line .. space
+    line = line .. diagnostics(buf)
+
     line = line .. space .. "%=" .. space
 
     line = line .. file_type(is_active)
