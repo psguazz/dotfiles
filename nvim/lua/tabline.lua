@@ -1,46 +1,10 @@
 local harpoon = require("harpoon")
-local devicons = require("nvim-web-devicons")
 
 local git = require("lib.git")
 local palette = require("lib.palette")
+local f = require("lib.format")
 
-local hl_groups = {}
-
-local function is_unsaved(file_path)
-  local buf = vim.fn.bufnr(file_path)
-
-  if buf == -1 then
-    return false
-  end
-
-  return vim.api.nvim_buf_get_option(buf, "modified")
-end
-
-local function define_group(name, opts)
-  if not hl_groups[name] then
-    hl_groups[name] = opts
-    vim.api.nvim_set_hl(0, name, opts)
-  end
-end
-
-local function format(group, text)
-  return "%#" .. group .. "#" .. text
-end
-
-local function colored_icon(name, apply_color)
-  local icon, icon_color = devicons.get_icon_color(name, vim.fn.fnamemodify(name, ":e"), { default = true })
-
-  if apply_color then
-    local group_name = "TabLineColor" .. icon_color:gsub("#", "")
-    define_group(group_name, { fg = icon_color })
-
-    return format(group_name, icon)
-  else
-    return icon
-  end
-end
-
-local function tab(name, index, is_current, status)
+local function tab(name, index, is_current, is_unsaved, status)
   local group = "Tabline"
   if is_current then group = group .. "Selected" end
 
@@ -48,15 +12,15 @@ local function tab(name, index, is_current, status)
   local name_group = group .. "Name"
   if status ~= "None" then name_group = name_group .. status end
 
-  local number = format(number_group, " " .. index)
-  local icon = colored_icon(name, is_current)
-  local tab_name = format(name_group, vim.fn.fnamemodify(name, ":t"))
+  local number = f.format(number_group, " " .. index)
+  local icon = f.colored_icon(name, is_current)
+  local tab_name = f.format(name_group, vim.fn.fnamemodify(name, ":t"))
 
   local prefix = " "
-  if is_current then prefix = format("TablinePrefix", "▐") end
+  if is_current then prefix = f.format("TablinePrefix", "▐") end
 
   local suffix = "  "
-  if is_unsaved(name) then suffix = format(number_group, "* ") end
+  if is_unsaved then suffix = f.format(number_group, "* ") end
 
   return "%#TablineBackground#" .. prefix .. number .. " " .. icon .. " " .. tab_name .. suffix
 end
@@ -71,7 +35,8 @@ function _G.my_tabline()
   for i, name in ipairs(names) do
     local status = git.status(name)
     local is_current = current_name == name
-    tabline = tabline .. tab(name, i, is_current, status)
+    local is_saved = f.is_unsaved(name)
+    tabline = tabline .. tab(name, i, is_current, is_saved, status)
 
     if is_current then
       current_found = true
@@ -80,7 +45,8 @@ function _G.my_tabline()
 
   if not current_found and current_name ~= "" and current_name ~= "NvimTree_1" then
     local current_status = git.status(vim.fn.bufname())
-    tabline = tabline .. tab(current_name, " ", true, current_status)
+    local is_saved = f.is_unsaved(current_name)
+    tabline = tabline .. tab(current_name, " ", true, is_saved, current_status)
   end
 
   return tabline .. "%#TablineBackground#"

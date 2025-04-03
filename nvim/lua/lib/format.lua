@@ -1,0 +1,40 @@
+local M = {}
+
+local devicons = require("nvim-web-devicons")
+local hl_groups = {}
+
+function M.is_unsaved(file_path)
+  local buf = vim.fn.bufnr(file_path)
+
+  if buf == -1 then
+    return false
+  end
+
+  return vim.api.nvim_buf_get_option(buf, "modified")
+end
+
+function M.define_group(name, opts)
+  if not hl_groups[name] then
+    hl_groups[name] = opts
+    vim.api.nvim_set_hl(0, name, opts)
+  end
+end
+
+function M.format(group, text)
+  return "%#" .. group .. "#" .. text
+end
+
+function M.colored_icon(name, apply_color)
+  local icon, icon_color = devicons.get_icon_color(name, vim.fn.fnamemodify(name, ":e"), { default = true })
+
+  if apply_color then
+    local group_name = "DevIconColor" .. icon_color:gsub("#", "")
+    M.define_group(group_name, { fg = icon_color })
+
+    return M.format(group_name, icon)
+  else
+    return icon
+  end
+end
+
+return M
