@@ -14,6 +14,8 @@ function M.is_unsaved(file_path)
 end
 
 function M.define_group(name, opts)
+  name = name:gsub("-", "")
+
   if not hl_groups[name] then
     hl_groups[name] = opts
     vim.api.nvim_set_hl(0, name, opts)
