@@ -49,7 +49,7 @@ function _G.my_tabline()
     tabline = tabline .. tab(current_name, " ", true, is_saved, current_status)
   end
 
-  return tabline
+  return "%#TablineBackground#" .. tabline .. "%#TablineBackground#"
 end
 
 local show = false
