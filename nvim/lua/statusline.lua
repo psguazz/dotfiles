@@ -43,12 +43,13 @@ local left_pill = ""
 local right_pill = ""
 local space = "%#StatuslineBackground# "
 
-local function should_hide()
-  local disabled_filetypes = { "NvimTree", "fugitive" }
-  local current_ft = vim.bo.filetype
+local disabled_filetypes = { "NvimTree", "fugitive" }
+
+local function should_hide(buf)
+  local filetype = vim.bo[buf].filetype
 
   for _, ft in ipairs(disabled_filetypes) do
-    if current_ft == ft then
+    if filetype == ft then
       return true
     end
   end
@@ -75,9 +76,10 @@ local function mode(is_active, current_mode, big)
   return pill(base_group, is_active, text)
 end
 
-local function filename(is_active, current_mode)
-  local text = vim.fn.expand('%:p')
-  vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+local function filename(buf, is_active, current_mode)
+  local text = vim.api.nvim_buf_get_name(buf)
+  text = vim.fn.fnamemodify(text, ":p")
+  text = text:gsub("^" .. vim.pesc(vim.fn.getcwd() .. "/"), "")
 
   local base_group = mode_groups[current_mode] .. "Inverted"
   return pill(base_group, is_active, text)
@@ -112,25 +114,25 @@ local function placeholder_line(is_active, current_mode)
   return mode(is_active, current_mode, false)
 end
 
-local function bare_line(is_active, current_mode)
+local function bare_line(buf, is_active, current_mode)
   local line = ""
 
   line = line .. mode(is_active, current_mode, false)
 
   if is_active then
     line = line .. space
-    line = line .. filename(false, current_mode)
+    line = line .. filename(buf, false, current_mode)
   end
 
   return line
 end
 
-local function full_line(is_active, current_mode)
+local function full_line(buf, is_active, current_mode)
   local line = ""
 
   line = line .. mode(is_active, current_mode, true)
   line = line .. space
-  line = line .. filename(is_active, current_mode)
+  line = line .. filename(buf, is_active, current_mode)
 
   if is_active then
     line = line .. space .. "%=" .. space
@@ -146,17 +148,19 @@ local function full_line(is_active, current_mode)
 end
 
 function _G.my_statusline()
+  local winid = vim.g.statusline_winid
+  local buf = vim.api.nvim_win_get_buf(winid)
+  local is_active = winid == vim.fn.win_getid()
   local current_mode = vim.api.nvim_get_mode().mode
-  local is_active = true
 
   local line = ""
 
-  if should_hide() then
+  if should_hide(buf) then
     line = placeholder_line(is_active, current_mode)
   elseif full then
-    line = full_line(is_active, current_mode)
+    line = full_line(buf, is_active, current_mode)
   else
-    line = bare_line(is_active, current_mode)
+    line = bare_line(buf, is_active, current_mode)
   end
 
   return "%#StatuslineBackground#" .. line .. "%#StatuslineBackground#"
