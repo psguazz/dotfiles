@@ -62,7 +62,6 @@ local function replace(text)
   local replacement = vim.fn.input("Replace `" .. text .. "` with: ")
   if replacement ~= "" then
     vim.cmd(".,$s/" .. text .. "/" .. replacement .. "/gc")
-    vim.cmd("1,.s/" .. text .. "/" .. replacement .. "/gc")
   end
 end
 
