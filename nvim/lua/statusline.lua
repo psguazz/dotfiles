@@ -92,26 +92,26 @@ local function diagnostics(buf)
   local hints = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.HINT })
   local info = #vim.diagnostic.get(buf, { severity = vim.diagnostic.severity.INFO })
 
-  local counts = ""
+  local counts = {}
 
   if errors > 0 then
-    counts = counts .. f.format("DiagnosticError", " " .. errors)
+    table.insert(counts, f.format("DiagnosticError", " " .. errors))
   end
   if warnings > 0 then
-    counts = counts .. f.format("DiagnosticWarn", " " .. warnings)
+    table.insert(counts, f.format("DiagnosticWarn", " " .. warnings))
   end
   if hints > 0 then
-    counts = counts .. f.format("DiagnosticHint", " " .. hints)
+    table.insert(counts, f.format("DiagnosticHint", " " .. hints))
   end
   if info > 0 then
-    counts = counts .. f.format("DiagnosticInfo", " " .. info)
+    table.insert(counts, f.format("DiagnosticInfo", " " .. info))
   end
 
-  if counts ~= "" then
-    counts = pill("Plain", false, counts)
+  if #counts > 0 then
+    return pill("Plain", false, table.concat(counts, " "))
+  else
+    return ""
   end
-
-  return counts
 end
 
 local function file_type(buf, is_active)
