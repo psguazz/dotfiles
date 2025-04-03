@@ -61,6 +61,7 @@ end
 local function replace(text)
   local replacement = vim.fn.input("Replace `" .. text .. "` with: ")
   if replacement ~= "" then
+    text = "\\V" .. vim.fn.escape(text, "\\")
     vim.cmd(".,$s/" .. text .. "/" .. replacement .. "/gc")
   end
 end
