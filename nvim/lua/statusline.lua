@@ -3,37 +3,41 @@ local f = require("lib.format")
 
 local full = false
 
-local mode_groups = {
-  n = "Normal",
-  no = "Normal",
-  v = "Visual",
-  V = "Visual",
-  [""] = "Visual",
-  i = "Insert",
-  R = "Replace",
-  Rv = "Replace",
-  c = "Command",
-  s = "Select",
-  S = "Select",
-  [""] = "Select",
-  t = "Terminal",
+local modes = {
+  ["n"]     = { group = "Normal", label = "Normal" },
+  ["no"]    = { group = "Normal", label = "Operator-pending" },
+  ["nov"]   = { group = "Normal", label = "Operator-pending (forced charwise)" },
+  ["noV"]   = { group = "Normal", label = "Operator-pending (forced linewise)" },
+  ["no\22"] = { group = "Normal", label = "Operator-pending (forced blockwise)" },
 
-}
+  ["v"]     = { group = "Visual", label = "Visual" },
+  ["V"]     = { group = "Visual", label = "Visual-line" },
+  ["\22"]   = { group = "Visual", label = "Visual-block" },
 
-local mode_labels = {
-  n = "NORMAL",
-  no = "NORMAL",
-  v = "VISUAL",
-  V = "V-LINE",
-  [""] = "V-BLOCK",
-  i = "INSERT",
-  R = "REPLACE",
-  Rv = "V-REPLACE",
-  c = "COMMAND",
-  s = "SELECT",
-  S = "S-LINE",
-  [""] = "S-BLOCK",
-  t = "TERMINAL",
+  ["s"]     = { group = "Select", label = "Select" },
+  ["S"]     = { group = "Select", label = "Select-line" },
+  ["\19"]   = { group = "Select", label = "Select-block" },
+
+  ["i"]     = { group = "Insert", label = "Insert" },
+  ["ic"]    = { group = "Insert", label = "Insert (completion)" },
+  ["ix"]    = { group = "Insert", label = "Insert (CTRL-X mode)" },
+
+  ["R"]     = { group = "Replace", label = "Replace" },
+  ["Rc"]    = { group = "Replace", label = "Replace (completion)" },
+  ["Rx"]    = { group = "Replace", label = "Replace (CTRL-X mode)" },
+  ["Rv"]    = { group = "Replace", label = "Virtual Replace" },
+
+  ["c"]     = { group = "Command", label = "Command-line" },
+  ["cv"]    = { group = "Command", label = "Ex" },
+  ["ce"]    = { group = "Command", label = "Normal Ex" },
+
+  ["r"]     = { group = "Replace", label = "Hit-enter" },
+  ["rm"]    = { group = "Replace", label = "Confirm" },
+  ["r?"]    = { group = "Replace", label = "Prompt" },
+
+  ["!"]     = { group = "Command", label = "Shell or External" },
+
+  ["t"]     = { group = "Command", label = "Terminal" }
 }
 
 local left_pill = ""
@@ -67,9 +71,9 @@ end
 
 local function mode(is_active, current_mode, big)
   local text = ""
-  if big then text = mode_labels[current_mode] or "Unknown" end
+  if big then text = modes[current_mode].label or "Unknown" end
 
-  local base_group = mode_groups[current_mode]
+  local base_group = modes[current_mode].group
   return pill(base_group, is_active, text)
 end
 
@@ -78,7 +82,7 @@ local function filename(buf, is_active, current_mode)
   text = vim.fn.fnamemodify(text, ":p")
   text = text:gsub("^" .. vim.pesc(vim.fn.getcwd() .. "/"), "")
 
-  local base_group = mode_groups[current_mode] .. "Inverted"
+  local base_group = modes[current_mode].group .. "Inverted"
   return pill(base_group, is_active, text)
 end
 
@@ -120,7 +124,7 @@ end
 local function git_branch(is_active, current_mode)
   local text = " " .. vim.fn.FugitiveHead()
 
-  local base_group = mode_groups[current_mode] .. "Inverted"
+  local base_group = modes[current_mode].group .. "Inverted"
   return pill(base_group, is_active, text)
 end
 
@@ -130,7 +134,7 @@ local function location(is_active, current_mode)
   local col = string.format("%-2d", c)
   local text = row .. ":" .. col
 
-  local base_group = mode_groups[current_mode]
+  local base_group = modes[current_mode].group
   return pill(base_group, is_active, text)
 end
 
