@@ -22,7 +22,7 @@ local function tab(name, index, is_current, is_unsaved, status)
   local suffix = "  "
   if is_unsaved then suffix = f.format(number_group, "* ") end
 
-  return "%#TablineBackground#" .. prefix .. number .. " " .. icon .. " " .. tab_name .. suffix
+  return "%#TablineBackground#" .. prefix .. number .. " " .. icon .. " " .. tab_name .. suffix .. "%#TablineBackground#"
 end
 
 function _G.my_tabline()
@@ -49,7 +49,7 @@ function _G.my_tabline()
     tabline = tabline .. tab(current_name, " ", true, is_saved, current_status)
   end
 
-  return tabline .. "%#TablineBackground#"
+  return tabline
 end
 
 local show = false
