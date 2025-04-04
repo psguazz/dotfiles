@@ -1,5 +1,6 @@
-local palette = require("lib.palette")
 local f = require("lib.format")
+local git = require("lib.git")
+local palette = require("lib.palette")
 
 local full = false
 
@@ -121,7 +122,7 @@ local function file_type(buf, is_active)
   return pill("Plain", false, icon .. f.format("StatuslinePlain", text))
 end
 
-local function git_status(is_active, current_mode)
+local function git_status(buf)
   local s = vim.b.gitsigns_status_dict
   s = s or { added = 0, changed = 0, removed = 0 }
 
@@ -137,14 +138,16 @@ local function git_status(is_active, current_mode)
     table.insert(counts, f.format("GitSignsDelete", "-" .. s.removed))
   end
 
-  local text = " " .. vim.fn.FugitiveHead()
+  local name = vim.api.nvim_buf_get_name(buf)
+  local group = "StatuslineGit" .. git.status(name)
+  local branch = " " .. vim.fn.FugitiveHead()
 
+  local text = f.format(group, branch)
   if #counts > 0 then
-    text = text .. " | " .. table.concat(counts, " ")
+    text = text .. f.format("StatuslinePlain", " | ") .. table.concat(counts, " ")
   end
 
-  local base_group = modes[current_mode].group .. "Inverted"
-  return pill(base_group, is_active, text)
+  return pill("Plain", false, text)
 end
 
 local function location(is_active, current_mode)
@@ -189,7 +192,7 @@ local function full_line(buf, is_active, current_mode)
 
     line = line .. file_type(buf, is_active)
     line = line .. space
-    line = line .. git_status(is_active, current_mode)
+    line = line .. git_status(buf)
     line = line .. space
     line = line .. location(is_active, current_mode)
   end
@@ -236,6 +239,11 @@ vim.api.nvim_set_hl(0, "StatuslineBackground", { bg = palette.bg1 })
 
 vim.api.nvim_set_hl(0, "StatuslinePlain", { fg = palette.grey, bg = palette.bg0 })
 vim.api.nvim_set_hl(0, "StatuslinePillPlain", { fg = palette.bg0, bg = palette.bg1 })
+
+vim.api.nvim_set_hl(0, "StatuslineGitNone", { fg = palette.fg, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslineGitAdded", { fg = palette.green, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslineGitModified", { fg = palette.yellow, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslineGitDeleted", { fg = palette.red, bg = palette.bg0 })
 
 vim.api.nvim_set_hl(0, "StatuslineNormalActive", { fg = palette.bg0, bg = palette.bg_blue })
 vim.api.nvim_set_hl(0, "StatuslinePillNormalActive", { fg = palette.bg_blue, bg = palette.bg1 })
