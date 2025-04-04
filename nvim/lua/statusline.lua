@@ -121,8 +121,27 @@ local function file_type(buf, is_active)
   return pill("Plain", false, icon .. f.format("StatuslinePlain", text))
 end
 
-local function git_branch(is_active, current_mode)
+local function git_status(is_active, current_mode)
+  local s = vim.b.gitsigns_status_dict
+  s = s or { added = 0, changed = 0, removed = 0 }
+
+  local counts = {}
+
+  if s.added or 0 > 0 then
+    table.insert(counts, f.format("GitSignsAdd", "+" .. s.added))
+  end
+  if s.changed or 0 > 0 then
+    table.insert(counts, f.format("GitSignsChange", "~" .. s.changed))
+  end
+  if s.removed or 0 > 0 then
+    table.insert(counts, f.format("GitSignsDelete", "-" .. s.removed))
+  end
+
   local text = " " .. vim.fn.FugitiveHead()
+
+  if #counts > 0 then
+    text = text .. " | " .. table.concat(counts, " ")
+  end
 
   local base_group = modes[current_mode].group .. "Inverted"
   return pill(base_group, is_active, text)
@@ -170,7 +189,7 @@ local function full_line(buf, is_active, current_mode)
 
     line = line .. file_type(buf, is_active)
     line = line .. space
-    line = line .. git_branch(is_active, current_mode)
+    line = line .. git_status(is_active, current_mode)
     line = line .. space
     line = line .. location(is_active, current_mode)
   end
