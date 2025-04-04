@@ -128,13 +128,13 @@ local function git_status(buf)
 
   local counts = {}
 
-  if s.added or 0 > 0 then
+  if (s.added or 0) > 0 then
     table.insert(counts, f.format("GitSignsAdd", "+" .. s.added))
   end
-  if s.changed or 0 > 0 then
+  if (s.changed or 0) > 0 then
     table.insert(counts, f.format("GitSignsChange", "~" .. s.changed))
   end
-  if s.removed or 0 > 0 then
+  if (s.removed or 0) > 0 then
     table.insert(counts, f.format("GitSignsDelete", "-" .. s.removed))
   end
 
