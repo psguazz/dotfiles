@@ -241,7 +241,7 @@ vim.api.nvim_set_hl(0, "StatuslinePlain", { fg = palette.grey, bg = palette.bg0 
 vim.api.nvim_set_hl(0, "StatuslinePillPlain", { fg = palette.bg0, bg = palette.bg1 })
 
 vim.api.nvim_set_hl(0, "StatuslineGitNone", { fg = palette.fg, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslineGitAdded", { fg = palette.green, bg = palette.bg0 })
+vim.api.nvim_set_hl(0, "StatuslineGitNew", { fg = palette.green, bg = palette.bg0 })
 vim.api.nvim_set_hl(0, "StatuslineGitModified", { fg = palette.yellow, bg = palette.bg0 })
 vim.api.nvim_set_hl(0, "StatuslineGitDeleted", { fg = palette.red, bg = palette.bg0 })
 
