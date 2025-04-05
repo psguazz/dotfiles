@@ -20,8 +20,14 @@ require("lazy").setup({
   { import = "plugins" }
 }, {})
 
+require("snippets")
 require("mappings")
 require("theme")
+
+require("search_and_replace")
+require("session")
+require("zen")
+
 require("tabline")
 require("statusline")
-require("snippets")
+
