@@ -59,6 +59,18 @@ local function should_hide(buf)
   return false
 end
 
+local function concat_pill(line, pill)
+  if pill == "" then
+    return line
+  end
+
+  if line == "" then
+    return pill
+  end
+
+  return line .. space .. pill
+end
+
 local function pill(base_group, is_active, text)
   if is_active then base_group = base_group .. "Active" end
   text = " " .. text .. " "
@@ -82,6 +94,8 @@ local function filename(buf, is_active, current_mode)
   local text = vim.api.nvim_buf_get_name(buf)
   text = vim.fn.fnamemodify(text, ":p")
   text = text:gsub("^" .. vim.pesc(vim.fn.getcwd() .. "/"), "")
+
+  if text == "" then return "" end
 
   local base_group = modes[current_mode].group .. "Inverted"
   return pill(base_group, is_active, text)
@@ -117,12 +131,19 @@ end
 
 local function file_type(buf, is_active)
   local icon = f.colored_icon(vim.fn.expand("%:p"), is_active)
-  local text = " " .. vim.bo[buf].filetype
+  local type = vim.bo[buf].filetype
+  if type == "" then type = "?" end
 
-  return pill("Plain", false, icon .. f.format("StatuslinePlain", text))
+  return pill("Plain", false, icon .. " " .. f.format("StatuslinePlain", type))
 end
 
 local function git_status(buf)
+  local name = vim.api.nvim_buf_get_name(buf)
+  local group = "StatuslineGit" .. git.status(name)
+  local branch = vim.fn.FugitiveHead()
+
+  if not branch or branch == "" then return "" end
+
   local s = vim.b.gitsigns_status_dict
   s = s or { added = 0, changed = 0, removed = 0 }
 
@@ -138,11 +159,7 @@ local function git_status(buf)
     table.insert(counts, f.format("GitSignsDelete", "-" .. s.removed))
   end
 
-  local name = vim.api.nvim_buf_get_name(buf)
-  local group = "StatuslineGit" .. git.status(name)
-  local branch = " " .. vim.fn.FugitiveHead()
-
-  local text = f.format(group, branch)
+  local text = f.format(group, " " .. branch)
   if #counts > 0 then
     text = text .. f.format("StatuslinePlain", " | ") .. table.concat(counts, " ")
   end
@@ -167,37 +184,31 @@ end
 local function bare_line(buf, is_active, current_mode)
   local line = ""
 
-  line = line .. mode(is_active, current_mode, false)
+  line = concat_pill(line, mode(is_active, current_mode, false))
 
   if is_active then
-    line = line .. space
-    line = line .. filename(buf, false, current_mode)
+    line = concat_pill(line, filename(buf, false, current_mode))
   end
 
   return line
 end
 
 local function full_line(buf, is_active, current_mode)
-  local line = ""
+  local left = ""
+  local right = ""
 
-  line = line .. mode(is_active, current_mode, true)
-  line = line .. space
-  line = line .. filename(buf, is_active, current_mode)
+  left = concat_pill(left, mode(is_active, current_mode, true))
+  left = concat_pill(left, filename(buf, is_active, current_mode))
 
   if is_active then
-    line = line .. space
-    line = line .. diagnostics(buf)
+    left = concat_pill(left, diagnostics(buf))
 
-    line = line .. space .. "%=" .. space
-
-    line = line .. file_type(buf, is_active)
-    line = line .. space
-    line = line .. git_status(buf)
-    line = line .. space
-    line = line .. location(is_active, current_mode)
+    right = concat_pill(right, file_type(buf, is_active))
+    right = concat_pill(right, git_status(buf))
+    right = concat_pill(right, location(is_active, current_mode))
   end
 
-  return line
+  return left .. "%=" .. right
 end
 
 function _G.my_statusline()
