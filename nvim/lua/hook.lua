@@ -1,17 +1,19 @@
 -- STATE
 
-local current = 1
-local hooked_perm = {}
-local hooked_temp = {}
+local state = {
+  current = 1,
+  hooked_perm = {},
+  hooked_temp = {}
+}
 
 local function all_hooks()
   local hooks = {}
 
-  for _, hook in ipairs(hooked_perm) do
+  for _, hook in ipairs(state.hooked_perm) do
     table.insert(hooks, hook)
   end
 
-  for _, hook in ipairs(hooked_temp) do
+  for _, hook in ipairs(state.hooked_temp) do
     table.insert(hooks, hook)
   end
 
@@ -96,44 +98,39 @@ local function go_to(number)
   local hook = all_hooks()[number]
   if hook == nil then return end
 
-  current = number
-
+  state.current = number
   vim.cmd("edit " .. vim.fn.fnameescape(hook.path))
-  vim.schedule(function()
-    print("MOUSE")
-    pcall(vim.api.nvim_win_set_cursor, 0, { hook.cursor.line, hook.cursor.col })
-  end)
 end
 
 local function restore_cursor()
   local hook = hookified_buffer()
-  hook = find(hooked_perm, hook) or find(hooked_temp, hook)
+  hook = find(state.hooked_perm, hook) or find(state.hooked_temp, hook)
   if hook == nil then return end
 
   pcall(vim.api.nvim_win_set_cursor, 0, hook.cursor)
 end
 
 local function go_to_next()
-  if current >= #hooked_perm + #hooked_temp then
+  if state.current >= #state.hooked_perm + #state.hooked_temp then
     go_to(1)
   else
-    go_to(current + 1)
+    go_to(state.current + 1)
   end
 end
 
 local function go_to_prev()
-  if current <= 1 then
-    go_to(#hooked_perm + #hooked_temp)
+  if state.current <= 1 then
+    go_to(#state.hooked_perm + #state.hooked_temp)
   else
-    go_to(current - 1)
+    go_to(state.current - 1)
   end
 end
 
 -- STATE MANAGEMENT
 
 local function unhook_all()
-  hooked_perm = {}
-  hooked_temp = {}
+  state.hooked_perm = {}
+  state.hooked_temp = {}
 
   vim.cmd("NvimTreeFocus")
 
@@ -147,8 +144,8 @@ end
 
 local function unhook()
   local hook = hookified_buffer()
-  remove_hook(hooked_perm, hook)
-  remove_hook(hooked_temp, hook)
+  remove_hook(state.hooked_perm, hook)
+  remove_hook(state.hooked_temp, hook)
   vim.cmd("bd!")
   go_to_prev()
 end
@@ -157,48 +154,59 @@ end
 local function hook_perm()
   local hook = hookified_buffer()
 
-  remove_hook(hooked_temp, hook)
+  remove_hook(state.hooked_temp, hook)
 
-  add_hook(hooked_perm, hook, 8)
-  current = #hooked_perm
+  add_hook(state.hooked_perm, hook, 8)
+  state.current = #state.hooked_perm
 end
 
 local function hook_temp()
   local hook = hookified_buffer()
 
-  if contains(hooked_perm, hook) then return end
+  if contains(state.hooked_perm, hook) then return end
 
-  add_hook(hooked_temp, hook, 9 - #hooked_perm)
-  current = #hooked_perm + #hooked_temp
+  add_hook(state.hooked_temp, hook, 9 - #state.hooked_perm)
+  state.current = #state.hooked_perm + #state.hooked_temp
 end
 
 local function rehook()
   local hook = hookified_buffer()
 
-  update_hook(hooked_perm, hook)
-  update_hook(hooked_temp, hook)
+  update_hook(state.hooked_perm, hook)
+  update_hook(state.hooked_temp, hook)
 end
 
 -- SESSION
 
-local function hook_name()
+local function hooks_name()
   local cwd = vim.loop.cwd() or "unknown"
   return vim.fn.sha256(cwd):sub(1, 16) .. ".json"
 end
 
-local function hook_path()
+local function hooks_path()
   local session_dir = vim.fn.stdpath("data") .. "/hooks"
   vim.fn.mkdir(session_dir, "p")
 
-  local full_path = session_dir .. "/" .. hook_name()
+  local full_path = session_dir .. "/" .. hooks_name()
   return vim.fn.fnameescape(full_path)
 end
 
 
 local function save_hooks()
+  local json = vim.fn.json_encode(state)
+  vim.fn.writefile({ json }, hooks_path())
 end
 
 local function load_hooks()
+  if vim.fn.filereadable(hooks_path()) == 0 then return end
+
+  local lines = vim.fn.readfile(hooks_path())
+  if not lines or #lines == 0 then return end
+
+  local ok, data = pcall(vim.fn.json_decode, table.concat(lines, "\n"))
+  if not ok or type(data) ~= "table" then return end
+
+  state = data
 end
 
 -- SETUP
