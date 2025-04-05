@@ -11,23 +11,24 @@ local function session_path()
   return vim.fn.fnameescape(full_path)
 end
 
+local function save_session()
+  vim.cmd("NvimTreeClose")
+  vim.cmd("mks! " .. session_path())
+end
+
+local function load_session()
+  if vim.fn.filereadable(session_path()) == 0 then return end
+
+  vim.schedule(function()
+    vim.cmd("silent source " .. session_path())
+  end)
+end
+
 local M = {}
 
 function M.setup()
-  vim.api.nvim_create_autocmd("VimLeavePre", {
-    callback = function()
-      vim.cmd("NvimTreeClose")
-      vim.cmd("mks! " .. session_path())
-    end
-  })
-
-  vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
-      vim.schedule(function()
-        vim.cmd("silent source " .. session_path())
-      end)
-    end
-  })
+  vim.api.nvim_create_autocmd("VimLeavePre", { callback = save_session })
+  vim.api.nvim_create_autocmd("VimEnter", { callback = load_session })
 end
 
 return M
