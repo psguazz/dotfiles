@@ -1,8 +1,7 @@
-local harpoon = require("harpoon")
-
-local git = require("lib.git")
-local palette = require("lib.palette")
 local f = require("lib.format")
+local git = require("lib.git")
+local h = require("hook")
+local palette = require("lib.palette")
 
 local function tab(name, index, is_current, is_unsaved, status)
   local group = "Tabline"
@@ -26,17 +25,18 @@ local function tab(name, index, is_current, is_unsaved, status)
 end
 
 function _G.my_tabline()
-  local names = harpoon:list():display()
-  local current_name = vim.fn.fnamemodify(vim.fn.bufname(), ':.')
+  local hooks = h.all_hooks()
+  local current_path = vim.api.nvim_buf_get_name(0)
+  local current_name = vim.fn.fnamemodify(current_path, ':.')
 
   local tabline = ""
   local current_found = false
 
-  for i, name in ipairs(names) do
-    local status = git.status(name)
-    local is_current = current_name == name
-    local is_saved = f.is_unsaved(name)
-    tabline = tabline .. tab(name, i, is_current, is_saved, status)
+  for i, hook in ipairs(hooks) do
+    local status = git.status(hook.path)
+    local is_current = current_path == hook.path
+    local is_saved = f.is_unsaved(hook.path)
+    tabline = tabline .. tab(hook.path, i, is_current, is_saved, status)
 
     if is_current then
       current_found = true
@@ -45,8 +45,8 @@ function _G.my_tabline()
 
   if not current_found and current_name ~= "" and current_name ~= "NvimTree_1" then
     local current_status = git.status(vim.fn.bufname())
-    local is_saved = f.is_unsaved(current_name)
-    tabline = tabline .. tab(current_name, " ", true, is_saved, current_status)
+    local is_saved = f.is_unsaved(current_path)
+    tabline = tabline .. tab(current_path, " ", true, is_saved, current_status)
   end
 
   return "%#TablineBackground#" .. tabline .. "%#TablineBackground#"
