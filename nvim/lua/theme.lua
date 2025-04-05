@@ -1,5 +1,4 @@
 vim.api.nvim_create_autocmd("ColorScheme", {
-  group = vim.api.nvim_create_augroup("custom_highlights_sonokai", {}),
   pattern = "sonokai",
   callback = function()
     local config = vim.fn["sonokai#get_configuration"]()

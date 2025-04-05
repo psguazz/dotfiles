@@ -1,5 +1,6 @@
 -- STATE
 
+local limit = 9
 local state = {
   current = 1,
   hooked_perm = {},
@@ -9,13 +10,8 @@ local state = {
 local function all_hooks()
   local hooks = {}
 
-  for _, hook in ipairs(state.hooked_perm) do
-    table.insert(hooks, hook)
-  end
-
-  for _, hook in ipairs(state.hooked_temp) do
-    table.insert(hooks, hook)
-  end
+  for _, hook in ipairs(state.hooked_perm) do table.insert(hooks, hook) end
+  for _, hook in ipairs(state.hooked_temp) do table.insert(hooks, hook) end
 
   return hooks
 end
@@ -23,13 +19,11 @@ end
 -- PRIMITIVES
 
 local function hookified_buffer()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local path = vim.api.nvim_buf_get_name(bufnr)
+  local buf = vim.api.nvim_get_current_buf()
+  local path = vim.api.nvim_buf_get_name(buf)
   local cursor = vim.api.nvim_win_get_cursor(0)
 
-  if path == "" then
-    return nil
-  end
+  if path == "" then return nil end
 
   return {
     path = path,
@@ -37,32 +31,19 @@ local function hookified_buffer()
   }
 end
 
-local function same_hook(h1, h2)
-  return h1.path == h2.path
-end
-
 local function index(list, hook)
   if hook == nil then return -1 end
 
   for i, existing in ipairs(list) do
-    if same_hook(existing, hook) then
+    if existing.path == hook.path then
       return i
     end
   end
-  return -1
+  return nil
 end
 
 local function contains(list, hook)
-  return index(list, hook) >= 0
-end
-
-local function find(list, hook)
-  local i = index(list, hook)
-  if i > 0 then
-    return list[i]
-  else
-    return nil
-  end
+  return index(list, hook) ~= nil
 end
 
 local function remove_hook(list, hook)
@@ -76,7 +57,7 @@ end
 
 local function update_hook(list, hook)
   local i = index(list, hook)
-  if i >= 0 then
+  if i then
     list[i] = hook
   end
 end
@@ -102,16 +83,17 @@ local function go_to(number)
   vim.cmd("edit " .. vim.fn.fnameescape(hook.path))
 end
 
-local function restore_cursor()
-  local hook = hookified_buffer()
-  hook = find(state.hooked_perm, hook) or find(state.hooked_temp, hook)
-  if hook == nil then return end
+local function restore_hook()
+  local hooks = all_hooks()
+  state.current = index(hooks, hookified_buffer())
 
-  pcall(vim.api.nvim_win_set_cursor, 0, hook.cursor)
+  if hooks[state.current] ~= nil then
+    pcall(vim.api.nvim_win_set_cursor, 0, hooks[state.current].cursor)
+  end
 end
 
 local function go_to_next()
-  if state.current >= #state.hooked_perm + #state.hooked_temp then
+  if not state.current or state.current >= #state.hooked_perm + #state.hooked_temp then
     go_to(1)
   else
     go_to(state.current + 1)
@@ -119,7 +101,7 @@ local function go_to_next()
 end
 
 local function go_to_prev()
-  if state.current <= 1 then
+  if not state.current or state.current <= 1 then
     go_to(#state.hooked_perm + #state.hooked_temp)
   else
     go_to(state.current - 1)
@@ -150,13 +132,12 @@ local function unhook()
   go_to_prev()
 end
 
-
 local function hook_perm()
   local hook = hookified_buffer()
 
   remove_hook(state.hooked_temp, hook)
 
-  add_hook(state.hooked_perm, hook, 8)
+  add_hook(state.hooked_perm, hook, limit - 1)
   state.current = #state.hooked_perm
 end
 
@@ -165,7 +146,7 @@ local function hook_temp()
 
   if contains(state.hooked_perm, hook) then return end
 
-  add_hook(state.hooked_temp, hook, 9 - #state.hooked_perm)
+  add_hook(state.hooked_temp, hook, limit - #state.hooked_perm)
   state.current = #state.hooked_perm + #state.hooked_temp
 end
 
@@ -178,19 +159,15 @@ end
 
 -- SESSION
 
-local function hooks_name()
-  local cwd = vim.loop.cwd() or "unknown"
-  return vim.fn.sha256(cwd):sub(1, 16) .. ".json"
-end
-
 local function hooks_path()
-  local session_dir = vim.fn.stdpath("data") .. "/hooks"
-  vim.fn.mkdir(session_dir, "p")
+  local cwd = vim.loop.cwd() or "unknown"
+  local name = vim.fn.sha256(cwd):sub(1, 16) .. ".json"
+  local dir = vim.fn.stdpath("data") .. "/hooks"
+  vim.fn.mkdir(dir, "p")
 
-  local full_path = session_dir .. "/" .. hooks_name()
+  local full_path = dir .. "/" .. name
   return vim.fn.fnameescape(full_path)
 end
-
 
 local function save_hooks()
   local json = vim.fn.json_encode(state)
@@ -211,30 +188,22 @@ end
 
 -- SETUP
 
-local M = {}
-
-M.all_hooks = all_hooks
+local M = { all_hooks = all_hooks }
 
 function M.setup()
   vim.api.nvim_create_autocmd("VimLeavePre", { callback = save_hooks })
   vim.api.nvim_create_autocmd("VimEnter", { callback = load_hooks })
   vim.api.nvim_create_autocmd("BufLeave", { callback = rehook })
-  vim.api.nvim_create_autocmd("BufEnter", { callback = restore_cursor })
+  vim.api.nvim_create_autocmd("BufEnter", { callback = restore_hook })
   vim.api.nvim_create_autocmd("BufWritePre", { callback = hook_temp })
 
   vim.api.nvim_create_user_command("A", hook_perm, {})
   vim.api.nvim_create_user_command("Q", unhook, {})
   vim.api.nvim_create_user_command("QA", unhook_all, {})
 
-  vim.keymap.set("n", "<leader>1", function() go_to(1) end)
-  vim.keymap.set("n", "<leader>2", function() go_to(2) end)
-  vim.keymap.set("n", "<leader>3", function() go_to(3) end)
-  vim.keymap.set("n", "<leader>4", function() go_to(4) end)
-  vim.keymap.set("n", "<leader>5", function() go_to(5) end)
-  vim.keymap.set("n", "<leader>6", function() go_to(6) end)
-  vim.keymap.set("n", "<leader>7", function() go_to(7) end)
-  vim.keymap.set("n", "<leader>8", function() go_to(8) end)
-  vim.keymap.set("n", "<leader>9", function() go_to(9) end)
+  for i = 1, 9 do
+    vim.keymap.set("n", "<leader>" .. i, function() go_to(i) end)
+  end
 
   vim.keymap.set("n", "<leader>,", go_to_prev)
   vim.keymap.set("n", "<leader>.", go_to_next)
