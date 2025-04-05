@@ -25,9 +25,10 @@ require("mappings")
 require("theme")
 
 require("search_and_replace")
-require("session")
 require("zen")
 
 require("tabline")
 require("statusline")
 
+require("session").setup()
+require("hook").setup()
