@@ -5,8 +5,8 @@ local function unique_paths(grep_results)
   local unique_list = {}
 
   for _, result in ipairs(grep_results) do
-    local path = result:match("^(.-):%d+:%d+:")
-    if not seen[path] then
+    local path = result:match("^(.-):%d+:")
+    if path and not seen[path] then
       seen[path] = true
       table.insert(unique_list, result)
     end
