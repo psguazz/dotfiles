@@ -91,13 +91,18 @@ local function mode(is_active, current_mode, big)
 end
 
 local function filename(buf, is_active, current_mode)
-  local text = vim.api.nvim_buf_get_name(buf)
-  text = vim.fn.fnamemodify(text, ":p")
-  text = text:gsub("^" .. vim.pesc(vim.fn.getcwd() .. "/"), "")
+  local path = vim.api.nvim_buf_get_name(buf)
+  local name = vim.fn.fnamemodify(path, ":p")
+  name = name:gsub("^" .. vim.pesc(vim.fn.getcwd() .. "/"), "")
 
-  if text == "" then return "" end
+  if name == "" then return "" end
+
+  local suffix = " "
+  if f.is_unsaved(path) then suffix = f.format("StatuslinePlain", "*") end
 
   local base_group = modes[current_mode].group .. "Inverted"
+  local text = name .. suffix
+
   return pill(base_group, is_active, text)
 end
 
