@@ -1,3 +1,5 @@
+local ts = require("telescope.builtin")
+
 local function unique_paths(grep_results)
   local seen = {}
   local unique_list = {}
@@ -26,6 +28,10 @@ local function search(text)
   vim.fn.setreg("/", "\\V" .. vim.fn.escape(text, "\\"))
   vim.cmd("normal! n")
   vim.cmd("normal! N")
+end
+
+local function global_search(text)
+  ts.live_grep({ default_text = text, use_regex = false, })
 end
 
 local function replace(text)
@@ -61,6 +67,9 @@ local M = {}
 function M.setup()
   vim.keymap.set("n", "<C-_>", function() search(current_word()) end, { noremap = true, silent = true })
   vim.keymap.set("v", "<C-_>", function() search(current_selection()) end, { noremap = true, silent = true })
+
+  vim.keymap.set("n", "<C-;>", function() global_search(current_word()) end, { noremap = true, silent = true })
+  vim.keymap.set("v", "<C-;>", function() global_search(current_selection()) end, { noremap = true, silent = true })
 
   vim.keymap.set("n", "<C-n>", function() replace(current_word()) end, { noremap = true, silent = true })
   vim.keymap.set("v", "<C-n>", function() replace(current_selection()) end, { noremap = true, silent = true })
