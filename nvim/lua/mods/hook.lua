@@ -88,11 +88,11 @@ local function restore_hook()
 end
 
 local function go_to_next()
-  go_to(state.current + 1)
+  go_to((state.current or global_limit) + 1)
 end
 
 local function go_to_prev()
-  go_to(state.current - 1)
+  go_to((state.current or 0) - 1)
 end
 
 -- STATE MANAGEMENT
