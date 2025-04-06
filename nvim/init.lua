@@ -24,7 +24,7 @@ require("config.snippets")
 require("config.mappings")
 require("config.theme")
 
-require("mods.search_and_replace").setup()
+require("mods.seek").setup()
 require("mods.zen").setup()
 require("mods.tabline").setup()
 require("mods.statusline").setup()
