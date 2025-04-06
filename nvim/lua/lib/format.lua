@@ -18,6 +18,7 @@ function M.define_group(name, opts)
 
   if not hl_groups[name] then
     hl_groups[name] = opts
+    vim.api.nvim_set_hl(0, name, {})
     vim.api.nvim_set_hl(0, name, opts)
   end
 end
@@ -26,12 +27,12 @@ function M.format(group, text)
   return "%#" .. group .. "#" .. text
 end
 
-function M.colored_icon(name, apply_color)
+function M.colored_icon(name, bg_color)
   local icon, icon_color = devicons.get_icon_color(name, vim.fn.fnamemodify(name, ":e"), { default = true })
 
-  if apply_color then
+  if bg_color then
     local group_name = "DevIconColor" .. icon_color:gsub("#", "")
-    M.define_group(group_name, { fg = icon_color })
+    M.define_group(group_name, { fg = icon_color, bg = bg_color })
 
     return M.format(group_name, icon)
   else

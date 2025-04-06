@@ -21,7 +21,7 @@ local function tab(name, index, is_current, is_unsaved, status)
   if status ~= "None" then name_group = name_group .. status end
 
   local number = f.format(number_group, " " .. index)
-  local icon = f.colored_icon(name, is_current)
+  local icon = f.colored_icon(name, is_current and palette.bg0)
   local tab_name = f.format(name_group, vim.fn.fnamemodify(name, ":t"))
 
   local prefix = " "
@@ -38,14 +38,14 @@ local function tabline()
   local current_path = vim.api.nvim_buf_get_name(0)
   local current_name = vim.fn.fnamemodify(current_path, ':.')
 
-  local tabline = tree_bar()
+  local line = tree_bar()
   local current_found = false
 
   for i, hook in ipairs(hooks) do
     local status = git.status(hook.path)
     local is_current = current_path == hook.path
     local is_saved = f.is_unsaved(hook.path)
-    tabline = tabline .. tab(hook.path, i, is_current, is_saved, status)
+    line = line .. tab(hook.path, i, is_current, is_saved, status)
 
     if is_current then
       current_found = true
@@ -55,10 +55,10 @@ local function tabline()
   if not current_found and current_name ~= "" and current_name ~= "NvimTree_1" then
     local current_status = git.status(vim.fn.bufname())
     local is_saved = f.is_unsaved(current_path)
-    tabline = tabline .. tab(current_path, " ", true, is_saved, current_status)
+    line = line .. tab(current_path, " ", true, is_saved, current_status)
   end
 
-  return "%#TablineBackground#" .. tabline .. "%#TablineBackground#"
+  return "%#TablineBackground#" .. line .. "%#TablineBackground#"
 end
 
 local show = false

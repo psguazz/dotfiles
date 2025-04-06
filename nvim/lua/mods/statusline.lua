@@ -115,16 +115,16 @@ local function diagnostics(buf)
   local counts = {}
 
   if errors > 0 then
-    table.insert(counts, f.format("DiagnosticError", " " .. errors))
+    table.insert(counts, f.format("StatuslineDiagnosticError", " " .. errors))
   end
   if warnings > 0 then
-    table.insert(counts, f.format("DiagnosticWarn", " " .. warnings))
+    table.insert(counts, f.format("StatuslineDiagnosticWarn", " " .. warnings))
   end
   if hints > 0 then
-    table.insert(counts, f.format("DiagnosticHint", " " .. hints))
+    table.insert(counts, f.format("StatuslineDiagnosticHint", " " .. hints))
   end
   if info > 0 then
-    table.insert(counts, f.format("DiagnosticInfo", " " .. info))
+    table.insert(counts, f.format("StatuslineDiagnosticInfo", " " .. info))
   end
 
   if #counts > 0 then
@@ -135,7 +135,7 @@ local function diagnostics(buf)
 end
 
 local function file_type(buf, is_active)
-  local icon = f.colored_icon(vim.fn.expand("%:p"), is_active)
+  local icon = f.colored_icon(vim.fn.expand("%:p"), is_active and palette.bg_dim)
   local type = vim.bo[buf].filetype
   if type == "" then type = "?" end
 
@@ -155,13 +155,13 @@ local function git_status(buf)
   local counts = {}
 
   if (s.added or 0) > 0 then
-    table.insert(counts, f.format("GitSignsAdd", "+" .. s.added))
+    table.insert(counts, f.format("StatuslineGitNew", "+" .. s.added))
   end
   if (s.changed or 0) > 0 then
-    table.insert(counts, f.format("GitSignsChange", "~" .. s.changed))
+    table.insert(counts, f.format("StatuslineGitModified", "~" .. s.changed))
   end
   if (s.removed or 0) > 0 then
-    table.insert(counts, f.format("GitSignsDelete", "-" .. s.removed))
+    table.insert(counts, f.format("StatuslineGitDeleted", "-" .. s.removed))
   end
 
   local text = f.format(group, " " .. branch)
@@ -265,6 +265,11 @@ function M.setup()
   vim.api.nvim_set_hl(0, "StatuslineGitNew", { fg = palette.green, bg = palette.bg0 })
   vim.api.nvim_set_hl(0, "StatuslineGitModified", { fg = palette.yellow, bg = palette.bg0 })
   vim.api.nvim_set_hl(0, "StatuslineGitDeleted", { fg = palette.red, bg = palette.bg0 })
+
+  vim.api.nvim_set_hl(0, "StatuslineDiagnosticError", { fg = palette.red, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslineDiagnosticWarn", { fg = palette.yellow, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslineDiagnosticHint", { fg = palette.green, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslineDiagnosticInfo", { fg = palette.blue, bg = palette.bg0 })
 
   vim.api.nvim_set_hl(0, "StatuslineNormalActive", { fg = palette.bg0, bg = palette.bg_blue })
   vim.api.nvim_set_hl(0, "StatuslinePillNormalActive", { fg = palette.bg_blue, bg = palette.bg1 })
