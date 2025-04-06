@@ -154,11 +154,11 @@ end
 
 local function hooks_path()
   local cwd = vim.loop.cwd() or "unknown"
-  local name = vim.fn.sha256(cwd):sub(1, 16) .. ".json"
   local dir = vim.fn.stdpath("data") .. "/hooks"
-  vim.fn.mkdir(dir, "p")
-
+  local name = vim.fn.sha256(cwd):sub(1, 16) .. ".json"
   local full_path = dir .. "/" .. name
+
+  vim.fn.mkdir(dir, "p")
   return vim.fn.fnameescape(full_path)
 end
 

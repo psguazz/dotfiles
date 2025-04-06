@@ -8,11 +8,13 @@ local function current_selection()
 end
 
 local function replace(text)
+  local pos = vim.api.nvim_win_get_cursor(0)
   local replacement = vim.fn.input("Replace `" .. text .. "` with: ")
-  if replacement ~= "" then
-    text = "\\V" .. vim.fn.escape(text, "\\")
-    vim.cmd(".,$s/" .. text .. "/" .. replacement .. "/gc")
-  end
+
+  text = "\\V" .. vim.fn.escape(text, "\\")
+  vim.cmd("%s/" .. text .. "/" .. replacement .. "/gc")
+
+  vim.api.nvim_win_set_cursor(0, pos)
 end
 
 local function search(text)
