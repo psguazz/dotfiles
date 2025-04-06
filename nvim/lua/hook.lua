@@ -1,6 +1,6 @@
 -- STATE
 
-local limit = 9
+local global_limit = 9
 local state = {
   current = 1,
   hooked_perm = {},
@@ -39,7 +39,6 @@ local function index(list, hook)
       return i
     end
   end
-  return nil
 end
 
 local function contains(list, hook)
@@ -47,19 +46,12 @@ local function contains(list, hook)
 end
 
 local function remove_hook(list, hook)
-  if hook == nil then return end
-
-  local i = index(list, hook)
-  if i >= 0 then
-    table.remove(list, i)
-  end
+  table.remove(list, index(list, hook))
 end
 
 local function update_hook(list, hook)
   local i = index(list, hook)
-  if i then
-    list[i] = hook
-  end
+  if i then list[i] = hook end
 end
 
 local function add_hook(list, hook, limit)
@@ -134,19 +126,20 @@ end
 
 local function hook_perm()
   local hook = hookified_buffer()
+  if contains(state.hooked_perm, hook) then return end
 
   remove_hook(state.hooked_temp, hook)
 
-  add_hook(state.hooked_perm, hook, limit - 1)
+  add_hook(state.hooked_perm, hook, global_limit - 1)
   state.current = #state.hooked_perm
 end
 
 local function hook_temp()
   local hook = hookified_buffer()
-
   if contains(state.hooked_perm, hook) then return end
+  if contains(state.hooked_temp, hook) then return end
 
-  add_hook(state.hooked_temp, hook, limit - #state.hooked_perm)
+  add_hook(state.hooked_temp, hook, global_limit - #state.hooked_perm)
   state.current = #state.hooked_perm + #state.hooked_temp
 end
 
