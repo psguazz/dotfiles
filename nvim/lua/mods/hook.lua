@@ -68,8 +68,11 @@ end
 -- NAVIGATION
 
 local function go_to(number)
-  local hook = all_hooks()[number]
-  if hook == nil then return end
+  local hooks = all_hooks()
+  if not number or number < 1 then number = #hooks end
+  if number > #hooks then number = 1 end
+
+  local hook = hooks[number]
 
   state.current = number
   vim.cmd("edit " .. vim.fn.fnameescape(hook.path))
@@ -85,19 +88,11 @@ local function restore_hook()
 end
 
 local function go_to_next()
-  if not state.current or state.current >= #state.hooked_perm + #state.hooked_temp then
-    go_to(1)
-  else
-    go_to(state.current + 1)
-  end
+  go_to(state.current + 1)
 end
 
 local function go_to_prev()
-  if not state.current or state.current <= 1 then
-    go_to(#state.hooked_perm + #state.hooked_temp)
-  else
-    go_to(state.current - 1)
-  end
+  go_to(state.current - 1)
 end
 
 -- STATE MANAGEMENT
@@ -118,9 +113,9 @@ end
 
 local function unhook()
   local hook = hookified_buffer()
+
   remove_hook(state.hooked_perm, hook)
   remove_hook(state.hooked_temp, hook)
-  vim.cmd("bd!")
   go_to_prev()
 end
 
