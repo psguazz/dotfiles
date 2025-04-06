@@ -152,13 +152,16 @@ end
 
 -- SESSION
 
-local function hooks_path()
+local function hooks_name()
   local cwd = vim.loop.cwd() or "unknown"
-  local dir = vim.fn.stdpath("data") .. "/hooks"
-  local name = vim.fn.sha256(cwd):sub(1, 16) .. ".json"
-  local full_path = dir .. "/" .. name
+  return vim.fn.sha256(cwd):sub(1, 16) .. ".json"
+end
 
-  vim.fn.mkdir(dir, "p")
+local function hooks_path()
+  local session_dir = vim.fn.stdpath("data") .. "/hooks"
+  vim.fn.mkdir(session_dir, "p")
+
+  local full_path = session_dir .. "/" .. hooks_name()
   return vim.fn.fnameescape(full_path)
 end
 

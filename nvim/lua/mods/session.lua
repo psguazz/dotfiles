@@ -5,7 +5,7 @@ end
 
 local function session_path()
   local session_dir = vim.fn.stdpath("data") .. "/sessions"
-  vim.fn.mkdir(session_dir, "p") -- make sure it exists
+  vim.fn.mkdir(session_dir, "p")
 
   local full_path = session_dir .. "/" .. session_name()
   return vim.fn.fnameescape(full_path)
