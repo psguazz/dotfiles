@@ -211,7 +211,7 @@ local function full_line(buf, is_active, current_mode)
   return left .. "%=" .. right
 end
 
-function _G.my_statusline()
+local function statusline()
   local winid = vim.g.statusline_winid
   local buf = vim.api.nvim_win_get_buf(winid)
   local is_active = winid == vim.fn.win_getid()
@@ -230,80 +230,87 @@ function _G.my_statusline()
   return "%#StatuslineBackground#" .. line .. "%#StatuslineBackground#"
 end
 
-vim.api.nvim_create_user_command("S", function()
-  if full then
-    vim.cmd("Soff")
-  else
-    vim.cmd("Son")
-  end
-end, {})
+local M = {}
 
-vim.api.nvim_create_user_command("Son", function()
-  full = true
-end, {})
+function M.setup()
+  vim.api.nvim_create_user_command("S", function()
+    if full then
+      vim.cmd("Soff")
+    else
+      vim.cmd("Son")
+    end
+  end, {})
 
-vim.api.nvim_create_user_command("Soff", function()
-  full = false
-end, {})
+  vim.api.nvim_create_user_command("Son", function()
+    full = true
+  end, {})
 
-vim.api.nvim_set_hl(0, "StatuslineBackground", { bg = palette.bg1 })
+  vim.api.nvim_create_user_command("Soff", function()
+    full = false
+  end, {})
 
-vim.api.nvim_set_hl(0, "StatuslinePlain", { fg = palette.grey, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillPlain", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineBackground", { bg = palette.bg1 })
 
-vim.api.nvim_set_hl(0, "StatuslineGitNone", { fg = palette.fg, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslineGitNew", { fg = palette.green, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslineGitModified", { fg = palette.yellow, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslineGitDeleted", { fg = palette.red, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePlain", { fg = palette.grey, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillPlain", { fg = palette.bg0, bg = palette.bg1 })
 
-vim.api.nvim_set_hl(0, "StatuslineNormalActive", { fg = palette.bg0, bg = palette.bg_blue })
-vim.api.nvim_set_hl(0, "StatuslinePillNormalActive", { fg = palette.bg_blue, bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslineNormalInvertedActive", { fg = palette.bg_blue, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillNormalInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineGitNone", { fg = palette.fg, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslineGitNew", { fg = palette.green, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslineGitModified", { fg = palette.yellow, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslineGitDeleted", { fg = palette.red, bg = palette.bg0 })
 
-vim.api.nvim_set_hl(0, "StatuslineVisualActive", { fg = palette.bg0, bg = palette.purple })
-vim.api.nvim_set_hl(0, "StatuslinePillVisualActive", { fg = palette.purple, bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslineVisualInvertedActive", { fg = palette.purple, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillVisualInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineNormalActive", { fg = palette.bg0, bg = palette.bg_blue })
+  vim.api.nvim_set_hl(0, "StatuslinePillNormalActive", { fg = palette.bg_blue, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineNormalInvertedActive", { fg = palette.bg_blue, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillNormalInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
 
-vim.api.nvim_set_hl(0, "StatuslineInsertActive", { fg = palette.bg0, bg = palette.bg_green })
-vim.api.nvim_set_hl(0, "StatuslinePillInsertActive", { fg = palette.bg_green, bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslineInsertInvertedActive", { fg = palette.bg_green, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillInsertInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineVisualActive", { fg = palette.bg0, bg = palette.purple })
+  vim.api.nvim_set_hl(0, "StatuslinePillVisualActive", { fg = palette.purple, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineVisualInvertedActive", { fg = palette.purple, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillVisualInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
 
-vim.api.nvim_set_hl(0, "StatuslineCommandActive", { fg = palette.bg0, bg = palette.yellow })
-vim.api.nvim_set_hl(0, "StatuslinePillCommandActive", { fg = palette.yellow, bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslineCommandInvertedActive", { fg = palette.yellow, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillCommandInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineInsertActive", { fg = palette.bg0, bg = palette.bg_green })
+  vim.api.nvim_set_hl(0, "StatuslinePillInsertActive", { fg = palette.bg_green, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineInsertInvertedActive", { fg = palette.bg_green, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillInsertInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
 
-vim.api.nvim_set_hl(0, "StatuslineReplaceActive", { fg = palette.bg0, bg = palette.bg_red })
-vim.api.nvim_set_hl(0, "StatuslinePillReplaceActive", { fg = palette.bg_red, bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslineReplaceInvertedActive", { fg = palette.bg_red, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillReplaceInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineCommandActive", { fg = palette.bg0, bg = palette.yellow })
+  vim.api.nvim_set_hl(0, "StatuslinePillCommandActive", { fg = palette.yellow, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineCommandInvertedActive", { fg = palette.yellow, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillCommandInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
 
-vim.api.nvim_set_hl(0, "StatuslineNormal", { fg = palette.bg0, bg = palette.grey })
-vim.api.nvim_set_hl(0, "StatuslinePillNormal", { fg = palette.grey, bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslineNormalInverted", { fg = palette.grey, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillNormalInverted", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineReplaceActive", { fg = palette.bg0, bg = palette.bg_red })
+  vim.api.nvim_set_hl(0, "StatuslinePillReplaceActive", { fg = palette.bg_red, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineReplaceInvertedActive", { fg = palette.bg_red, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillReplaceInvertedActive", { fg = palette.bg0, bg = palette.bg1 })
 
-vim.api.nvim_set_hl(0, "StatuslineVisual", { fg = palette.bg0, bg = palette.grey })
-vim.api.nvim_set_hl(0, "StatuslinePillVisual", { fg = palette.grey, bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslineVisualInverted", { fg = palette.grey, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillVisualInverted", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineNormal", { fg = palette.bg0, bg = palette.grey })
+  vim.api.nvim_set_hl(0, "StatuslinePillNormal", { fg = palette.grey, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineNormalInverted", { fg = palette.grey, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillNormalInverted", { fg = palette.bg0, bg = palette.bg1 })
 
-vim.api.nvim_set_hl(0, "StatuslineInsert", { fg = palette.bg0, bg = palette.grey })
-vim.api.nvim_set_hl(0, "StatuslinePillInsert", { fg = palette.grey, bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslineInsertInverted", { fg = palette.grey, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillInsertInverted", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineVisual", { fg = palette.bg0, bg = palette.grey })
+  vim.api.nvim_set_hl(0, "StatuslinePillVisual", { fg = palette.grey, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineVisualInverted", { fg = palette.grey, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillVisualInverted", { fg = palette.bg0, bg = palette.bg1 })
 
-vim.api.nvim_set_hl(0, "StatuslineCommand", { fg = palette.bg0, bg = palette.grey })
-vim.api.nvim_set_hl(0, "StatuslinePillCommand", { fg = palette.grey, bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslineCommandInverted", { fg = palette.grey, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillCommandInverted", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineInsert", { fg = palette.bg0, bg = palette.grey })
+  vim.api.nvim_set_hl(0, "StatuslinePillInsert", { fg = palette.grey, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineInsertInverted", { fg = palette.grey, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillInsertInverted", { fg = palette.bg0, bg = palette.bg1 })
 
-vim.api.nvim_set_hl(0, "StatuslineReplace", { fg = palette.bg0, bg = palette.grey })
-vim.api.nvim_set_hl(0, "StatuslinePillReplace", { fg = palette.grey, bg = palette.bg1 })
-vim.api.nvim_set_hl(0, "StatuslineReplaceInverted", { fg = palette.grey, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "StatuslinePillReplaceInverted", { fg = palette.bg0, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineCommand", { fg = palette.bg0, bg = palette.grey })
+  vim.api.nvim_set_hl(0, "StatuslinePillCommand", { fg = palette.grey, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineCommandInverted", { fg = palette.grey, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillCommandInverted", { fg = palette.bg0, bg = palette.bg1 })
 
-vim.o.statusline = '%!v:lua.my_statusline()'
+  vim.api.nvim_set_hl(0, "StatuslineReplace", { fg = palette.bg0, bg = palette.grey })
+  vim.api.nvim_set_hl(0, "StatuslinePillReplace", { fg = palette.grey, bg = palette.bg1 })
+  vim.api.nvim_set_hl(0, "StatuslineReplaceInverted", { fg = palette.grey, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslinePillReplaceInverted", { fg = palette.bg0, bg = palette.bg1 })
+
+  _G.my_statusline = statusline
+  vim.o.statusline = '%!v:lua.my_statusline()'
+end
+
+return M

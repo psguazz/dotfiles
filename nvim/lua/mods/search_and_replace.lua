@@ -21,8 +21,14 @@ local function search(text)
   vim.cmd("normal! N")
 end
 
-vim.keymap.set("n", "<C-n>", function() replace(current_word()) end, { noremap = true, silent = true })
-vim.keymap.set("v", "<C-n>", function() replace(current_selection()) end, { noremap = true, silent = true })
+local M = {}
 
-vim.keymap.set("n", "<C-_>", function() search(current_word()) end, { noremap = true, silent = true })
-vim.keymap.set("v", "<C-_>", function() search(current_selection()) end, { noremap = true, silent = true })
+function M.setup()
+  vim.keymap.set("n", "<C-n>", function() replace(current_word()) end, { noremap = true, silent = true })
+  vim.keymap.set("v", "<C-n>", function() replace(current_selection()) end, { noremap = true, silent = true })
+
+  vim.keymap.set("n", "<C-_>", function() search(current_word()) end, { noremap = true, silent = true })
+  vim.keymap.set("v", "<C-_>", function() search(current_selection()) end, { noremap = true, silent = true })
+end
+
+return M

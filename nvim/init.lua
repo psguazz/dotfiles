@@ -1,7 +1,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-require("opts")
+require("config.opts")
 
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -20,15 +20,13 @@ require("lazy").setup({
   { import = "plugins" }
 }, {})
 
-require("snippets")
-require("mappings")
-require("theme")
+require("config.snippets")
+require("config.mappings")
+require("config.theme")
 
-require("search_and_replace")
-require("zen")
-
-require("tabline")
-require("statusline")
-
-require("session").setup()
-require("hook").setup()
+require("mods.search_and_replace").setup()
+require("mods.zen").setup()
+require("mods.tabline").setup()
+require("mods.statusline").setup()
+require("mods.session").setup()
+require("mods.hook").setup()

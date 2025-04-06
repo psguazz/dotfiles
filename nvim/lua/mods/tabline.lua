@@ -1,6 +1,6 @@
 local f = require("lib.format")
 local git = require("lib.git")
-local h = require("hook")
+local h = require("mods.hook")
 local palette = require("lib.palette")
 
 local function tab(name, index, is_current, is_unsaved, status)
@@ -24,7 +24,7 @@ local function tab(name, index, is_current, is_unsaved, status)
   return "%#TablineBackground#" .. prefix .. number .. " " .. icon .. " " .. tab_name .. suffix .. "%#TablineBackground#"
 end
 
-function _G.my_tabline()
+local function tabline()
   local hooks = h.all_hooks()
   local current_path = vim.api.nvim_buf_get_name(0)
   local current_name = vim.fn.fnamemodify(current_path, ':.')
@@ -72,19 +72,26 @@ vim.api.nvim_create_user_command("Toff", function()
   vim.cmd("set showtabline=0")
 end, {})
 
-vim.api.nvim_set_hl(0, "TablineBackground", { bg = palette.bg_dim })
-vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.red, bg = palette.bg_dim })
-vim.api.nvim_set_hl(0, "TablineNumber", { fg = palette.grey, bg = palette.bg_dim })
-vim.api.nvim_set_hl(0, "TablineName", { fg = palette.grey, bg = palette.bg_dim })
-vim.api.nvim_set_hl(0, "TablineNameModified", { fg = palette.off_yellow, bg = palette.bg_dim })
-vim.api.nvim_set_hl(0, "TablineNameStaged", { fg = palette.off_blue, bg = palette.bg_dim })
-vim.api.nvim_set_hl(0, "TablineNameNew", { fg = palette.off_green, bg = palette.bg_dim })
-vim.api.nvim_set_hl(0, "TablineNameDeleted", { fg = palette.off_red, bg = palette.bg_dim })
-vim.api.nvim_set_hl(0, "TablineSelectedNumber", { fg = palette.grey, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "TablineSelectedName", { fg = palette.fg, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "TablineSelectedNameModified", { fg = palette.yellow, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "TablineSelectedNameStaged", { fg = palette.blue, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "TablineSelectedNameNew", { fg = palette.green, bg = palette.bg0 })
-vim.api.nvim_set_hl(0, "TablineSelectedNameDeleted", { fg = palette.red, bg = palette.bg0 })
+local M = {}
 
-vim.o.tabline = '%!v:lua.my_tabline()'
+function M.setup()
+  vim.api.nvim_set_hl(0, "TablineBackground", { bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.red, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablineNumber", { fg = palette.grey, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablineName", { fg = palette.grey, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablineNameModified", { fg = palette.off_yellow, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablineNameStaged", { fg = palette.off_blue, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablineNameNew", { fg = palette.off_green, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablineNameDeleted", { fg = palette.off_red, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablineSelectedNumber", { fg = palette.grey, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "TablineSelectedName", { fg = palette.fg, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "TablineSelectedNameModified", { fg = palette.yellow, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "TablineSelectedNameStaged", { fg = palette.blue, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "TablineSelectedNameNew", { fg = palette.green, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "TablineSelectedNameDeleted", { fg = palette.red, bg = palette.bg0 })
+
+  _G.my_tabline = tabline
+  vim.o.tabline = '%!v:lua.my_tabline()'
+end
+
+return M
