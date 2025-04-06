@@ -3,6 +3,15 @@ local git = require("lib.git")
 local h = require("mods.hook")
 local palette = require("lib.palette")
 
+local function tree_bar()
+  if not f.tree_open() then return "" end
+
+  local icon = f.format("TablineIcon", "󰙅 ")
+  local text = f.format("TablineBackground", "Files")
+
+  return "  " .. icon .. text .. "                     "
+end
+
 local function tab(name, index, is_current, is_unsaved, status)
   local group = "Tabline"
   if is_current then group = group .. "Selected" end
@@ -29,7 +38,7 @@ local function tabline()
   local current_path = vim.api.nvim_buf_get_name(0)
   local current_name = vim.fn.fnamemodify(current_path, ':.')
 
-  local tabline = ""
+  local tabline = tree_bar()
   local current_found = false
 
   for i, hook in ipairs(hooks) do
@@ -75,7 +84,8 @@ end, {})
 local M = {}
 
 function M.setup()
-  vim.api.nvim_set_hl(0, "TablineBackground", { bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablineIcon", { fg = palette.orange, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablineBackground", { fg = palette.fg, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.red, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineNumber", { fg = palette.grey, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineName", { fg = palette.grey, bg = palette.bg_dim })
