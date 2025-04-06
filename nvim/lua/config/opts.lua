@@ -21,10 +21,10 @@ vim.wo.signcolumn = "yes"
 vim.wo.wrap = false
 
 vim.api.nvim_create_autocmd("TextYankPost", {
+  pattern = "*",
   callback = function()
     vim.highlight.on_yank()
   end,
-  pattern = "*",
 })
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -33,5 +33,14 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spell = true
     vim.opt_local.wrap = true
     vim.opt_local.textwidth = 80
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  pattern = "*",
+  callback = function()
+    if vim.bo.filetype == "" then
+      vim.bo.filetype = "txt"
+    end
   end,
 })
