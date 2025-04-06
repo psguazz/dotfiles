@@ -1,3 +1,18 @@
+local function unique_paths(grep_results)
+  local seen = {}
+  local unique_list = {}
+
+  for _, result in ipairs(grep_results) do
+    local path = result:match("^(.-):%d+:%d+:")
+    if not seen[path] then
+      seen[path] = true
+      table.insert(unique_list, result)
+    end
+  end
+
+  return unique_list
+end
+
 local function current_word()
   return vim.fn.expand("<cword>")
 end
@@ -28,16 +43,14 @@ local function global_replace(text)
   local pos = vim.api.nvim_win_get_cursor(0)
   local replacement = vim.fn.input("GLOBAL Replace `" .. text .. "` with: ")
 
-  if replacement == "" then return end
+  local cmd = { "git", "grep", "-n", "--no-color", text }
+  local results = unique_paths(vim.fn.systemlist(cmd))
 
-  local rg_cmd = { "rg", "--vimgrep", "--no-heading", "--smart-case", text }
-  local results = vim.fn.systemlist(rg_cmd)
+  if #results < 1 then return end
 
-  if #results > 0 then
-    text = "\\V" .. vim.fn.escape(text, "\\")
-    vim.fn.setqflist({}, " ", { title = "Global Replace", lines = result })
-    vim.cmd("cdo %s/" .. text .. "/" .. replacement .. "/gc")
-  end
+  text = "\\V" .. vim.fn.escape(text, "\\")
+  vim.fn.setqflist({}, " ", { title = "Global Replace", lines = results })
+  vim.cmd("cdo %s/" .. text .. "/" .. replacement .. "/gc")
 
   vim.api.nvim_set_current_buf(buf)
   vim.api.nvim_win_set_cursor(0, pos)
