@@ -84,7 +84,7 @@ end
 
 local function mode(is_active, current_mode, big)
   local text = ""
-  if big then text = modes[current_mode].label or "Unknown" end
+  if big and is_active then text = modes[current_mode].label or "Unknown" end
 
   local base_group = modes[current_mode].group
   return pill(base_group, is_active, text)
