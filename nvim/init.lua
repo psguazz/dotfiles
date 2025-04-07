@@ -20,6 +20,7 @@ require("lazy").setup({
   { import = "plugins" }
 }, {})
 
+require("config.lsp")
 require("config.snippets")
 require("config.mappings")
 require("config.theme")
