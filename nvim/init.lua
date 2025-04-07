@@ -21,7 +21,6 @@ require("lazy").setup({
 }, {})
 
 require("config.lsp")
-require("config.snippets")
 require("config.mappings")
 require("config.theme")
 
