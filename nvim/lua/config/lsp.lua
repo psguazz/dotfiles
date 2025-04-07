@@ -53,6 +53,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local opts = { buffer = args.buf }
 
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+
     vim.api.nvim_create_autocmd("BufWritePre", { buffer = args.buf, callback = lsp_format })
     vim.api.nvim_create_autocmd("BufWritePost", { buffer = args.buf, callback = prettier_format })
 
@@ -69,34 +72,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, opts)
     vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
   end
-})
-
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(ev)
-    local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    if client:supports_method("textDocument/completion") then
-      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-    end
-  end,
-})
-
-
--- This is copied straight from blink
--- https://cmp.saghen.dev/installation#merging-lsp-capabilities
-local capabilities = {
-  textDocument = {
-    foldingRange = {
-      dynamicRegistration = false,
-      lineFoldingOnly = true,
-    },
-  },
-}
-
--- Setup language servers.
-
-vim.lsp.config("*", {
-  capabilities = capabilities,
-  root_markers = { ".git" },
 })
 
 vim.lsp.enable({
