@@ -135,7 +135,7 @@ local function diagnostics(buf)
 end
 
 local function file_type(buf, is_active)
-  local icon = f.colored_icon(vim.fn.expand("%:p"), is_active and palette.bg_dim)
+  local icon = f.colored_icon(vim.fn.expand("%:p"), is_active)
   local type = vim.bo[buf].filetype
   if type == "" then type = "?" end
 
@@ -256,20 +256,21 @@ function M.setup()
     full = false
   end, {})
 
+  vim.api.nvim_set_hl(0, "Statusline", { fg = "none", bg = "none" })
   vim.api.nvim_set_hl(0, "StatuslineBackground", { bg = palette.bg1 })
 
   vim.api.nvim_set_hl(0, "StatuslinePlain", { fg = palette.grey, bg = palette.bg0 })
   vim.api.nvim_set_hl(0, "StatuslinePillPlain", { fg = palette.bg0, bg = palette.bg1 })
 
-  vim.api.nvim_set_hl(0, "StatuslineGitNone", { fg = palette.fg, bg = palette.bg0 })
-  vim.api.nvim_set_hl(0, "StatuslineGitNew", { fg = palette.green, bg = palette.bg0 })
-  vim.api.nvim_set_hl(0, "StatuslineGitModified", { fg = palette.yellow, bg = palette.bg0 })
-  vim.api.nvim_set_hl(0, "StatuslineGitDeleted", { fg = palette.red, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslineGitNone", { fg = palette.fg })
+  vim.api.nvim_set_hl(0, "StatuslineGitNew", { fg = palette.green })
+  vim.api.nvim_set_hl(0, "StatuslineGitModified", { fg = palette.yellow })
+  vim.api.nvim_set_hl(0, "StatuslineGitDeleted", { fg = palette.red })
 
-  vim.api.nvim_set_hl(0, "StatuslineDiagnosticError", { fg = palette.red, bg = palette.bg0 })
-  vim.api.nvim_set_hl(0, "StatuslineDiagnosticWarn", { fg = palette.yellow, bg = palette.bg0 })
-  vim.api.nvim_set_hl(0, "StatuslineDiagnosticHint", { fg = palette.green, bg = palette.bg0 })
-  vim.api.nvim_set_hl(0, "StatuslineDiagnosticInfo", { fg = palette.blue, bg = palette.bg0 })
+  vim.api.nvim_set_hl(0, "StatuslineDiagnosticError", { fg = palette.red })
+  vim.api.nvim_set_hl(0, "StatuslineDiagnosticWarn", { fg = palette.yellow })
+  vim.api.nvim_set_hl(0, "StatuslineDiagnosticHint", { fg = palette.green })
+  vim.api.nvim_set_hl(0, "StatuslineDiagnosticInfo", { fg = palette.blue })
 
   vim.api.nvim_set_hl(0, "StatuslineNormalActive", { fg = palette.bg0, bg = palette.bg_blue })
   vim.api.nvim_set_hl(0, "StatuslinePillNormalActive", { fg = palette.bg_blue, bg = palette.bg1 })

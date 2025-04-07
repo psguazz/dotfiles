@@ -27,12 +27,12 @@ function M.format(group, text)
   return "%#" .. group .. "#" .. text
 end
 
-function M.colored_icon(name, bg_color)
+function M.colored_icon(name, apply_color)
   local icon, icon_color = devicons.get_icon_color(name, vim.fn.fnamemodify(name, ":e"), { default = true })
 
-  if bg_color then
+  if apply_color then
     local group_name = "DevIconColor" .. icon_color:gsub("#", "")
-    M.define_group(group_name, { fg = icon_color, bg = bg_color })
+    M.define_group(group_name, { fg = icon_color })
 
     return M.format(group_name, icon)
   else

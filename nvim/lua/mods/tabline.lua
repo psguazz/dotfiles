@@ -21,7 +21,7 @@ local function tab(name, index, is_current, is_unsaved, status)
   if status ~= "None" then name_group = name_group .. status end
 
   local number = f.format(number_group, " " .. index)
-  local icon = f.colored_icon(name, is_current and palette.bg0)
+  local icon = f.colored_icon(name, is_current)
   local tab_name = f.format(name_group, vim.fn.fnamemodify(name, ":t"))
 
   local prefix = " "
@@ -84,8 +84,12 @@ end, {})
 local M = {}
 
 function M.setup()
-  vim.api.nvim_set_hl(0, "TablineIcon", { fg = palette.orange, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "Tabline", { fg = "none", bg = "none" })
+  vim.api.nvim_set_hl(0, "TablineSel", { fg = "none", bg = "none" })
+  vim.api.nvim_set_hl(0, "TablineFill", { fg = "none", bg = "none" })
   vim.api.nvim_set_hl(0, "TablineBackground", { fg = palette.fg, bg = palette.bg_dim })
+
+  vim.api.nvim_set_hl(0, "TablineIcon", { fg = palette.orange, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.red, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineNumber", { fg = palette.grey, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineName", { fg = palette.grey, bg = palette.bg_dim })
