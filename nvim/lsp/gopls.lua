@@ -24,6 +24,6 @@ return {
       staticcheck = true,
       gofumpt = true,
       semanticTokens = true,
-    },
-  },
+    }
+  }
 }

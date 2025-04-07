@@ -4,7 +4,16 @@ return {
     require("mason").setup()
 
     local mason_registry = require("mason-registry")
-    local servers = { "elixirls", "pylsp", "standardrb", "gopls", "lua_ls" }
+    local servers = {
+      "elixirls",
+      "gopls",
+      "lua_ls",
+      "pylsp",
+      "standardrb",
+      "tailwindcss",
+      "typescript-language-server",
+      "prettier"
+    }
 
     for _, server_name in ipairs(servers) do
       local ok, pkg = pcall(mason_registry.get_package, server_name)
