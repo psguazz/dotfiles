@@ -12,7 +12,7 @@ return {
   },
   filetypes = {
     "html",
-    "erb",
+    "eruby",
     "eelixir",
   },
   settings = {

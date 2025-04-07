@@ -64,9 +64,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.api.nvim_create_autocmd("BufWritePre", { buffer = args.buf, callback = lsp_format })
     vim.api.nvim_create_autocmd("BufWritePost", { buffer = args.buf, callback = prettier_format })
 
-    vim.api.nvim_create_user_command("Format", format_toggle, {})
-    vim.api.nvim_create_user_command("FormatOn", format_on, {})
-    vim.api.nvim_create_user_command("FormatOff", format_off, {})
 
     vim.keymap.set("n", "<leader>R", vim.lsp.buf.rename, opts)
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
@@ -79,9 +76,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end
 })
 
+vim.api.nvim_create_user_command("Format", format_toggle, {})
+vim.api.nvim_create_user_command("FormatOn", format_on, {})
+vim.api.nvim_create_user_command("FormatOff", format_off, {})
+
+vim.api.nvim_create_user_command('LspInfo', ':checkhealth vim.lsp', {})
+
 vim.lsp.enable({
   "gopls",
-  "htmlbeautifier",
   "luals",
   "pylsp",
   "standardrb",
