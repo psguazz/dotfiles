@@ -18,19 +18,18 @@ local function format_on() autoformat = true end
 local function format_off() autoformat = false end
 local function format_toggle() autoformat = not autoformat end
 
-local function lsp_format()
+local function lsp_format(args)
   if not autoformat then return end
-  if prettier_filetypes[vim.bo.filetype] then return end
+  if prettier_filetypes[vim.bo[args.buf].filetype] then return end
 
-  vim.lsp.buf.format({ async = false })
+  vim.lsp.buf.format({ bufnr = args.buf, async = false })
 end
 
-local function prettier_format()
+local function prettier_format(args)
   if not autoformat then return end
-  if not prettier_filetypes[vim.bo.filetype] then return end
+  if not prettier_filetypes[vim.bo[args.buf].filetype] then return end
 
-  local buf = vim.api.nvim_get_current_buf()
-  local name = vim.api.nvim_buf_get_name(buf)
+  local name = vim.api.nvim_buf_get_name(args.buf)
 
   local function after_format(res)
     if res.code ~= 0 then
@@ -39,8 +38,8 @@ local function prettier_format()
     end
 
     vim.schedule(function()
-      vim.api.nvim_buf_call(buf, function()
-        vim.cmd("edit!")
+      vim.api.nvim_buf_call(args.buf, function()
+        vim.cmd("checktime")
       end)
     end)
   end
@@ -62,8 +61,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local opts = { buffer = args.buf }
 
     vim.api.nvim_create_autocmd("BufWritePre", { buffer = args.buf, callback = lsp_format })
-    vim.api.nvim_create_autocmd("BufWritePost", { buffer = args.buf, callback = prettier_format })
-
 
     vim.keymap.set("n", "<leader>R", vim.lsp.buf.rename, opts)
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
@@ -75,6 +72,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
   end
 })
+
+vim.api.nvim_create_autocmd("BufWritePost", { callback = prettier_format })
 
 vim.api.nvim_create_user_command("Format", format_toggle, {})
 vim.api.nvim_create_user_command("FormatOn", format_on, {})
