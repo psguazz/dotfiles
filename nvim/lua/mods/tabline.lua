@@ -3,6 +3,8 @@ local git = require("lib.git")
 local h = require("mods.hook")
 local palette = require("lib.palette")
 
+local show = false
+
 local function tree_bar()
   if not f.tree_open() then return "" end
 
@@ -61,29 +63,34 @@ local function tabline()
   return "%#TablineBackground#" .. line .. "%#TablineBackground#"
 end
 
-local show = false
-
-vim.api.nvim_create_user_command("T", function()
-  if show then
-    vim.cmd("Toff")
-  else
-    vim.cmd("Ton")
-  end
-end, {})
-
-vim.api.nvim_create_user_command("Ton", function()
+local function show_line()
   show = true
   vim.cmd("set showtabline=2")
-end, {})
+end
 
-vim.api.nvim_create_user_command("Toff", function()
+local function hide_line()
   show = false
   vim.cmd("set showtabline=0")
-end, {})
+end
+
+local function toggle_line()
+  if show then
+    hide_line()
+  else
+    show_line()
+  end
+end
 
 local M = {}
 
 function M.setup()
+  show = not show
+  toggle_line()
+
+  vim.api.nvim_create_user_command("T", toggle_line, {})
+  vim.api.nvim_create_user_command("Ton", show_line, {})
+  vim.api.nvim_create_user_command("Toff", hide_line, {})
+
   vim.api.nvim_set_hl(0, "Tabline", { fg = "none", bg = "none" })
   vim.api.nvim_set_hl(0, "TablineSel", { fg = "none", bg = "none" })
   vim.api.nvim_set_hl(0, "TablineFill", { fg = "none", bg = "none" })

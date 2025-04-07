@@ -237,24 +237,28 @@ local function statusline()
   return "%#StatuslineBackground#" .. line .. "%#StatuslineBackground#"
 end
 
+local function show_line()
+  full = true
+end
+
+local function hide_line()
+  full = false
+end
+
+local function toggle_line()
+  if full then
+    hide_line()
+  else
+    show_line()
+  end
+end
+
 local M = {}
 
 function M.setup()
-  vim.api.nvim_create_user_command("S", function()
-    if full then
-      vim.cmd("Soff")
-    else
-      vim.cmd("Son")
-    end
-  end, {})
-
-  vim.api.nvim_create_user_command("Son", function()
-    full = true
-  end, {})
-
-  vim.api.nvim_create_user_command("Soff", function()
-    full = false
-  end, {})
+  vim.api.nvim_create_user_command("S", toggle_line, {})
+  vim.api.nvim_create_user_command("Son", show_line, {})
+  vim.api.nvim_create_user_command("Soff", hide_line, {})
 
   vim.api.nvim_set_hl(0, "Statusline", { fg = "none", bg = "none" })
   vim.api.nvim_set_hl(0, "StatuslineBackground", { bg = palette.bg1 })
