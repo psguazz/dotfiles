@@ -101,9 +101,10 @@ vim.lsp.config("*", {
 
 vim.lsp.enable({
   "gopls",
+  "htmlbeautifier",
   "luals",
   "pylsp",
+  "standardrb",
   "tailwindcss",
   "ts-ls",
-  "htmlbeautifier"
 })

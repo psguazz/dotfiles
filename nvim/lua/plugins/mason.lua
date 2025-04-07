@@ -8,11 +8,11 @@ return {
       "elixirls",
       "gopls",
       "lua_ls",
+      "prettier",
       "pylsp",
       "standardrb",
       "tailwindcss",
       "typescript-language-server",
-      "prettier"
     }
 
     for _, server_name in ipairs(servers) do
