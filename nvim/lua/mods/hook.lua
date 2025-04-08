@@ -10,8 +10,15 @@ local state = {
 local function all_hooks()
   local hooks = {}
 
-  for _, hook in ipairs(state.hooked_perm) do table.insert(hooks, hook) end
-  for _, hook in ipairs(state.hooked_temp) do table.insert(hooks, hook) end
+  for _, hook in ipairs(state.hooked_perm) do
+    hook.perm = true
+    table.insert(hooks, hook)
+  end
+
+  for _, hook in ipairs(state.hooked_temp) do
+    hook.perm = false
+    table.insert(hooks, hook)
+  end
 
   return hooks
 end

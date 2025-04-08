@@ -21,11 +21,18 @@ local function tree_bar()
   return "  " .. icon .. text .. "                     "
 end
 
-local function tab(path, name_limit, index, is_current, is_unsaved, status)
+local function tab(path, name_limit, index, is_current, is_perm)
+  local status = git.status(path)
+  local is_unsaved = f.is_unsaved(path)
+
   local group = "Tabline"
   if is_current then group = group .. "Selected" end
 
+  local prefix_group = "TablinePrefix"
+  if is_perm then prefix_group = prefix_group .. "Pin" end
+
   local number_group = group .. "Number"
+
   local name_group = group .. "Name"
   if status ~= "None" then name_group = name_group .. status end
 
@@ -37,7 +44,7 @@ local function tab(path, name_limit, index, is_current, is_unsaved, status)
   local tab_name = f.format(name_group, name)
 
   local prefix = " "
-  if is_current then prefix = f.format("TablinePrefix", "▐") end
+  if is_current then prefix = f.format(prefix_group, "▐") end
 
   local suffix = "  "
   if is_unsaved then suffix = f.format(number_group, "* ") end
@@ -55,10 +62,8 @@ local function tabline()
   local current_found = false
 
   for i, hook in ipairs(hooks) do
-    local status = git.status(hook.path)
     local is_current = current_path == hook.path
-    local is_saved = f.is_unsaved(hook.path)
-    line = line .. tab(hook.path, name_limit, i, is_current, is_saved, status)
+    line = line .. tab(hook.path, name_limit, i, is_current, hook.perm)
 
     if is_current then
       current_found = true
@@ -66,9 +71,7 @@ local function tabline()
   end
 
   if not current_found and current_name ~= "" and current_name ~= "NvimTree_1" then
-    local current_status = git.status(vim.fn.bufname())
-    local is_saved = f.is_unsaved(current_path)
-    line = line .. tab(current_path, name_limit, " ", true, is_saved, current_status)
+    line = line .. tab(current_path, name_limit, " ", true, false)
   end
 
   return "%#TablineBackground#" .. line .. "%#TablineBackground#"
@@ -108,7 +111,8 @@ function M.setup()
   vim.api.nvim_set_hl(0, "TablineBackground", { fg = palette.fg, bg = palette.bg_dim })
 
   vim.api.nvim_set_hl(0, "TablineIcon", { fg = palette.orange, bg = palette.bg_dim })
-  vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.red, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.orange, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablinePrefixPin", { fg = palette.red, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineNumber", { fg = palette.grey, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineName", { fg = palette.grey, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineNameModified", { fg = palette.off_yellow, bg = palette.bg_dim })
