@@ -21,30 +21,30 @@ local function tree_bar()
   return "  " .. icon .. text .. "                     "
 end
 
-local function tab(path, name_limit, index, is_current, is_perm)
-  local status = git.status(path)
-  local is_unsaved = f.is_unsaved(path)
+local function tab(hook, name_limit)
+  local status = git.status(hook.path)
+  local is_unsaved = f.is_unsaved(hook.path)
 
   local group = "Tabline"
-  if is_current then group = group .. "Selected" end
+  if hook.is_current then group = group .. "Selected" end
 
   local prefix_group = "TablinePrefix"
-  if is_perm then prefix_group = prefix_group .. "Pin" end
+  if hook.is_perm then prefix_group = prefix_group .. "Pin" end
 
   local number_group = group .. "Number"
 
   local name_group = group .. "Name"
   if status ~= "None" then name_group = name_group .. status end
 
-  local name = vim.fn.fnamemodify(path, ":t")
+  local name = vim.fn.fnamemodify(hook.path, ":t")
   if #name > name_limit then name = string.sub(name, 1, name_limit) .. "…" end
 
-  local number = f.format(number_group, " " .. index)
-  local icon = f.colored_icon(path, is_current)
+  local number = f.format(number_group, " " .. hook.index)
+  local icon = f.colored_icon(hook.path, hook.is_current)
   local tab_name = f.format(name_group, name)
 
   local prefix = " "
-  if is_current then prefix = f.format(prefix_group, "▐") end
+  if hook.is_current then prefix = f.format(prefix_group, "▐") end
 
   local suffix = "  "
   if is_unsaved then suffix = f.format(number_group, "* ") end
@@ -61,17 +61,14 @@ local function tabline()
   local name_limit = name_length(#hooks + 1)
   local current_found = false
 
-  for i, hook in ipairs(hooks) do
-    local is_current = current_path == hook.path
-    line = line .. tab(hook.path, name_limit, i, is_current, hook.perm)
-
-    if is_current then
-      current_found = true
-    end
+  for _, hook in ipairs(hooks) do
+    line = line .. tab(hook, name_limit)
+    if hook.is_current then current_found = true end
   end
 
   if not current_found and current_name ~= "" and current_name ~= "NvimTree_1" then
-    line = line .. tab(current_path, name_limit, " ", true, false)
+    local fake_hook = { path = current_path, index = " ", is_perm = false, is_current = true }
+    line = line .. tab(fake_hook, name_limit)
   end
 
   return "%#TablineBackground#" .. line .. "%#TablineBackground#"

@@ -7,17 +7,25 @@ local state = {
   hooked_temp = {}
 }
 
+local function decorated_hook(hook, is_perm, index)
+  return {
+    path = hook.path,
+    cursor = hook.cursor,
+    index = index,
+    is_current = index == state.current,
+    is_perm = is_perm,
+  }
+end
+
 local function all_hooks()
   local hooks = {}
 
-  for _, hook in ipairs(state.hooked_perm) do
-    hook.perm = true
-    table.insert(hooks, hook)
+  for i, hook in ipairs(state.hooked_perm) do
+    table.insert(hooks, decorated_hook(hook, true, i))
   end
 
-  for _, hook in ipairs(state.hooked_temp) do
-    hook.perm = false
-    table.insert(hooks, hook)
+  for i, hook in ipairs(state.hooked_temp) do
+    table.insert(hooks, decorated_hook(hook, false, i + #state.hooked_perm))
   end
 
   return hooks
@@ -160,10 +168,10 @@ local function hooks_name()
 end
 
 local function hooks_path()
-  local session_dir = vim.fn.stdpath("data") .. "/hooks"
-  vim.fn.mkdir(session_dir, "p")
+  local hook_dir = vim.fn.stdpath("data") .. "/hooks"
+  vim.fn.mkdir(hook_dir, "p")
 
-  local full_path = session_dir .. "/" .. hooks_name()
+  local full_path = hook_dir .. "/" .. hooks_name()
   return vim.fn.fnameescape(full_path)
 end
 
