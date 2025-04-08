@@ -7,6 +7,19 @@ local state = {
   hooked_temp = {}
 }
 
+local function base_hook()
+  local buf = vim.api.nvim_get_current_buf()
+  local path = vim.api.nvim_buf_get_name(buf)
+  local cursor = vim.api.nvim_win_get_cursor(0)
+
+  if path == "" then return nil end
+
+  return {
+    path = path,
+    cursor = { cursor[1], cursor[2] }
+  }
+end
+
 local function decorated_hook(hook, is_perm, i)
   return {
     path = hook.path,
@@ -32,19 +45,6 @@ local function all_hooks()
 end
 
 -- PRIMITIVES
-
-local function hookified_buffer()
-  local buf = vim.api.nvim_get_current_buf()
-  local path = vim.api.nvim_buf_get_name(buf)
-  local cursor = vim.api.nvim_win_get_cursor(0)
-
-  if path == "" then return nil end
-
-  return {
-    path = path,
-    cursor = { cursor[1], cursor[2] }
-  }
-end
 
 local function index(list, hook)
   if hook == nil then return -1 end
@@ -96,7 +96,7 @@ end
 
 local function restore_hook()
   local hooks = all_hooks()
-  state.current = index(hooks, hookified_buffer())
+  state.current = index(hooks, base_hook())
 
   if hooks[state.current] ~= nil then
     pcall(vim.api.nvim_win_set_cursor, 0, hooks[state.current].cursor)
@@ -128,7 +128,7 @@ local function unhook_all()
 end
 
 local function unhook()
-  local hook = hookified_buffer()
+  local hook = base_hook()
 
   remove_hook(state.hooked_perm, hook)
   remove_hook(state.hooked_temp, hook)
@@ -136,7 +136,7 @@ local function unhook()
 end
 
 local function hook_perm()
-  local hook = hookified_buffer()
+  local hook = base_hook()
   if contains(state.hooked_perm, hook) then return end
 
   remove_hook(state.hooked_temp, hook)
@@ -146,7 +146,7 @@ local function hook_perm()
 end
 
 local function hook_temp()
-  local hook = hookified_buffer()
+  local hook = base_hook()
   if contains(state.hooked_perm, hook) then return end
   if contains(state.hooked_temp, hook) then return end
 
@@ -155,7 +155,7 @@ local function hook_temp()
 end
 
 local function rehook()
-  local hook = hookified_buffer()
+  local hook = base_hook()
 
   update_hook(state.hooked_perm, hook)
   update_hook(state.hooked_temp, hook)
