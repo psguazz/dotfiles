@@ -33,9 +33,6 @@ return {
     vim.keymap.set("n", "<leader>/", function()
       ts.buffers()
     end)
-    vim.keymap.set("n", "<leader>dd", function()
-      ts.diagnostics()
-    end)
 
     require("telescope").load_extension("fzf")
   end
