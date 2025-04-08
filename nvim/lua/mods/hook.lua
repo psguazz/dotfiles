@@ -7,12 +7,12 @@ local state = {
   hooked_temp = {}
 }
 
-local function decorated_hook(hook, is_perm, index)
+local function decorated_hook(hook, is_perm, i)
   return {
     path = hook.path,
     cursor = hook.cursor,
-    index = index,
-    is_current = index == state.current,
+    index = i,
+    is_current = i == state.current,
     is_perm = is_perm,
   }
 end
@@ -61,7 +61,8 @@ local function contains(list, hook)
 end
 
 local function remove_hook(list, hook)
-  table.remove(list, index(list, hook))
+  local i = index(list, hook)
+  if i then table.remove(list, i) end
 end
 
 local function update_hook(list, hook)
