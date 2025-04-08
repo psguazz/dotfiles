@@ -20,12 +20,12 @@ require("lazy").setup({
   { import = "plugins" }
 }, {})
 
-require("config.autoformat")
 require("config.diagnostics")
 require("config.lsp")
 require("config.mappings")
 require("config.theme")
 
+require("mods.beautique").setup()
 require("mods.hook").setup()
 require("mods.seek").setup()
 require("mods.session").setup()

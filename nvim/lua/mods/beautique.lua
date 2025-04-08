@@ -50,9 +50,15 @@ local function prettier_format(args)
   vim.system({ "prettier", "--write", name }, { text = true, }, after_format)
 end
 
-vim.api.nvim_create_user_command("Format", format_toggle, {})
-vim.api.nvim_create_user_command("FormatOn", format_on, {})
-vim.api.nvim_create_user_command("FormatOff", format_off, {})
+local M = {}
 
-vim.api.nvim_create_autocmd("BufWritePre", { callback = lsp_format })
-vim.api.nvim_create_autocmd("BufWritePost", { callback = prettier_format })
+function M.setup()
+  vim.api.nvim_create_user_command("Format", format_toggle, {})
+  vim.api.nvim_create_user_command("FormatOn", format_on, {})
+  vim.api.nvim_create_user_command("FormatOff", format_off, {})
+
+  vim.api.nvim_create_autocmd("BufWritePre", { callback = lsp_format })
+  vim.api.nvim_create_autocmd("BufWritePost", { callback = prettier_format })
+end
+
+return M
