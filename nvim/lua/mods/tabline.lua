@@ -5,6 +5,13 @@ local palette = require("lib.palette")
 
 local show = false
 
+local function name_length(n_tabs)
+  local width = vim.o.columns
+  if f.tree_open() then width = width - 30 end
+
+  return math.floor(width / n_tabs) - 8
+end
+
 local function tree_bar()
   if not f.tree_open() then return "" end
 
@@ -14,7 +21,7 @@ local function tree_bar()
   return "  " .. icon .. text .. "                     "
 end
 
-local function tab(name, index, is_current, is_unsaved, status)
+local function tab(path, name_limit, index, is_current, is_unsaved, status)
   local group = "Tabline"
   if is_current then group = group .. "Selected" end
 
@@ -22,9 +29,12 @@ local function tab(name, index, is_current, is_unsaved, status)
   local name_group = group .. "Name"
   if status ~= "None" then name_group = name_group .. status end
 
+  local name = vim.fn.fnamemodify(path, ":t")
+  if #name > name_limit then name = string.sub(name, 1, name_limit) .. "…" end
+
   local number = f.format(number_group, " " .. index)
-  local icon = f.colored_icon(name, is_current)
-  local tab_name = f.format(name_group, vim.fn.fnamemodify(name, ":t"))
+  local icon = f.colored_icon(path, is_current)
+  local tab_name = f.format(name_group, name)
 
   local prefix = " "
   if is_current then prefix = f.format("TablinePrefix", "▐") end
@@ -41,13 +51,14 @@ local function tabline()
   local current_name = vim.fn.fnamemodify(current_path, ':.')
 
   local line = tree_bar()
+  local name_limit = name_length(#hooks + 1)
   local current_found = false
 
   for i, hook in ipairs(hooks) do
     local status = git.status(hook.path)
     local is_current = current_path == hook.path
     local is_saved = f.is_unsaved(hook.path)
-    line = line .. tab(hook.path, i, is_current, is_saved, status)
+    line = line .. tab(hook.path, name_limit, i, is_current, is_saved, status)
 
     if is_current then
       current_found = true
@@ -57,7 +68,7 @@ local function tabline()
   if not current_found and current_name ~= "" and current_name ~= "NvimTree_1" then
     local current_status = git.status(vim.fn.bufname())
     local is_saved = f.is_unsaved(current_path)
-    line = line .. tab(current_path, " ", true, is_saved, current_status)
+    line = line .. tab(current_path, name_limit, " ", true, is_saved, current_status)
   end
 
   return "%#TablineBackground#" .. line .. "%#TablineBackground#"
