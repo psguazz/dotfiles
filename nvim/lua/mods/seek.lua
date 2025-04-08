@@ -50,6 +50,8 @@ local function global_replace(text)
   local pos = vim.api.nvim_win_get_cursor(0)
   local replacement = vim.fn.input("GLOBAL Replace `" .. text .. "` with: ")
 
+  if #replacement < 1 then return end
+
   local cmd = { "git", "grep", "-n", "--no-color", text }
   local results = unique_paths(vim.fn.systemlist(cmd))
 
