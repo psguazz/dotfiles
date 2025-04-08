@@ -82,10 +82,11 @@ vim.api.nvim_create_user_command("FormatOff", format_off, {})
 vim.api.nvim_create_user_command('LspInfo', ':checkhealth vim.lsp', {})
 
 vim.lsp.enable({
+  "elixir-ls",
   "gopls",
-  "luals",
+  "lua-language-server",
   "pylsp",
   "standardrb",
-  "tailwindcss",
-  "ts-ls",
+  "tailwindcss-language-server",
+  "typescript-language-server",
 })

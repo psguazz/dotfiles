@@ -5,19 +5,21 @@ return {
 
     local mason_registry = require("mason-registry")
     local servers = {
-      "elixirls",
+      "elixir-ls",
       "gopls",
-      "lua_ls",
+      "lua-language-server",
       "prettier",
-      "pylsp",
+      "python-lsp-server",
       "standardrb",
-      "tailwindcss",
+      "tailwindcss-language-server",
       "typescript-language-server",
     }
 
     for _, server_name in ipairs(servers) do
       local ok, pkg = pcall(mason_registry.get_package, server_name)
-      if ok and not pkg:is_installed() then
+      if not ok then
+        vim.notify("LSP not found: " .. server_name, vim.log.levels.ERROR)
+      elseif not pkg:is_installed() then
         pkg:install()
       end
     end
