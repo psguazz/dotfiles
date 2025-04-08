@@ -45,7 +45,7 @@ local left_pill = ""
 local right_pill = ""
 local space = "%#StatuslineBackground# "
 
-local disabled_filetypes = { "NvimTree", "fugitive" }
+local disabled_filetypes = { "NvimTree" }
 
 local function should_hide(buf)
   local filetype = vim.bo[buf].filetype
@@ -145,9 +145,9 @@ end
 local function git_status(buf)
   local name = vim.api.nvim_buf_get_name(buf)
   local group = "StatuslineGit" .. git.status(name)
-  local branch = vim.fn.FugitiveHead()
+  local branch = git.branch()
 
-  if not branch or branch == "" then return "" end
+  if branch == "" then return "" end
 
   local s = vim.b.gitsigns_status_dict
   s = s or { added = 0, changed = 0, removed = 0 }
