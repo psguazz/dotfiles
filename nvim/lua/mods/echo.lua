@@ -175,9 +175,9 @@ end
 local function location(is_active, current_mode)
   if not is_active then return "" end
 
-  local r, c = unpack(vim.api.nvim_win_get_cursor(0))
-  local row = string.format("%2d", r)
-  local col = string.format("%-2d", c)
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local row = string.format("%2d", cursor[1])
+  local col = string.format("%-2d", cursor[2])
   local text = row .. ":" .. col
 
   local base_group = modes[current_mode].group
