@@ -9,7 +9,7 @@ local function name_length(n_tabs)
   local width = vim.o.columns
   if f.tree_open() then width = width - 30 end
 
-  return math.floor(width / n_tabs) - 8
+  return math.floor(width / n_tabs) - 9
 end
 
 local function tree_bar()
