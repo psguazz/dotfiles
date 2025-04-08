@@ -47,7 +47,7 @@ end
 -- PRIMITIVES
 
 local function index(list, hook)
-  if hook == nil then return -1 end
+  if hook == nil then return nil end
 
   for i, existing in ipairs(list) do
     if existing.path == hook.path then
