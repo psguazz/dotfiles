@@ -87,11 +87,14 @@ local function go_to(number)
   local hooks = all_hooks()
   if not number or number < 1 then number = #hooks end
   if number > #hooks then number = 1 end
-
-  local hook = hooks[number]
+  if #hooks == 0 then number = nil end
 
   state.current = number
-  vim.cmd("edit " .. vim.fn.fnameescape(hook.path))
+
+  if number ~= nil then
+    local hook = hooks[number]
+    vim.cmd("edit " .. vim.fn.fnameescape(hook.path))
+  end
 end
 
 local function restore_hook()
@@ -116,6 +119,7 @@ end
 local function unhook_all()
   state.hooked_perm = {}
   state.hooked_temp = {}
+  state.current = nil
 
   vim.cmd("NvimTreeFocus")
 
@@ -129,10 +133,14 @@ end
 
 local function unhook()
   local hook = base_hook()
+  local buf = vim.api.nvim_get_current_buf()
 
   remove_hook(state.hooked_perm, hook)
   remove_hook(state.hooked_temp, hook)
   go_to_prev()
+
+  if state.current == nil then vim.cmd("NvimTreeFocus") end
+  vim.api.nvim_buf_delete(buf, { force = true })
 end
 
 local function hook_perm()
