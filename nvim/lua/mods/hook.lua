@@ -70,12 +70,14 @@ local function update_hook(list, hook)
   if i then list[i] = hook end
 end
 
-local function add_hook(list, hook, limit)
+local function add_hook(list, hook)
   if hook == nil then return end
   if contains(list, hook) then return end
 
   table.insert(list, hook)
+end
 
+local function trim(list, limit)
   while #list > (limit or 1000) do
     table.remove(list, 1)
   end
@@ -147,9 +149,12 @@ local function hook_perm()
   local hook = base_hook()
   if contains(state.hooked_perm, hook) then return end
 
-  remove_hook(state.hooked_temp, hook)
+  add_hook(state.hooked_perm, hook)
+  trim(state.hooked_perm, global_limit - 1)
 
-  add_hook(state.hooked_perm, hook, global_limit - 1)
+  remove_hook(state.hooked_temp, hook)
+  trim(state.hooked_temp, global_limit - #state.hooked_perm)
+
   state.current = #state.hooked_perm
 end
 
@@ -158,7 +163,9 @@ local function hook_temp()
   if contains(state.hooked_perm, hook) then return end
   if contains(state.hooked_temp, hook) then return end
 
-  add_hook(state.hooked_temp, hook, global_limit - #state.hooked_perm)
+  add_hook(state.hooked_temp, hook)
+  trim(state.hooked_temp, global_limit - #state.hooked_perm)
+
   state.current = #state.hooked_perm + #state.hooked_temp
 end
 
