@@ -39,7 +39,8 @@ local function replace(text)
   local replacement = vim.fn.input("Replace `" .. text .. "` with: ")
 
   text = "\\V" .. vim.fn.escape(text, "\\")
-  vim.cmd("%s/" .. text .. "/" .. replacement .. "/gc")
+  vim.cmd(".,$s/" .. text .. "/" .. replacement .. "/gce")
+  vim.cmd("1,.s/" .. text .. "/" .. replacement .. "/gce")
 
   vim.api.nvim_win_set_cursor(0, pos)
 end
