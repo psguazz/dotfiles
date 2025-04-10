@@ -30,16 +30,35 @@ local function decorated_hook(hook, is_perm, i)
   }
 end
 
-local function all_hooks()
+local function current()
+  return state.current
+end
+
+local function perm_hooks()
   local hooks = {}
 
   for i, hook in ipairs(state.hooked_perm) do
     table.insert(hooks, decorated_hook(hook, true, i))
   end
 
+  return hooks
+end
+
+local function temp_hooks()
+  local hooks = {}
+
   for i, hook in ipairs(state.hooked_temp) do
     table.insert(hooks, decorated_hook(hook, false, i + #state.hooked_perm))
   end
+
+  return hooks
+end
+
+local function all_hooks()
+  local hooks = {}
+
+  for _, hook in ipairs(perm_hooks()) do table.insert(hooks, hook) end
+  for _, hook in ipairs(temp_hooks()) do table.insert(hooks, hook) end
 
   return hooks
 end
@@ -208,7 +227,12 @@ end
 
 -- SETUP
 
-local M = { all_hooks = all_hooks }
+M = {
+  perm_hooks = perm_hooks,
+  temp_hooks = temp_hooks,
+  all_hooks = all_hooks,
+  current = current
+}
 
 function M.setup()
   vim.api.nvim_create_autocmd("VimLeavePre", { callback = save_hooks })
