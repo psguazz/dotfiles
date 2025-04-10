@@ -9,6 +9,7 @@ return {
     "postcss.config.cjs",
     "postcss.config.mjs",
     "postcss.config.ts",
+    ".git",
   },
   filetypes = {
     "html",

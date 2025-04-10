@@ -4,6 +4,7 @@ return {
   root_markers = {
     "go.mod",
     "go.sum",
+    ".git",
   },
   settings = {
     gopls = {
