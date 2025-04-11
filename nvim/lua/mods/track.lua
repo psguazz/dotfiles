@@ -6,7 +6,7 @@ local palette = require("lib.palette")
 local show = false
 
 local function name_length(n_tabs)
-  local width = vim.o.columns - 4
+  local width = vim.o.columns - 10
   if f.tree_open() then width = width - 30 end
 
   return math.floor(width / n_tabs) - 9
@@ -29,6 +29,7 @@ local function tab(hook, name_limit)
   if hook.is_current then group = group .. "Selected" end
 
   local prefix_group = "TablinePrefix"
+  if hook.index == " " then prefix_group = prefix_group .. "Temp" end
   if hook.is_perm then prefix_group = prefix_group .. "Pin" end
 
   local number_group = group .. "Number"
@@ -36,20 +37,20 @@ local function tab(hook, name_limit)
   local name_group = group .. "Name"
   if status ~= "None" then name_group = name_group .. status end
 
-  local name = vim.fn.fnamemodify(hook.path, ":t")
-  if #name > name_limit then name = string.sub(name, 1, name_limit) .. "…" end
+  local prefix = " "
+  if hook.is_current then prefix = f.format(prefix_group, "▐") end
 
   local number = f.format(number_group, " " .. hook.index)
   local icon = " " .. f.colored_icon(hook.path, hook.is_current) .. " "
-  local tab_name = f.format(name_group, name)
 
-  local prefix = " "
-  if hook.is_current then prefix = f.format(prefix_group, "▐") end
+  local name = vim.fn.fnamemodify(hook.path, ":t")
+  if #name > name_limit then name = string.sub(name, 1, name_limit) .. "…" end
+  name = f.format(name_group, name)
 
   local suffix = "  "
   if is_unsaved then suffix = f.format(number_group, "* ") end
 
-  return "%#TablineBackground#" .. prefix .. number .. icon .. tab_name .. suffix .. "%#TablineBackground#"
+  return "%#TablineBackground#" .. prefix .. number .. icon .. name .. suffix .. "%#TablineBackground#"
 end
 
 local function tabline()
@@ -59,27 +60,34 @@ local function tabline()
   local current_path = vim.api.nvim_buf_get_name(0)
   local current_name = vim.fn.fnamemodify(current_path, ':.')
 
-  local line = tree_bar()
+  local line = ""
   local name_limit = name_length(#perm_hooks + #temp_hooks + 1)
+
+  local show_current = not h.current() and current_name ~= "" and current_name ~= "NvimTree_1"
+  local divider = f.format("TablineBackground", "  |  ")
 
   for _, hook in ipairs(perm_hooks) do
     line = line .. tab(hook, name_limit)
   end
 
   if #perm_hooks > 0 and #temp_hooks > 0 then
-    line = line .. f.format("TablineBackground", "  |  ")
+    line = line .. divider
   end
 
   for _, hook in ipairs(temp_hooks) do
     line = line .. tab(hook, name_limit)
   end
 
-  if not h.current() and current_name ~= "" and current_name ~= "NvimTree_1" then
+  if #line > 0 and show_current then
+    line = line .. divider
+  end
+
+  if show_current then
     local fake_hook = { path = current_path, index = " ", is_perm = false, is_current = true }
     line = line .. tab(fake_hook, name_limit)
   end
 
-  return "%#TablineBackground#" .. line .. "%#TablineBackground#"
+  return "%#TablineBackground#" .. tree_bar() .. line .. "%#TablineBackground#"
 end
 
 local function show_line()
@@ -119,6 +127,7 @@ function M.setup()
   vim.api.nvim_set_hl(0, "TablineIcon", { fg = palette.orange, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.orange, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablinePrefixPin", { fg = palette.red, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablinePrefixTemp", { fg = palette.yellow, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineNumber", { fg = palette.grey, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineName", { fg = palette.grey, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineNameModified", { fg = palette.off_yellow, bg = palette.bg_dim })
