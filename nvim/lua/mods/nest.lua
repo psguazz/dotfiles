@@ -1,3 +1,14 @@
+local function was_started_with_file()
+  for _, arg in ipairs(vim.fn.argv()) do
+    local stat = vim.loop.fs_stat(arg)
+    if stat and stat.type == "file" then
+      return true
+    end
+  end
+
+  return false
+end
+
 local function session_name()
   local cwd = vim.loop.cwd() or "unknown"
   return vim.fn.sha256(cwd):sub(1, 16) .. ".vim"
@@ -12,11 +23,14 @@ local function session_path()
 end
 
 local function save_session()
+  if was_started_with_file() then return end
+
   vim.cmd("NvimTreeClose")
   vim.cmd("mks! " .. session_path())
 end
 
 local function load_session()
+  if was_started_with_file() then return end
   if vim.fn.filereadable(session_path()) == 0 then return end
 
   vim.schedule(function()
