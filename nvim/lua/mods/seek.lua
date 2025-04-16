@@ -15,17 +15,21 @@ local function unique_paths(grep_results)
   return unique_list
 end
 
+local function escape(text)
+  return vim.fn.escape(text, "/\\")
+end
+
 local function current_word()
-  return vim.fn.expand("<cword>")
+  return escape(vim.fn.expand("<cword>"))
 end
 
 local function current_selection()
   vim.cmd('noau normal! "vy"')
-  return vim.fn.getreg("v")
+  return escape(vim.fn.getreg("v"))
 end
 
 local function search(text)
-  vim.fn.setreg("/", "\\V" .. vim.fn.escape(text, "\\"))
+  vim.fn.setreg("/", "\\V" .. text)
   vim.cmd("normal! n")
   vim.cmd("normal! N")
 end
@@ -36,9 +40,9 @@ end
 
 local function replace(text)
   local pos = vim.api.nvim_win_get_cursor(0)
-  local replacement = vim.fn.input("Replace `" .. text .. "` with: ")
+  local replacement = vim.fn.input("Replace " .. text .. " with: ")
 
-  text = "\\V" .. vim.fn.escape(text, "\\")
+  text = "\\V" .. text
   vim.cmd(".,$s/" .. text .. "/" .. replacement .. "/gce")
   vim.cmd("1,.s/" .. text .. "/" .. replacement .. "/gce")
 
@@ -57,7 +61,7 @@ local function global_replace(text)
 
   if #results < 1 then return end
 
-  text = "\\V" .. vim.fn.escape(text, "\\")
+  text = "\\V" .. text
   vim.fn.setqflist({}, " ", { title = "Global Replace", lines = results })
   vim.cmd("cdo %s/" .. text .. "/" .. replacement .. "/gc")
 
