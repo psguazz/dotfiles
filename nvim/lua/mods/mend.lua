@@ -63,7 +63,7 @@ local function prettier_format(args)
   if not custom_filetypes.prettier[vim.bo[args.buf].filetype] then return end
 
   local name = vim.api.nvim_buf_get_name(args.buf)
-  manual_format({ "prettier", "--write", name }, args)
+  manual_format({ "prettier", "--prose-wrap", "always", "--write", name }, args)
 end
 
 local function erb_format(args)
