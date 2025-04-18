@@ -6,6 +6,7 @@ return {
     local mason_registry = require("mason-registry")
     local servers = {
       "elixir-ls",
+      "erb-formatter",
       "gopls",
       "lua-language-server",
       "prettier",
