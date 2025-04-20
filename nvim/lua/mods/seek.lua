@@ -44,7 +44,6 @@ local function replace(text)
 
   text = "\\V" .. text
   vim.cmd(".,$s/" .. text .. "/" .. replacement .. "/gce")
-  vim.cmd("1,.s/" .. text .. "/" .. replacement .. "/gce")
 
   vim.api.nvim_win_set_cursor(0, pos)
 end
