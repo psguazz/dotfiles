@@ -27,3 +27,5 @@ foreground = "#e2e2e3"
 cursor-invert-fg-bg
 
 window-padding-balance
+
+window-decoration = false
