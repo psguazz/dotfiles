@@ -49,7 +49,7 @@ alt-f = 'fullscreen'
 [gaps]
 inner.horizontal = 5
 inner.vertical = 5
-outer.top = 40
+outer.top = 38
 outer.left = 0
 outer.bottom = -1
 outer.right = 0
