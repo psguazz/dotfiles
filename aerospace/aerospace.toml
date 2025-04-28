@@ -47,9 +47,9 @@ alt-shift-9 = 'move-node-to-workspace 9'
 alt-f = 'fullscreen'
 
 [gaps]
-inner.horizontal = 5
-inner.vertical = 5
-outer.top = 32
+inner.horizontal = 10
+inner.vertical = 10
+outer.top = 24
 outer.left = 0
 outer.bottom = -1
 outer.right = 0
