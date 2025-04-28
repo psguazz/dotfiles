@@ -1,7 +1,18 @@
 #!/bin/bash
 
+source "/Users/psg/.config/scripts/palette.sh"
+
 if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
-  sketchybar --set $NAME background.color=0x88FF00FF label.shadow.drawing=on icon.shadow.drawing=on background.border_width=2
+  bg=$diff_yellow
+  icon=$grey
+  label=$fg
 else
-  sketchybar --set $NAME background.color=0x44FFFFFF label.shadow.drawing=off icon.shadow.drawing=off background.border_width=0
+  bg=$bg_dim
+  icon=$grey
+  label=$grey
 fi
+
+sketchybar --set $NAME \
+           background.color="$(hex_to_rgba $bg)" \
+           icon.color=$(hex_to_rgba $icon) \
+           label.color=$(hex_to_rgba $label)

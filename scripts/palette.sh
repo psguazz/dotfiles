@@ -34,6 +34,14 @@ hex_to_rgb() {
     echo "$r;$g;$b"
 }
 
+hex_to_rgba() {
+    local hex=$1
+    local hex=${hex#"#"}
+    local alpha=${2:-ff}
+
+    echo "0x$alpha$hex"
+}
+
 set_color() {
     local rgb=$(hex_to_rgb "$1")
     echo -ne "\033[38;2;${rgb}m"

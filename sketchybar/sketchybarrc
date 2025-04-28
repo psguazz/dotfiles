@@ -1,15 +1,17 @@
+source "/Users/psg/.config/scripts/palette.sh"
+
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 ITEM_DIR="$CONFIG_DIR/items"
 
-sketchybar --bar position=top height=38 blur_radius=30 color=0x40000000
+sketchybar --bar position=top height=38 blur_radius=0 color="$(hex_to_rgba $bg_dim)"
 
 default=(
   padding_left=5
   padding_right=5
   icon.font="Monaco Nerd Font:Bold:14.0"
   label.font="Monaco Nerd Font:Regular:14.0"
-  icon.color=0xffffffff
-  label.color=0xffffffff
+  icon.color="$(hex_to_rgba $fg)"
+  label.color="$(hex_to_rgba $fg)"
   icon.padding_left=4
   icon.padding_right=4
   label.padding_left=4
