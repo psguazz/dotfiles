@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+scripts_dir="/Users/psg/.config/scripts"
 
-source "$current_dir/palette.sh"
+source "$scripts_dir/palette.sh"
 
 function pill() {
     local icon_color=$1
@@ -66,5 +66,5 @@ tmux set-option -g status-right ""
 time=$(pill $purple $diff_blue "󰃭" "%a %-e %b %-l:%M %p")
 tmux set-option -ga status-right " $time"
 
-battery=$(pill $bg_red $diff_red "#($current_dir/battery_status.sh)" "#($current_dir/battery_level.sh)")
+battery=$(pill $bg_red $diff_red "#($scripts_dir/battery_status.sh)" "#($scripts_dir/battery_level.sh)")
 tmux set-option -ga status-right " $battery"
