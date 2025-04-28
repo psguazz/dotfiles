@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+scripts_dir="/Users/psg/.config/scripts"
 
-source "$current_dir/palette.sh"
+source "$scripts_dir/palette.sh"
 
 selected_session=$1
 
