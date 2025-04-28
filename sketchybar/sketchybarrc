@@ -25,5 +25,6 @@ source $ITEM_DIR/app.sh
 source $ITEM_DIR/clock.sh
 source $ITEM_DIR/volume.sh
 source $ITEM_DIR/battery.sh
+source $ITEM_DIR/wifi.sh
 
 sketchybar --update

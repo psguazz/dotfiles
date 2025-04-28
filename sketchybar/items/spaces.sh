@@ -1,3 +1,5 @@
+#!/bin/bash
+
 sketchybar --add event aerospace_workspace_change
 
 for sid in $(aerospace list-workspaces --monitor 1); do
@@ -23,8 +25,7 @@ for sid in $(aerospace list-workspaces --monitor 1); do
     background.drawing=on \
     background.border_color=0xAAFFFFFF \
     background.border_width=0 \
-    background.height=25 \
-    updates=on
+    background.height=25
 done
 
 for sid in $(aerospace list-workspaces --monitor 1 --empty no); do
@@ -32,13 +33,11 @@ for sid in $(aerospace list-workspaces --monitor 1 --empty no); do
 
   sketchybar --set space.$sid drawing=on
 
-  icon_strip=" "
+  icon_strip=""
   if [ "${apps}" != "" ]; then
     while read -r app; do
-      icon_strip+=" $($CONFIG_DIR/plugins/icon_map_fn.sh "$app")"
+      icon_strip+=" $(/Users/psg/.config/scripts/icon_map_fn.sh "$app")"
     done <<<"${apps}"
-  else
-    icon_strip=""
   fi
   sketchybar --set space.$sid label="$icon_strip"
 done
