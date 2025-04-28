@@ -1,5 +1,13 @@
 #!/bin/bash
 
 sketchybar --add item wifi right \
+           --subscribe wifi wifi_change \
            --set wifi script="$PLUGIN_DIR/wifi.sh" \
-           --subscribe wifi wifi_change
+           icon="!" \
+           icon.padding_left=10 \
+           icon.color=$(hex_to_rgba $fg) \
+           label.padding_left=0 \
+           background.corner_radius=5 \
+           background.drawing=on \
+           background.height=16 \
+           background.color=$(hex_to_rgba $diff_yellow)
