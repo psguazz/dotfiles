@@ -3,13 +3,13 @@ source "/Users/psg/.config/scripts/palette.sh"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 ITEM_DIR="$CONFIG_DIR/items"
 
-sketchybar --bar position=top height=38 blur_radius=0 color="$(hex_to_rgba $bg_dim)"
+sketchybar --bar position=top height=30 blur_radius=30 color="$(hex_to_rgba $bg_dim '77')"
 
 default=(
   padding_left=5
   padding_right=5
-  icon.font="Monaco Nerd Font:Bold:14.0"
-  label.font="Monaco Nerd Font:Regular:14.0"
+  icon.font="Monaco Nerd Font:Bold:12.0"
+  label.font="Monaco Nerd Font:Regular:12.0"
   icon.color="$(hex_to_rgba $fg)"
   label.color="$(hex_to_rgba $fg)"
   icon.padding_left=4
@@ -20,13 +20,35 @@ default=(
 )
 sketchybar --default "${default[@]}"
 
-source $ITEM_DIR/aerospace.sh
+sketchybar --add event aerospace_workspace_change
 
-source $ITEM_DIR/front_app.sh
+for sid in $(aerospace list-workspaces --monitor 1); do
+  sketchybar --add item space.$sid left \
+    --subscribe space.$sid aerospace_workspace_change \
+    --set space.$sid \
+    click_script="aerospace workspace $sid" \
+    script="$PLUGIN_DIR/aerospace.sh $sid" \
+    drawing=off \
+    icon="$sid" \
+    icon.padding_left=10 \
+    label.font="sketchybar-app-font:Regular:14.0" \
+    label.padding_right=20 \
+    label.padding_left=0 \
+    background.corner_radius=5 \
+    background.drawing=on \
+    background.height=20
+done
 
-source $ITEM_DIR/clock.sh
-source $ITEM_DIR/volume.sh
-source $ITEM_DIR/battery.sh
-source $ITEM_DIR/wifi.sh
+for sid in $(aerospace list-workspaces --monitor 1 --empty no); do
+  apps=$(aerospace list-windows --workspace "$sid" | awk -F'|' '{gsub(/^ *| *$/, "", $2); print $2}')
 
-sketchybar --update
+  sketchybar --set space.$sid drawing=on
+
+  icon_strip=""
+  if [ "${apps}" != "" ]; then
+    while read -r app; do
+      icon_strip+=" $(/Users/psg/.config/scripts/icon_map_fn.sh "$app")"
+    done <<<"${apps}"
+  fi
+  sketchybar --set space.$sid label="$icon_strip"
+done
