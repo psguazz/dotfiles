@@ -1,0 +1,29 @@
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+ITEM_DIR="$CONFIG_DIR/items"
+
+sketchybar --bar position=top height=40 blur_radius=30 color=0x40000000
+
+default=(
+  padding_left=5
+  padding_right=5
+  icon.font="Monaco Nerd Font:Bold:14.0"
+  label.font="Monaco Nerd Font:Regular:14.0"
+  icon.color=0xffffffff
+  label.color=0xffffffff
+  icon.padding_left=4
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=4
+  updates=on
+)
+sketchybar --default "${default[@]}"
+
+source $ITEM_DIR/spaces.sh
+
+source $ITEM_DIR/app.sh
+
+source $ITEM_DIR/clock.sh
+source $ITEM_DIR/volume.sh
+source $ITEM_DIR/battery.sh
+
+sketchybar --update

@@ -1,9 +1,10 @@
-start-at-login = true
 after-login-command = []
 
 exec-on-workspace-change = ['/bin/bash', '-c',
   "/usr/local/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
 ]
+
+start-at-login = true
 
 [mode.main.binding]
 
@@ -44,11 +45,6 @@ alt-shift-8 = 'move-node-to-workspace 8'
 alt-shift-9 = 'move-node-to-workspace 9'
 
 alt-f = 'fullscreen'
-
-alt-shift-h = ['join-with left', 'mode main']
-alt-shift-j = ['join-with down', 'mode main']
-alt-shift-k = ['join-with up', 'mode main']
-alt-shift-l = ['join-with right', 'mode main']
 
 [gaps]
 inner.horizontal = 5
