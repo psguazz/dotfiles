@@ -4,7 +4,7 @@ sketchybar --add event aerospace_workspace_change
 
 for sid in $(aerospace list-workspaces --monitor 1); do
   sketchybar --add item space.$sid left \
-             --subscribe space.$sid aerospace_workspace_change \
+             --subscribe space.$sid space_windows_change aerospace_workspace_change \
              --set space.$sid \
              click_script="aerospace workspace $sid" \
              script="$PLUGIN_DIR/aerospace.sh $sid" \
