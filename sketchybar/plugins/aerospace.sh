@@ -3,9 +3,9 @@
 source "/Users/psg/.config/scripts/palette.sh"
 
 if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
-  bg=$diff_yellow
+  bg=$yellow
   icon=$grey
-  label=$fg
+  label=$bg_dim
 else
   bg=$bg_dim
   icon=$grey
