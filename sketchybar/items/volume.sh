@@ -3,4 +3,5 @@
 sketchybar --add item volume right \
            --subscribe volume volume_change \
            --set volume script="$PLUGIN_DIR/volume.sh" \
-           background.color=$(hex_to_rgba $green)
+           background.border_color=$(hex_to_rgba $green) \
+           icon.color=$(hex_to_rgba $green)
