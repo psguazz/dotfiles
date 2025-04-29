@@ -4,14 +4,14 @@ source "/Users/psg/.config/scripts/palette.sh"
 
 if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
   color=$yellow
-  border=$yellow
+  border=1
 else
   color=$grey
-  border=$bg_dim
+  border=0
 fi
 
 sketchybar --set $NAME \
-           background.border_color="$(hex_to_rgba $border)" \
+           background.border_width="$border" \
            icon.color=$(hex_to_rgba $grey) \
            label.color=$(hex_to_rgba $color)
 
