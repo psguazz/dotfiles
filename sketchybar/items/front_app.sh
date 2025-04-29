@@ -2,6 +2,7 @@
 
 sketchybar --add item front_app center \
            --subscribe front_app front_app_switched \
-           --set front_app script="$PLUGIN_DIR/front_app.sh" \
-           background.border_width=0
+           --set front_app \
+           background.border_width=0 \
+           script="$PLUGIN_DIR/front_app.sh"
 

@@ -10,7 +10,7 @@ ICON="󰤭"
 
 if [[ "$state" == "running" ]]; then
   rssi=$(echo "$info" | awk '/agrCtlRSSI/ { print $2 }')
-  
+
   if [ "$rssi" -gt -60 ]; then
     ICON="󰤨"
   elif [ "$rssi" -gt -70 ]; then
