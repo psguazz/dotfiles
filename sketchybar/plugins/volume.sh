@@ -12,4 +12,4 @@ case "$VOLUME" in
   *) ICON="󰖁"
 esac
 
-sketchybar --set "$NAME" icon="$ICON" icon.font="Monaco Nerd Font:Bold:14.0"
+sketchybar --set "$NAME" icon="$ICON" label="$INFO%"

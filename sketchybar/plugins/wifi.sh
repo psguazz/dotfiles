@@ -5,6 +5,7 @@ info=$($airport -I)
 
 state=$(echo "$info" | awk '/state/ { print $2 }')
 
+SSID="No connection"
 ICON="󰤭"
 
 if [[ "$state" == "running" ]]; then
@@ -23,6 +24,8 @@ if [[ "$state" == "running" ]]; then
   if ! ping -c 1 -W 1 8.8.8.8 &> /dev/null; then
     ICON="󰖪"
   fi
+
+  SSID=$(networksetup -getairportnetwork en0 | awk -F': ' '{print $2}')
 fi
 
-sketchybar --set $NAME icon="$ICON" icon.font="Monaco Nerd Font:Bold:14.0"
+sketchybar --set $NAME icon="$ICON" label="$SSID"
