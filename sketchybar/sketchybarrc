@@ -7,16 +7,16 @@ sketchybar --bar position=top height=24 blur_radius=3 color="$(hex_to_rgba $bg_d
 
 default=(
   background.border_color="$(hex_to_rgba $fg)"
-  background.border_width=1
-  background.corner_radius=100
+  background.border_width=0
+  background.corner_radius=6
   background.drawing=on
   background.height=20
   icon.color="$(hex_to_rgba $grey)"
-  icon.font="Monaco Nerd Font:Bold:12.0"
+  icon.font="SF Pro:Bold:18.0"
   icon.padding_left=10
   icon.padding_right=10
   label.color="$(hex_to_rgba $fg)"
-  label.font="Monaco Nerd Font:Bold:12.0"
+  label.font="SF Pro:Bold:12.0"
   label.padding_left=0
   label.padding_right=10
   padding_left=4

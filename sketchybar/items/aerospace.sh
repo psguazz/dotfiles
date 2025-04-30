@@ -9,6 +9,7 @@ for sid in $(aerospace list-workspaces --monitor 1); do
              background.border_color=$(hex_to_rgba $yellow) \
              click_script="aerospace workspace $sid" \
              drawing=off \
+             icon.font="SF Pro:Bold:12.0" \
              icon="$sid" \
              label.font="sketchybar-app-font:Regular:11.0" \
              label.padding_right=15 \
