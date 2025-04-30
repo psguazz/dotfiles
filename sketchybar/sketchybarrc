@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source "/Users/psg/.config/scripts/palette.sh"
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
@@ -6,7 +8,7 @@ ITEM_DIR="$CONFIG_DIR/items"
 bar=(
   blur_radius=5
   color="$(hex_to_rgba $bg_dim 'aa')"
-  corner_radius=6
+  corner_radius=600
   height=40
   margin=10
   position=top
@@ -21,15 +23,15 @@ default=(
   background.drawing=on
   background.height=28
   icon.color="$(hex_to_rgba $grey)"
-  icon.font="Monaco Nerd Font:Bold:12.0"
+  icon.font="Monaco Nerd Font:Bold:16.0"
   icon.padding_left=12
-  icon.padding_right=12
+  icon.padding_right=8
   label.color="$(hex_to_rgba $fg)"
   label.font="Monaco Nerd Font:Bold:12.0"
   label.padding_left=0
   label.padding_right=12
-  padding_left=12
-  padding_right=12
+  padding_left=6
+  padding_right=6
   updates=on
 )
 

@@ -22,7 +22,7 @@ apps=$(aerospace list-windows --workspace "$1" | awk -F'|' '{gsub(/^ *| *$/, "",
 
 if [ "${apps}" != "" ]; then
   while read -r app; do
-    icon_strip+=" $(/Users/psg/.config/scripts/icon_map_fn.sh "$app")"
+    icon_strip+="$(/Users/psg/.config/scripts/icon_map_fn.sh "$app") "
   done <<<"${apps}"
 
   sketchybar --set $NAME label="$icon_strip" drawing=on
