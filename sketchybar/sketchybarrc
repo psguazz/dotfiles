@@ -30,6 +30,8 @@ default=(
   label.font="Monaco Nerd Font:Bold:12.0"
   label.padding_left=0
   label.padding_right=12
+  padding_left=4
+  padding_right=4
   updates=on
 )
 
