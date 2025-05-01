@@ -16,7 +16,4 @@ for sid in $(aerospace list-workspaces --monitor 1); do
              script="$PLUGIN_DIR/aerospace.sh $sid"
 done
 
-sketchybar --add bracket spaces '/space\..*/' \
-           --set spaces \
-           background.padding_left=100 \
-           background.padding_right=0
+sketchybar --add bracket spaces '/space\..*/' 

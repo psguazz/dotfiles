@@ -8,7 +8,7 @@ ITEM_DIR="$CONFIG_DIR/items"
 bar=(
   blur_radius=5
   color="$(hex_to_rgba $bg_dim 'aa')"
-  corner_radius=600
+  corner_radius=6
   height=40
   margin=10
   position=top
@@ -19,7 +19,7 @@ default=(
   background.border_color="$(hex_to_rgba $grey)"
   background.border_width=2
   background.color="$(hex_to_rgba $bg4)"
-  background.corner_radius=600
+  background.corner_radius=6
   background.drawing=on
   background.height=28
   icon.color="$(hex_to_rgba $grey)"
@@ -30,20 +30,13 @@ default=(
   label.font="Monaco Nerd Font:Bold:12.0"
   label.padding_left=0
   label.padding_right=12
-  padding_left=2
-  padding_right=2
   updates=on
 )
 
 sketchybar --bar  "${bar[@]}"
 sketchybar --default "${default[@]}"
 
-source $ITEM_DIR/aerospace.sh
-
+source $ITEM_DIR/spaces.sh
 source $ITEM_DIR/front_app.sh
-
-source $ITEM_DIR/clock.sh
-source $ITEM_DIR/battery.sh
-source $ITEM_DIR/volume.sh
-source $ITEM_DIR/wifi.sh
+source $ITEM_DIR/widgets.sh
 
