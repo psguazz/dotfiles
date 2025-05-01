@@ -5,17 +5,18 @@ source "/Users/psg/.config/scripts/palette.sh"
 if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
   icon=$orange
   label=$fg
-  border=$orange
+  background="on"
 else
   icon=$grey
   label=$grey
-  border=$grey
+  background="off"
 fi
 
 sketchybar --set $NAME \
-  background.border_color=$(hex_to_rgba $border) \
-  icon.color=$(hex_to_rgba $icon) \
-  label.color=$(hex_to_rgba $label)
+           background.border_color=$(hex_to_rgba $icon) \
+           background.drawing=$background \
+           icon.color=$(hex_to_rgba $icon) \
+           label.color=$(hex_to_rgba $label)
 
 icon_strip=""
 apps=$(aerospace list-windows --workspace "$1" | awk -F'|' '{gsub(/^ *| *$/, "", $2); print $2}')
