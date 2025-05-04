@@ -3,21 +3,21 @@
 source "/Users/psg/.config/scripts/palette.sh"
 
 if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
+  border=2
   color=$orange
   bg=$diff_yellow
   label=$fg
-  drawing="on"
 else
+  border=0
   color=$grey
-  bg=$grey
+  bg=$bg4
   label=$grey
-  drawing="off"
 fi
 
 sketchybar --set $NAME \
            background.border_color=$(hex_to_rgba $color) \
+           background.border_width=$border \
            background.color=$(hex_to_rgba $bg) \
-           background.drawing=$drawing \
            icon.color=$(hex_to_rgba $color) \
            label.color=$(hex_to_rgba $label)
 

@@ -7,10 +7,9 @@ ITEM_DIR="$CONFIG_DIR/items"
 
 bar=(
   blur_radius=5
-  color="$(hex_to_rgba $bg_dim 'aa')"
+  color="$(hex_to_rgba $bg_dim '00')"
   corner_radius=6
-  height=40
-  margin=10
+  height=48
   position=top
   y_offset=10
 )
@@ -39,6 +38,5 @@ sketchybar --bar  "${bar[@]}"
 sketchybar --default "${default[@]}"
 
 source $ITEM_DIR/spaces.sh
-source $ITEM_DIR/front_app.sh
 source $ITEM_DIR/widgets.sh
 
