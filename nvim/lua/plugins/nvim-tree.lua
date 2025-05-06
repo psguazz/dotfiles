@@ -1,5 +1,8 @@
 return {
   "nvim-tree/nvim-tree.lua",
+  dependencies = {
+    "nvim-tree/nvim-web-devicons"
+  },
   config = function()
     local function on_attach(bufnr)
       require("nvim-tree.api").config.mappings.default_on_attach(bufnr)
