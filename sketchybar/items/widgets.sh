@@ -2,7 +2,7 @@
 
 sketchybar --add item widget.left_padding right \
            --set widget.left_padding \
-           width=20 \
+           width=8 \
            background.drawing=off
 
 sketchybar --add item widget.clock right \
@@ -38,13 +38,13 @@ sketchybar --add item widget.wifi right \
 sketchybar --add item widget.right_padding right \
            --set widget.right_padding \
            width=0 \
-           padding_right=-15 \
+           padding_right=-30 \
            background.drawing=off
 
 sketchybar --add bracket widgets '/widget\..*/' \
            --set widgets \
            background.color="$(hex_to_rgba $bg_dim 'aa')" \
-           background.height=48 \
+           background.height=40 \
            background.border_width=0
            
 
