@@ -14,7 +14,6 @@ local function maybe_clear_cache()
   end
 end
 
-
 local M = {}
 
 function M.branch()
