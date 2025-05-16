@@ -181,6 +181,7 @@ end
 local function hook_temp()
   local hook = base_hook()
   if contains(state.hooked_perm, hook) then return end
+  if contains(state.hooked_temp, hook) then return end
 
   add_hook(state.hooked_temp, hook)
   trim(state.hooked_temp, global_limit - #state.hooked_perm)
