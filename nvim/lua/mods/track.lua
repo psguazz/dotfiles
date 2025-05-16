@@ -60,32 +60,32 @@ local function tabline()
   local current_path = vim.api.nvim_buf_get_name(0)
   local current_name = vim.fn.fnamemodify(current_path, ':.')
 
-  local line = ""
   local name_limit = name_length(#perm_hooks + #temp_hooks + 1)
-
   local show_current = not h.current() and current_name ~= "" and current_name ~= "NvimTree_1"
-  local divider = f.format("TablineBackground", "  |  ")
 
+  local perm_line = ""
   for _, hook in ipairs(perm_hooks) do
-    line = line .. tab(hook, name_limit)
+    perm_line = perm_line .. tab(hook, name_limit)
   end
 
-  if #perm_hooks > 0 and #temp_hooks > 0 then
-    line = line .. divider
-  end
-
+  local temp_line = ""
   for _, hook in ipairs(temp_hooks) do
-    line = line .. tab(hook, name_limit)
+    temp_line = temp_line .. tab(hook, name_limit)
   end
 
-  if #line > 0 and show_current then
-    line = line .. divider
-  end
-
+  local curr_line = ""
   if show_current then
     local fake_hook = { path = current_path, index = " ", is_perm = false, is_current = true }
-    line = line .. tab(fake_hook, name_limit)
+    curr_line = tab(fake_hook, name_limit)
   end
+
+  local lines = {}
+  if #perm_line > 0 then table.insert(lines, perm_line) end
+  if #temp_line > 0 then table.insert(lines, temp_line) end
+  if #curr_line > 0 then table.insert(lines, curr_line) end
+
+  local divider = f.format("TablineBackground", "  |  ")
+  local line = table.concat(lines, divider)
 
   return "%#TablineBackground#" .. tree_bar() .. line .. "%#TablineBackground#"
 end
