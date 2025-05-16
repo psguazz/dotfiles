@@ -21,9 +21,9 @@ return {
         vim.keymap.set(mode, l, r, opts)
       end
 
-      map({ "n", "v" }, "<leader>g.", function()
+      map({ "n", "v" }, "g.", function()
         if vim.wo.diff then
-          return "<leader>g."
+          return "g."
         end
         vim.schedule(function()
           gs.next_hunk()
@@ -31,9 +31,9 @@ return {
         return "<Ignore>"
       end, { expr = true, desc = "Jump to next hunk" })
 
-      map({ "n", "v" }, "<leader>g,", function()
+      map({ "n", "v" }, "g,", function()
         if vim.wo.diff then
-          return "<leader>g,"
+          return "g,"
         end
         vim.schedule(function()
           gs.prev_hunk()

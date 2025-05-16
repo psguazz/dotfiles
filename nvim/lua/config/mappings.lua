@@ -9,6 +9,9 @@ vim.keymap.set({ "n", "v" }, "<leader>k", "<c-u>zz")
 vim.keymap.set("n", "<leader>\"", ":split<CR>")
 vim.keymap.set("n", "<leader>%", ":vsplit<CR>")
 
+vim.keymap.set("n", "q,", ":cprevious<CR>")
+vim.keymap.set("n", "q.", ":cnext<CR>")
+
 vim.api.nvim_create_user_command("CP", function()
   local file_path = vim.fn.expand("%:p")
   vim.fn.setreg("+", file_path)

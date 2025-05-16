@@ -6,8 +6,8 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
-vim.keymap.set("n", "<leader>d.", "<cmd>lua vim.diagnostic.goto_next({ float = false })<CR>")
-vim.keymap.set("n", "<leader>d,", "<cmd>lua vim.diagnostic.goto_prev({ float = false })<CR>")
+vim.keymap.set("n", "d.", "<cmd>lua vim.diagnostic.goto_next({ float = false })<CR>")
+vim.keymap.set("n", "d,", "<cmd>lua vim.diagnostic.goto_prev({ float = false })<CR>")
 
 vim.keymap.set("n", "<leader>dd", function()
   require("telescope.builtin").diagnostics()

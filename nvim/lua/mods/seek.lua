@@ -62,7 +62,9 @@ local function global_replace(text)
 
   text = "\\V" .. text
   vim.fn.setqflist({}, " ", { title = "Global Replace", lines = results })
+  vim.cmd("copen")
   vim.cmd("cdo %s/" .. text .. "/" .. replacement .. "/gc")
+  vim.cmd("cclose")
 
   vim.api.nvim_set_current_buf(buf)
   vim.api.nvim_win_set_cursor(0, pos)
