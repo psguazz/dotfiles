@@ -38,8 +38,8 @@ local function perm_hooks()
   local hooks = {}
 
   for i, hook in ipairs(state.hooked_perm) do
-    local index = #state.hooked_perm - i + 1
-    table.insert(hooks, 1, decorated_hook(hook, true, index))
+    local index = i
+    table.insert(hooks, decorated_hook(hook, true, index))
   end
 
   return hooks
@@ -95,12 +95,12 @@ local function add_hook(list, hook)
   if hook == nil then return end
 
   remove_hook(list, hook)
-  table.insert(list, 1, hook)
+  table.insert(list, hook)
 end
 
 local function trim(list, limit)
   while #list > (limit or 1000) do
-    table.remove(list, #list)
+    table.remove(list, 1)
   end
 end
 
@@ -185,7 +185,7 @@ local function hook_temp()
   add_hook(state.hooked_temp, hook)
   trim(state.hooked_temp, global_limit - #state.hooked_perm)
 
-  state.current = #state.hooked_perm + 1
+  state.current = #state.hooked_perm + #state.hooked_temp
 end
 
 local function rehook()
