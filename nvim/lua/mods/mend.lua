@@ -45,7 +45,7 @@ local function manual_format(cmd, args)
 
   local function after_format(res)
     if res.code ~= 0 then
-      vim.notify("Formt failed:\n" .. (res.stderr or ""), vim.log.levels.ERROR)
+      vim.notify("Formt failed!", vim.log.levels.ERROR)
       return
     end
 
