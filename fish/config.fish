@@ -1,5 +1,4 @@
 status --is-interactive; and source (rbenv init -|psub)
-source /usr/local/opt/asdf/asdf.fish
 source ~/.config/fish/functions/load_palette.fish
 
 load_palette
