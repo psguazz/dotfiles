@@ -45,6 +45,10 @@ return {
         gs.blame_line { full = true }
       end, { desc = "git blame line" })
 
+      vim.api.nvim_create_user_command("Blame", function()
+        vim.cmd("Gitsigns blame")
+      end, {})
+
       map("n", "<leader>tb", gs.toggle_current_line_blame, { desc = "toggle git blame line" })
       map("n", "<leader>td", gs.toggle_deleted, { desc = "toggle git show deleted" })
     end,
