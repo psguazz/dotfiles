@@ -5,9 +5,14 @@ local palette = require("lib.palette")
 
 local show = false
 
-local function name_length(n_tabs)
-  local width = vim.o.columns - 10
+local function name_length(n_tabs, show_current)
+  local width = vim.o.columns - 5
   if f.tree_open() then width = width - 30 end
+
+  if show_current then
+    width = width - 5
+    n_tabs = n_tabs + 1
+  end
 
   return math.floor(width / n_tabs) - 9
 end
@@ -60,8 +65,8 @@ local function tabline()
   local current_path = vim.api.nvim_buf_get_name(0)
   local current_name = vim.fn.fnamemodify(current_path, ':.')
 
-  local name_limit = name_length(#perm_hooks + #temp_hooks + 1)
   local show_current = not h.current() and current_name ~= "" and current_name ~= "NvimTree_1"
+  local name_limit = name_length(#perm_hooks + #temp_hooks, show_current)
 
   local perm_line = ""
   for _, hook in ipairs(perm_hooks) do
