@@ -11,7 +11,8 @@ bar=(
   corner_radius=6
   height=48
   position=top
-  y_offset=10
+  y_offset=4
+  topmost=on
 )
 
 default=(

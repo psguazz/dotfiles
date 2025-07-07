@@ -1,7 +1,7 @@
 start-at-login = true
 
 exec-on-workspace-change = ["/bin/bash", "-c",
-  "/usr/local/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
+  "/opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
 ]
 
 [mode.main.binding]
