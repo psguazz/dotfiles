@@ -7,8 +7,8 @@ ITEM_DIR="$CONFIG_DIR/items"
 
 bar=(
   blur_radius=5
-  color="$(hex_to_rgba $bg_dim '00')"
-  corner_radius=6
+  color="$(hex_to_rgba '000000' 'ff')"
+  corner_radius=0
   height=32
   position=top
   y_offset=0
