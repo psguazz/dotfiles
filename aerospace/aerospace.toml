@@ -54,5 +54,5 @@ inner.horizontal = 6
 inner.vertical = 6
 outer.top = 0
 outer.left = 0
-outer.bottom = -1
+outer.bottom = 0
 outer.right = 0
