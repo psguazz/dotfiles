@@ -21,17 +21,3 @@ sketchybar --add item widget.volume right \
            background.color=$(hex_to_rgba $diff_green) \
            icon.color=$(hex_to_rgba $green) \
            script="$PLUGIN_DIR/volume.sh"
-
-sketchybar --add item widget.wifi right \
-           --subscribe widget.wifi wifi_change \
-           --set widget.wifi \
-           background.color=$(hex_to_rgba $diff_blue) \
-           icon.color=$(hex_to_rgba $blue) \
-           script="$PLUGIN_DIR/wifi.sh" \
-           update_freq=10
-
-sketchybar --add item widget.right_padding right \
-           --set widget.right_padding \
-           width=0 \
-           padding_right=-30 \
-           background.drawing=off
