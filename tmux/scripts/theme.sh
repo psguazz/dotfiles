@@ -63,8 +63,8 @@ tmux set-window-option -g window-status-format "$other_windows"
 
 tmux set-option -g status-right ""
 
-ram=$(pill $purple $diff_blue "" "#($scripts_dir/memory_pressure.sh)" )
-tmux set-option -ga status-right " $ram"
-
-cpu=$(pill $bg_red $diff_red "" "#($scripts_dir/cpu_load.sh)")
-tmux set-option -ga status-right " $cpu"
+cpu="#[fg=${fg}]#($scripts_dir/cpu_load.sh)"
+gpu="#[fg=${fg}]#($scripts_dir/gpu_load.sh)"
+mem="#[fg=${fg}]#($scripts_dir/memory_load.sh)"
+stats=$(pill $purple $diff_blue "" "${cpu}${separator}${gpu}${separator}${mem}")
+tmux set-option -ga status-right " $stats"
