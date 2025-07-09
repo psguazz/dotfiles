@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
-uptime | awk -F'load averages?: ' '{print $2}' | awk '{print $1}'
+function cpu_load() {
+    local idle=$(top -l 1 | awk '/CPU usage/ { sub(/%/, "", $7); print $7 }')
+    echo $((100 - ${idle%.*}))
+}
+
+printf "C %2s%%" "$(cpu_load)"
