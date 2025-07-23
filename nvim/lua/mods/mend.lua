@@ -71,7 +71,7 @@ local function erb_format(args)
   if not custom_filetypes.erb[vim.bo[args.buf].filetype] then return end
 
   local name = vim.api.nvim_buf_get_name(args.buf)
-  manual_format({ "erb-format", name, "--write", "--print-width", 240 }, args)
+  manual_format({ "erb-format", name, "--write", "--print-width", 480 }, args)
 end
 
 local M = {}
