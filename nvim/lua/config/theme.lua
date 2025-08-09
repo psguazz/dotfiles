@@ -70,10 +70,10 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
     set_hl("sqlKeyword", palette.red, palette.none)
 
-    set_hl("DiagnosticVirtualTextError", palette.grey, palette.diff_red)
-    set_hl("DiagnosticVirtualTextWarn", palette.grey, palette.diff_yellow)
-    set_hl("DiagnosticVirtualTextInfo", palette.grey, palette.diff_blue)
-    set_hl("DiagnosticVirtualTextHint", palette.grey, palette.diff_green)
+    set_hl("DiagnosticVirtualTextError", palette.grey, palette.bg_red)
+    set_hl("DiagnosticVirtualTextWarn", palette.grey, palette.bg_yellow)
+    set_hl("DiagnosticVirtualTextInfo", palette.grey, palette.bg_blue)
+    set_hl("DiagnosticVirtualTextHint", palette.grey, palette.bg_green)
 
     set_hl("NvimTreeNormal", palette.fg, palette.bg_dim)
     set_hl("NvimTreeSpecialFile", palette.fg, palette.none)
@@ -101,10 +101,10 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
     set_hl("Visual", palette.none, palette.grey_dim)
     set_hl("IncSearch", palette.bg0, palette.yellow)
-    set_hl("Search", palette.none, palette.diff_yellow)
+    set_hl("Search", palette.none, palette.bg_yellow)
 
     set_hl("HlSearchNear", palette.bg0, palette.yellow)
-    set_hl("HlSearchLens", palette.grey, palette.diff_yellow)
+    set_hl("HlSearchLens", palette.grey, palette.bg_yellow)
     set_hl("HlSearchLensNear", palette.bg0, palette.yellow)
   end
 })
