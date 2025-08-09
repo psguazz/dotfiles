@@ -4,7 +4,7 @@ source "/Users/psg/.config/scripts/palette.sh"
 
 if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
   color=$orange
-  bg=$diff_yellow
+  bg=$bg_yellow
   label=$fg
 else
   color=$grey
