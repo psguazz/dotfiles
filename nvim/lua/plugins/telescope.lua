@@ -30,9 +30,6 @@ return {
     vim.keymap.set("n", "<leader>fS", function()
       ts.live_grep({ use_regex = false, })
     end)
-    vim.keymap.set("n", "<leader>/", function()
-      ts.buffers()
-    end)
 
     require("telescope").load_extension("fzf")
   end
