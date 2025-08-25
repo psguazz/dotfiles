@@ -5,14 +5,15 @@ local palette = require("lib.palette")
 
 local show = false
 
-local function name_length(n_tabs, show_current)
-  local width = vim.o.columns - 5
-  if f.tree_open() then width = width - 30 end
+local function int(bool)
+  return bool and 1 or 0
+end
 
-  if show_current then
-    width = width - 5
-    n_tabs = n_tabs + 1
-  end
+local function name_length(n_perm, n_writ, n_read)
+  local n_tabs = n_perm + n_writ + n_read
+  local groups = int(n_perm > 0) + int(n_writ > 0) + int(n_read > 0)
+  local width = vim.o.columns - (groups - 1) * 5
+  if f.tree_open() then width = width - 30 end
 
   return math.floor(width / n_tabs) - 9
 end
