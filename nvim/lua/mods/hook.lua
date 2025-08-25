@@ -99,6 +99,7 @@ end
 
 local function add_hook(list, hook)
   if hook == nil then return end
+  if hook.path:match("NvimTree_") then return end
 
   remove_hook(list, hook)
   table.insert(list, hook)
