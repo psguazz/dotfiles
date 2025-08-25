@@ -2,10 +2,15 @@
 
 local global_limit = 9
 local state = {
-  current = 1,
+  current = nil,
   hooked_perm = {},
-  hooked_temp = {}
+  hooked_writ = {},
+  hooked_read = {},
 }
+
+local function current()
+  return state.current
+end
 
 local function base_hook()
   local buf = vim.api.nvim_get_current_buf()
@@ -20,47 +25,48 @@ local function base_hook()
   }
 end
 
-local function decorated_hook(hook, is_perm, i)
+local function decorated_hook(hook, status, i)
   return {
     path = hook.path,
     cursor = hook.cursor,
     index = i,
     is_current = i == state.current,
-    is_perm = is_perm,
+    status = status
   }
 end
 
-local function current()
-  return state.current
+local function decorate(list, base_index, status)
+  local hooks = {}
+
+  for i, hook in ipairs(list) do
+    local index = i + base_index
+    table.insert(hooks, decorated_hook(hook, status, index))
+  end
+
+  return hooks
 end
 
 local function perm_hooks()
-  local hooks = {}
-
-  for i, hook in ipairs(state.hooked_perm) do
-    local index = i
-    table.insert(hooks, decorated_hook(hook, true, index))
-  end
-
-  return hooks
+  local base_index = 0
+  return decorate(state.hooked_perm, base_index, 0)
 end
 
-local function temp_hooks()
-  local hooks = {}
+local function writ_hooks()
+  local base_index = #state.hooked_perm
+  return decorate(state.hooked_writ, base_index, 1)
+end
 
-  for i, hook in ipairs(state.hooked_temp) do
-    local index = i + #state.hooked_perm
-    table.insert(hooks, decorated_hook(hook, false, index))
-  end
-
-  return hooks
+local function read_hooks()
+  local base_index = #state.hooked_perm + #state.hooked_writ
+  return decorate(state.hooked_read, base_index, 2)
 end
 
 local function all_hooks()
   local hooks = {}
 
   for _, hook in ipairs(perm_hooks()) do table.insert(hooks, hook) end
-  for _, hook in ipairs(temp_hooks()) do table.insert(hooks, hook) end
+  for _, hook in ipairs(writ_hooks()) do table.insert(hooks, hook) end
+  for _, hook in ipairs(read_hooks()) do table.insert(hooks, hook) end
 
   return hooks
 end
@@ -141,7 +147,8 @@ end
 
 local function unhook_all()
   state.hooked_perm = {}
-  state.hooked_temp = {}
+  state.hooked_writ = {}
+  state.hooked_read = {}
   state.current = nil
 
   vim.cmd("NvimTreeFocus")
@@ -154,12 +161,24 @@ local function unhook_all()
   end
 end
 
+local function trim_hooks()
+  local limit = global_limit
+  trim(state.hooked_perm, limit)
+
+  limit = limit - #state.hooked_perm
+  trim(state.hooked_writ, limit)
+
+  limit = limit - #state.hooked_writ
+  trim(state.hooked_read, limit)
+end
+
 local function unhook()
   local hook = base_hook()
   local buf = vim.api.nvim_get_current_buf()
 
   remove_hook(state.hooked_perm, hook)
-  remove_hook(state.hooked_temp, hook)
+  remove_hook(state.hooked_writ, hook)
+  remove_hook(state.hooked_read, hook)
   go_to_prev()
 
   if state.current == nil then vim.cmd("NvimTreeFocus") end
@@ -170,30 +189,43 @@ local function hook_perm()
   local hook = base_hook()
 
   add_hook(state.hooked_perm, hook)
-  trim(state.hooked_perm, global_limit - 1)
-
-  remove_hook(state.hooked_temp, hook)
-  trim(state.hooked_temp, global_limit - #state.hooked_perm)
+  remove_hook(state.hooked_writ, hook)
+  remove_hook(state.hooked_read, hook)
+  trim_hooks()
 
   state.current = #state.hooked_perm
 end
 
-local function hook_temp()
+local function hook_writ()
   local hook = base_hook()
+
   if contains(state.hooked_perm, hook) then return end
-  if contains(state.hooked_temp, hook) then return end
+  if contains(state.hooked_writ, hook) then return end
 
-  add_hook(state.hooked_temp, hook)
-  trim(state.hooked_temp, global_limit - #state.hooked_perm)
+  add_hook(state.hooked_writ, hook)
+  remove_hook(state.hooked_read, hook)
+  trim_hooks()
 
-  state.current = #state.hooked_perm + #state.hooked_temp
+  state.current = #state.hooked_perm + #state.hooked_writ
+end
+
+local function hook_read()
+  local hook = base_hook()
+
+  if contains(state.hooked_perm, hook) then return end
+  if contains(state.hooked_writ, hook) then return end
+  if contains(state.hooked_read, hook) then return end
+
+  add_hook(state.hooked_read, hook)
+  trim_hooks()
 end
 
 local function rehook()
   local hook = base_hook()
 
   update_hook(state.hooked_perm, hook)
-  update_hook(state.hooked_temp, hook)
+  update_hook(state.hooked_writ, hook)
+  update_hook(state.hooked_read, hook)
 end
 
 -- SESSION
@@ -232,7 +264,8 @@ end
 
 M = {
   perm_hooks = perm_hooks,
-  temp_hooks = temp_hooks,
+  writ_hooks = writ_hooks,
+  read_hooks = read_hooks,
   all_hooks = all_hooks,
   current = current
 }
@@ -241,8 +274,9 @@ function M.setup()
   vim.api.nvim_create_autocmd("VimLeavePre", { callback = save_hooks })
   vim.api.nvim_create_autocmd("VimEnter", { callback = load_hooks })
   vim.api.nvim_create_autocmd("BufLeave", { callback = rehook })
+  vim.api.nvim_create_autocmd("BufEnter", { callback = hook_read })
   vim.api.nvim_create_autocmd("BufEnter", { callback = restore_hook })
-  vim.api.nvim_create_autocmd("BufWritePre", { callback = hook_temp })
+  vim.api.nvim_create_autocmd("BufWritePre", { callback = hook_writ })
 
   vim.api.nvim_create_user_command("A", hook_perm, {})
   vim.api.nvim_create_user_command("Q", unhook, {})

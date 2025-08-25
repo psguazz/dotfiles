@@ -13,8 +13,9 @@ local function display(hook)
   local group = "Peek"
 
   local prefix_group = group .. "Prefix"
-  if hook.index == " " then prefix_group = prefix_group .. "Temp" end
-  if hook.is_perm then prefix_group = prefix_group .. "Pin" end
+  if hook.status == 0 then prefix_group = prefix_group .. "Perm" end
+  if hook.status == 1 then prefix_group = prefix_group .. "Writ" end
+  if hook.status == 2 then prefix_group = prefix_group .. "Read" end
 
   local number_group = group .. "Number"
   local name_group = group .. "Name"
@@ -80,9 +81,9 @@ M = {}
 function M.setup()
   vim.keymap.set("n", "<leader>/", hook_search)
 
-  vim.api.nvim_set_hl(0, "PeekPrefix", { fg = palette.orange })
-  vim.api.nvim_set_hl(0, "PeekPrefixPin", { fg = palette.red })
-  vim.api.nvim_set_hl(0, "PeekPrefixTemp", { fg = palette.yellow })
+  vim.api.nvim_set_hl(0, "PeekPrefixPerm", { fg = palette.red })
+  vim.api.nvim_set_hl(0, "PeekPrefixWrit", { fg = palette.orange })
+  vim.api.nvim_set_hl(0, "PeekPrefixRead", { fg = palette.yellow })
   vim.api.nvim_set_hl(0, "PeekNumber", { fg = palette.grey })
   vim.api.nvim_set_hl(0, "PeekName", { fg = palette.fg })
 end

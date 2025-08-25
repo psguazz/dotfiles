@@ -34,8 +34,9 @@ local function tab(hook, name_limit)
   if hook.is_current then group = group .. "Selected" end
 
   local prefix_group = "TablinePrefix"
-  if hook.index == " " then prefix_group = prefix_group .. "Temp" end
-  if hook.is_perm then prefix_group = prefix_group .. "Pin" end
+  if hook.status == 0 then prefix_group = prefix_group .. "Perm" end
+  if hook.status == 1 then prefix_group = prefix_group .. "Writ" end
+  if hook.status == 2 then prefix_group = prefix_group .. "Read" end
 
   local number_group = group .. "Number"
 
@@ -60,34 +61,33 @@ end
 
 local function tabline()
   local perm_hooks = h.perm_hooks()
-  local temp_hooks = h.temp_hooks()
+  local writ_hooks = h.writ_hooks()
+  local read_hooks = h.read_hooks()
 
   local current_path = vim.api.nvim_buf_get_name(0)
   local current_name = vim.fn.fnamemodify(current_path, ':.')
 
-  local show_current = not h.current() and current_name ~= "" and current_name ~= "NvimTree_1"
-  local name_limit = name_length(#perm_hooks + #temp_hooks, show_current)
+  local name_limit = name_length(#perm_hooks, #writ_hooks, #read_hooks)
 
   local perm_line = ""
   for _, hook in ipairs(perm_hooks) do
     perm_line = perm_line .. tab(hook, name_limit)
   end
 
-  local temp_line = ""
-  for _, hook in ipairs(temp_hooks) do
-    temp_line = temp_line .. tab(hook, name_limit)
+  local writ_line = ""
+  for _, hook in ipairs(writ_hooks) do
+    writ_line = writ_line .. tab(hook, name_limit)
   end
 
-  local curr_line = ""
-  if show_current then
-    local fake_hook = { path = current_path, index = " ", is_perm = false, is_current = true }
-    curr_line = tab(fake_hook, name_limit)
+  local read_line = ""
+  for _, hook in ipairs(read_hooks) do
+    read_line = read_line .. tab(hook, name_limit)
   end
 
   local lines = {}
   if #perm_line > 0 then table.insert(lines, perm_line) end
-  if #temp_line > 0 then table.insert(lines, temp_line) end
-  if #curr_line > 0 then table.insert(lines, curr_line) end
+  if #writ_line > 0 then table.insert(lines, writ_line) end
+  if #read_line > 0 then table.insert(lines, read_line) end
 
   local divider = f.format("TablineBackground", "  |  ")
   local line = table.concat(lines, divider)
@@ -130,9 +130,9 @@ function M.setup()
   vim.api.nvim_set_hl(0, "TablineBackground", { fg = palette.grey, bg = palette.bg_dim })
 
   vim.api.nvim_set_hl(0, "TablineIcon", { fg = palette.orange, bg = palette.bg_dim })
-  vim.api.nvim_set_hl(0, "TablinePrefix", { fg = palette.orange, bg = palette.bg_dim })
-  vim.api.nvim_set_hl(0, "TablinePrefixPin", { fg = palette.red, bg = palette.bg_dim })
-  vim.api.nvim_set_hl(0, "TablinePrefixTemp", { fg = palette.yellow, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablinePrefixPerm", { fg = palette.red, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablinePrefixWrit", { fg = palette.orange, bg = palette.bg_dim })
+  vim.api.nvim_set_hl(0, "TablinePrefixRead", { fg = palette.yellow, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineNumber", { fg = palette.grey, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineName", { fg = palette.grey, bg = palette.bg_dim })
   vim.api.nvim_set_hl(0, "TablineNameModified", { fg = palette.off_yellow, bg = palette.bg_dim })
