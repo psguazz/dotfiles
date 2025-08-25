@@ -164,12 +164,14 @@ end
 
 local function trim_hooks()
   local limit = global_limit
+  if #state.hooked_read > 0 then limit = limit - 1 end
+
   trim(state.hooked_perm, limit)
 
   limit = limit - #state.hooked_perm
   trim(state.hooked_writ, limit)
 
-  limit = limit - #state.hooked_writ
+  limit = limit - #state.hooked_writ + 1
   trim(state.hooked_read, limit)
 end
 
