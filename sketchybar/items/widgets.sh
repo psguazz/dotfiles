@@ -25,6 +25,6 @@ sketchybar --add item widget.volume right \
 sketchybar --add item widget.wifi right \
            --set widget.wifi \
            background.color=$(hex_to_rgba $bg_blue) \
-           icon.color=$(hex_to_rgba $blue) \
+           icon.padding_left=5 \
            script="$PLUGIN_DIR/wifi.sh" \
            update_freq=10

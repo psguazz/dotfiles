@@ -1,14 +1,19 @@
 #!/bin/bash
 
+source "/Users/psg/.config/scripts/palette.sh"
+
 SCRIPTS_DIR="/Users/psg/.config/scripts"
 
 SSID=$($SCRIPTS_DIR/wifi_name.sh)
 
 if [[ -z "$SSID" ]]; then
-    SSID="No WiFi"
-    ICON="󰖪"
+    color=$grey
+    icon="󰖪"
 else
-    ICON="󰖩"
+    color=$blue
+    icon="󰖩"
 fi
 
-sketchybar --set "$NAME" icon="$ICON" label="$SSID"
+sketchybar --set "$NAME" \
+           label="$icon" \
+           label.color=$(hex_to_rgba $color)
