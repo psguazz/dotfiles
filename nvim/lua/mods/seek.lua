@@ -76,8 +76,8 @@ function M.setup()
   vim.keymap.set("n", "<C-_>", function() search(current_word()) end, { noremap = true, silent = true })
   vim.keymap.set("v", "<C-_>", function() search(current_selection()) end, { noremap = true, silent = true })
 
-  vim.keymap.set("n", "<C-;>", function() global_search(current_word()) end, { noremap = true, silent = true })
-  vim.keymap.set("v", "<C-;>", function() global_search(current_selection()) end, { noremap = true, silent = true })
+  vim.keymap.set("n", "<C-p>", function() global_search(current_word()) end, { noremap = true, silent = true })
+  vim.keymap.set("v", "<C-p>", function() global_search(current_selection()) end, { noremap = true, silent = true })
 
   vim.keymap.set("n", "<C-n>", function() replace(current_word()) end, { noremap = true, silent = true })
   vim.keymap.set("v", "<C-n>", function() replace(current_selection()) end, { noremap = true, silent = true })
