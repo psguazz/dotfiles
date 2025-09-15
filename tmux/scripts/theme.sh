@@ -45,8 +45,8 @@ tmux set -g popup-border-lines rounded
 
 # SESSION
 
-session_prefix=$(pill $orange $bg_yellow "󰆍" "#S")
-session_regular=$(pill $filled_green $bg_green "󰆍" "#S")
+session_prefix=$(pill $orange $bg_yellow "󰆍 " "#S")
+session_regular=$(pill $filled_green $bg_green "󰆍 " "#S")
 separator="#[fg=${grey_dim}] | "
 
 tmux set-option -g status-left "#{?client_prefix,${session_prefix},${session_regular}}${separator}"
@@ -66,5 +66,5 @@ tmux set-option -g status-right ""
 cpu="#[fg=${fg}]#($scripts_dir/cpu_load.sh)"
 gpu="#[fg=${fg}]#($scripts_dir/gpu_load.sh)"
 mem="#[fg=${fg}]#($scripts_dir/memory_load.sh)"
-stats=$(pill $purple $bg_blue "" "${cpu}${separator}${gpu}${separator}${mem}")
+stats=$(pill $purple $bg_blue " " "${cpu}${separator}${gpu}${separator}${mem}")
 tmux set-option -ga status-right " $stats"

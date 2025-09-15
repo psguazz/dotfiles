@@ -60,30 +60,26 @@ local function tab(hook, name_limit)
   return "%#TablineBackground#" .. prefix .. number .. icon .. name .. suffix .. "%#TablineBackground#"
 end
 
+local function hook_line(hooks, name_limit)
+  local line = ""
+
+  for _, hook in ipairs(hooks) do
+    line = line .. tab(hook, name_limit)
+  end
+
+  return line
+end
+
 local function tabline()
   local perm_hooks = h.perm_hooks()
   local writ_hooks = h.writ_hooks()
   local read_hooks = h.read_hooks()
 
-  local current_path = vim.api.nvim_buf_get_name(0)
-  local current_name = vim.fn.fnamemodify(current_path, ':.')
-
   local name_limit = name_length(#perm_hooks, #writ_hooks, #read_hooks)
 
-  local perm_line = ""
-  for _, hook in ipairs(perm_hooks) do
-    perm_line = perm_line .. tab(hook, name_limit)
-  end
-
-  local writ_line = ""
-  for _, hook in ipairs(writ_hooks) do
-    writ_line = writ_line .. tab(hook, name_limit)
-  end
-
-  local read_line = ""
-  for _, hook in ipairs(read_hooks) do
-    read_line = read_line .. tab(hook, name_limit)
-  end
+  local perm_line = hook_line(perm_hooks, name_limit)
+  local writ_line = hook_line(writ_hooks, name_limit)
+  local read_line = hook_line(read_hooks, name_limit)
 
   local lines = {}
   if #perm_line > 0 then table.insert(lines, perm_line) end

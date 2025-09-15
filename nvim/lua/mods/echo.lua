@@ -45,7 +45,7 @@ local left_pill = ""
 local right_pill = ""
 local space = "%#StatuslineBackground# "
 
-local disabled_filetypes = { "NvimTree" }
+local disabled_filetypes = { "NvimTree", "gitsigns-blame" }
 
 local function should_hide(buf)
   local filetype = vim.bo[buf].filetype

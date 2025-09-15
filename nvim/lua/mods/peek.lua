@@ -76,7 +76,7 @@ local function hook_search()
   }):find()
 end
 
-M = {}
+local M = {}
 
 function M.setup()
   vim.keymap.set("n", "<leader>/", hook_search)
