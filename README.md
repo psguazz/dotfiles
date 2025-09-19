@@ -18,13 +18,10 @@ them up.
 
 - [Aerospace](https://nikitabobko.github.io/AeroSpace/guide)
 - [SketchyBar](https://felixkratz.github.io/SketchyBar/)
-- [Hammerspoon](https://www.hammerspoon.org/)
 
 I'm a one-monitor guy -- just a laptop's screen. I use Aerospace to manage most
 stuff; then there's SketchyBar because I like having an overview of the used
-spaces. Hammerspoon is used to toggle it on certain keypresses to save precious
-space, especially while in the terminal (which must be full, and I mean full,
-screen, because... Well, because).
+spaces.
 
 ### Theming
 
