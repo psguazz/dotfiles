@@ -5,4 +5,4 @@ function memory_load() {
     echo $((100 - ${free%\%}))
 }
 
-printf "M %2s%%" "$(memory_load)"
+printf "%2s%%" "$(memory_load)"

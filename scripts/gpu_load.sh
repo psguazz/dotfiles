@@ -5,4 +5,4 @@ function gpu_load() {
     echo $((100 - ${idle%.*}))
 }
 
-printf "G %2s%%" "$(gpu_load)"
+printf "%2s%%" "$(gpu_load)"

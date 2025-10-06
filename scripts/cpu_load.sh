@@ -5,4 +5,4 @@ function cpu_load() {
     echo $((100 - ${idle%.*}))
 }
 
-printf "C %2s%%" "$(cpu_load)"
+printf "%2s%%" "$(cpu_load)"
