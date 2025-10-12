@@ -1,5 +1,5 @@
 return {
-  cmd = { "pylsp" },
+  cmd = { "ruff", "server" },
   filetypes = { "python" },
   root_markers = {
     "pyproject.toml",
@@ -10,10 +10,6 @@ return {
     "pyrightconfig.json",
     ".git",
   },
-  settings = {
-    plugins = {
-      black = { enabled = true },
-      isort = { enabled = true, profile = "black" }
-    }
-  }
+  single_file_support = true,
+  settings = {},
 }
