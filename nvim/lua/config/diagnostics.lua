@@ -9,6 +9,11 @@ vim.diagnostic.config({
 vim.keymap.set("n", "d.", "<cmd>lua vim.diagnostic.goto_next({ float = false })<CR>")
 vim.keymap.set("n", "d,", "<cmd>lua vim.diagnostic.goto_prev({ float = false })<CR>")
 
+vim.keymap.set("n", "dm", function()
+  vim.diagnostic.open_float()
+end)
+
+
 vim.keymap.set("n", "<leader>dd", function()
   require("telescope.builtin").diagnostics()
 end)
