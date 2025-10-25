@@ -32,6 +32,11 @@ local function erb_format(args)
   custom_format({ "erb-format", name, "--write", "--print-width", 480 }, args)
 end
 
+local function gdformat_format(args)
+  local name = vim.api.nvim_buf_get_name(args.buf)
+  custom_format({ "gdformat", name }, args)
+end
+
 local custom_formatters = {
   prettier = {
     callback = prettier_format,
@@ -54,7 +59,13 @@ local custom_formatters = {
     filetypes = {
       "eruby",
     }
-  }
+  },
+  gdformat = {
+    callback = gdformat_format,
+    filetypes = {
+      "gdscript",
+    },
+  },
 }
 
 local function find_formatter(buf)

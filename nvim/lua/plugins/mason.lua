@@ -11,6 +11,7 @@ return {
       "gopls",
       "lua-language-server",
       "prettier",
+      "gdtoolkit",
       "pyright",
       "ruff",
       "standardrb",

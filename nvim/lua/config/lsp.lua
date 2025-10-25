@@ -18,6 +18,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 vim.lsp.enable({
   "elixir-ls",
+  "gdscript",
+  "gdshader-lsp",
   "gopls",
   "lua-language-server",
   "pyright",
