@@ -102,12 +102,12 @@ local function add_hook(list, hook)
   if hook.path:match("NvimTree_") then return end
 
   remove_hook(list, hook)
-  table.insert(list, hook)
+  table.insert(list, 1, hook)
 end
 
 local function trim(list, limit)
-  while #list > (limit or 1000) do
-    table.remove(list, 1)
+  while #list > limit do
+    table.remove(list, #list)
   end
 end
 
@@ -163,16 +163,9 @@ local function unhook_all()
 end
 
 local function trim_hooks()
-  local limit = global_limit
-  if #state.hooked_read > 0 then limit = limit - 1 end
-
-  trim(state.hooked_perm, limit)
-
-  limit = limit - #state.hooked_perm
-  trim(state.hooked_writ, limit)
-
-  limit = limit - #state.hooked_writ + 1
-  trim(state.hooked_read, limit)
+  trim(state.hooked_perm, global_limit)
+  trim(state.hooked_writ, global_limit - #state.hooked_perm)
+  trim(state.hooked_read, global_limit - #state.hooked_perm - #state.hooked_writ)
 end
 
 local function unhook()
@@ -196,20 +189,19 @@ local function hook_perm()
   remove_hook(state.hooked_read, hook)
   trim_hooks()
 
-  state.current = #state.hooked_perm
+  state.current = 1
 end
 
 local function hook_writ()
   local hook = base_hook()
 
   if contains(state.hooked_perm, hook) then return end
-  if contains(state.hooked_writ, hook) then return end
 
   add_hook(state.hooked_writ, hook)
   remove_hook(state.hooked_read, hook)
   trim_hooks()
 
-  state.current = #state.hooked_perm + #state.hooked_writ
+  state.current = #state.hooked_perm + 1
 end
 
 local function hook_read()
@@ -217,10 +209,11 @@ local function hook_read()
 
   if contains(state.hooked_perm, hook) then return end
   if contains(state.hooked_writ, hook) then return end
-  if contains(state.hooked_read, hook) then return end
 
   add_hook(state.hooked_read, hook)
   trim_hooks()
+
+  state.current = #state.hooked_perm + #state.hooked_writ + 1
 end
 
 local function rehook()
