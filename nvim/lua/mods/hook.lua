@@ -163,9 +163,9 @@ local function unhook_all()
 end
 
 local function trim_hooks()
-  trim(state.hooked_perm, global_limit)
-  trim(state.hooked_writ, global_limit - #state.hooked_perm)
-  trim(state.hooked_read, global_limit - #state.hooked_perm - #state.hooked_writ)
+  trim(state.hooked_perm, global_limit - 2)
+  trim(state.hooked_writ, global_limit - 1 - #state.hooked_perm)
+  trim(state.hooked_read, global_limit - 0 - #state.hooked_perm - #state.hooked_writ)
 end
 
 local function unhook()
