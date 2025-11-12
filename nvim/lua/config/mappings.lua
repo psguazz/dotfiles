@@ -20,3 +20,8 @@ vim.api.nvim_create_user_command("CP", function()
   local file_path = vim.fn.expand("%:p")
   vim.fn.setreg("+", file_path)
 end, {})
+
+vim.api.nvim_create_user_command("GR", function()
+  vim.cmd("GitSignsResetAll")
+  vim.cmd("NvimTreeRefresh")
+end, {})
