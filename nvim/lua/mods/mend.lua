@@ -22,18 +22,15 @@ local function custom_format(cmd, args)
   vim.system(cmd, { text = true, }, after_format)
 end
 
-local function prettier_format(args)
-  local name = vim.api.nvim_buf_get_name(args.buf)
+local function prettier_format(name, args)
   custom_format({ "prettier", "--prose-wrap", "always", "--write", name }, args)
 end
 
-local function erb_format(args)
-  local name = vim.api.nvim_buf_get_name(args.buf)
+local function erb_format(name, args)
   custom_format({ "erb-format", name, "--write", "--print-width", 480 }, args)
 end
 
-local function gdformat_format(args)
-  local name = vim.api.nvim_buf_get_name(args.buf)
+local function gdformat_format(name, args)
   custom_format({ "gdformat", name }, args)
 end
 
@@ -79,6 +76,8 @@ local function find_formatter(buf)
 end
 
 local function format_pre(args)
+  if not autoformat then return end
+
   local formatter = find_formatter(args.buf)
   if formatter ~= nil then return end
 
@@ -89,10 +88,13 @@ local function format_pre(args)
 end
 
 local function format_post(args)
+  if not autoformat then return end
+
   local formatter = find_formatter(args.buf)
   if formatter == nil then return end
 
-  return formatter(args)
+  local name = vim.api.nvim_buf_get_name(args.buf)
+  return formatter(name, args)
 end
 
 local M = {}
