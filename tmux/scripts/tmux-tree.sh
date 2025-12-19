@@ -5,9 +5,14 @@ scripts_dir="/Users/psg/.config/scripts"
 source "$scripts_dir/palette.sh"
 
 selected_session=$1
+query=$2
 
 tmux ls -F "#{session_name}: #{T:tree_mode_format}" | while read -r desc; do
     name=${desc%%:*}
+
+    if ! echo "$name" | fzf --filter="$query" > /dev/null; then
+        continue
+    fi
 
     if [[ "$selected_session" == "$name" ]]; then
         color_echo $yellow $desc
