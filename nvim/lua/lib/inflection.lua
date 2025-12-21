@@ -17,9 +17,8 @@ local UNCOUNTABLE = {
 local function detect_inflection(word)
   word = word:lower()
 
-  if UNCOUNTABLE[word] then
-    return "uncountable"
-  end
+  if word == "" then return "uncountable" end
+  if UNCOUNTABLE[word] then return "uncountable" end
 
   for s, p in pairs(IRREGULAR) do
     if word == s then return "singular" end

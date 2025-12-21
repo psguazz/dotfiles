@@ -59,6 +59,8 @@ local function tokenize(name)
   name = name:gsub("%s+$", "")
   name = name:gsub("%s+", " ")
 
+  if name == "" then return {} end
+
   return vim.split(name, " ")
 end
 
