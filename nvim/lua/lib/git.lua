@@ -62,6 +62,11 @@ function M.status(file_path)
   return status
 end
 
+function M.is_git_repo()
+  local output = vim.fn.systemlist("git rev-parse --is-inside-work-tree")
+  return output[1] == "true"
+end
+
 vim.api.nvim_create_autocmd("BufWritePost", { callback = clear_cache })
 
 return M

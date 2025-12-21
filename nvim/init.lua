@@ -11,6 +11,7 @@ require("config.theme")
 
 require("mods.echo").setup()
 require("mods.hook").setup()
+require("mods.jump").setup()
 require("mods.mend").setup()
 require("mods.nest").setup()
 require("mods.peek").setup()

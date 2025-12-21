@@ -62,24 +62,13 @@ local function hook_search()
     }),
     sorter = conf.generic_sorter({}),
     previewer = previewers.vim_buffer_cat.new({}),
-    attach_mappings = function(prompt_bufnr, map)
-      local function open_file()
-        local hook = action_state.get_selected_entry()
-        actions.close(prompt_bufnr)
-        vim.cmd("edit " .. vim.fn.fnameescape(hook.path))
-      end
-
-      map("i", "<CR>", open_file)
-      map("n", "<CR>", open_file)
-      return true
-    end,
   }):find()
 end
 
 local M = {}
 
 function M.setup()
-  vim.keymap.set("n", "<leader>/", hook_search)
+  vim.keymap.set("n", "<leader>n", hook_search)
 
   vim.api.nvim_set_hl(0, "PeekPrefixPerm", { fg = palette.red })
   vim.api.nvim_set_hl(0, "PeekPrefixWrit", { fg = palette.orange })
