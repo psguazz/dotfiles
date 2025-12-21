@@ -37,7 +37,7 @@ local IGNORE_FOLDERS = {
 local GIT_COMMAND = "git -c core.quotepath=false ls-files --exclude-standard --cached --others"
 local RG_COMMAND = "rg --files ."
 
-local FILTER_COMMAND = [[%s | rg '%s' | rg -v '%s']]
+local FILTER_COMMAND = [[%s | rg -i '%s' | rg -i -v '%s']]
 
 local function command()
   if git.is_git_repo() then
