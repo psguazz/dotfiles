@@ -47,19 +47,19 @@ local function command()
   end
 end
 
-local function normalize(token)
-  token = token:lower()
-  token = token:gsub("[-_/]", " ")
+local function tokenize(name)
+  name = name:lower()
+  name = name:gsub("[-_/]", " ")
 
   for _, word in ipairs(BLACKLIST) do
-    token = token:gsub(word, "")
+    name = name:gsub(word, "")
   end
 
-  token = token:gsub("^%s+", "")
-  token = token:gsub("%s+$", "")
-  token = token:gsub("%s+", " ")
+  name = name:gsub("^%s+", "")
+  name = name:gsub("%s+$", "")
+  name = name:gsub("%s+", " ")
 
-  return vim.split(token, " ")
+  return vim.split(name, " ")
 end
 
 local function inflect(tokens)
@@ -101,6 +101,7 @@ end
 local function build_tokens()
   local name = vim.api.nvim_buf_get_name(0)
   if name == "" then return {} end
+  if name:match("NvimTree_") then return {} end
 
   if use_parent_folder(name) then
     name = extract_parent_folder(name)
@@ -108,7 +109,7 @@ local function build_tokens()
     name = extract_file_name(name)
   end
 
-  return inflect(normalize(name))
+  return inflect(tokenize(name))
 end
 
 local function filter(source, tokens)
