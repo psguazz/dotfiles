@@ -36,8 +36,6 @@ local GIT_COMMAND = "git -c core.quotepath=false ls-files --exclude-standard --c
 local RG_COMMAND = "rg --files ."
 
 local FILTER_COMMAND = [[%s | rg '%s' | rg -v '%s']]
-local FILENAME_PATTERN = [[(%s)[^/]*$]]
-local PARENT_PATTERN = [[(%s)[^/]*/[^/]*$]]
 
 local function command()
   if git.is_git_repo() then
@@ -112,11 +110,16 @@ local function build_tokens()
 end
 
 local function filter(source, tokens)
+  local filename_pattern = [[(%s)[^/]*$]]
+  local parent_pattern = [[(%s)[^/]*/[^/]*(%s)[^/]*$]]
+
   local pattern = table.concat(tokens, "|")
+  local use_folders = table.concat(USE_FOLDERS, "|")
+
   local exclude = table.concat(IGNORE_FOLDERS, "|")
   local include = table.concat({
-    string.format(FILENAME_PATTERN, pattern),
-    string.format(PARENT_PATTERN, pattern),
+    string.format(filename_pattern, pattern),
+    string.format(parent_pattern, pattern, use_folders),
   }, "|")
 
   local cmd = string.format(FILTER_COMMAND, source, include, exclude)
