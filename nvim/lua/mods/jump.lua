@@ -5,28 +5,34 @@ local previewers = require("telescope.previewers")
 local make_entry = require("telescope.make_entry")
 
 local git = require("lib.git")
+local inflection = require("lib.inflection")
 
-BLACKLIST = {
+local BLACKLIST = {
   "controllers?",
   "components?",
   "jobs?",
   "tests?",
 }
 
-FOLDER_EXTENSIONS = {
+local FOLDER_EXTENSIONS = {
   "erb",
   "html",
 }
 
-IGNORE_FOLDERS = {
-  "node_modules",
-  "db/migrate",
+local IGNORE_FOLDERS = {
+  "node_modules/",
+  "db/migrate/",
+  "vendor/",
+  "log/",
+  "tmp/",
+  "public/",
+  "assets/",
 }
 
-GIT_COMMAND = "git -c core.quotepath=false ls-files --exclude-standard --cached --others"
-RG_COMMAND = "rg --files ."
+local GIT_COMMAND = "git -c core.quotepath=false ls-files --exclude-standard --cached --others"
+local RG_COMMAND = "rg --files ."
 
-FILTER_COMMAND = [[%s | rg "%s" | rg -v "%s"]]
+local FILTER_COMMAND = [[%s | rg "%s" | rg -v "%s"]]
 
 local function command()
   if git.is_git_repo() then
@@ -49,6 +55,18 @@ local function normalize(token)
   token = token:gsub("%s+", " ")
 
   return vim.split(token, " ")
+end
+
+local function inflect(tokens)
+  local inflected = {}
+
+  for _, token in ipairs(tokens) do
+    for _, i in ipairs(inflection.inflections(token)) do
+      table.insert(inflected, i)
+    end
+  end
+
+  return inflected
 end
 
 
@@ -75,21 +93,21 @@ local function extract_file_name(token)
 end
 
 
-local function build_token()
-  local token = vim.api.nvim_buf_get_name(0)
-  if token == "" then return {} end
+local function build_tokens()
+  local name = vim.api.nvim_buf_get_name(0)
+  if name == "" then return {} end
 
-  if use_parent_folder(token) then
-    token = extract_parent_folder(token)
+  if use_parent_folder(name) then
+    name = extract_parent_folder(name)
   else
-    token = extract_file_name(token)
+    name = extract_file_name(name)
   end
 
-  return normalize(token)
+  return inflect(normalize(name))
 end
 
-local function filter(source, query)
-  local include = table.concat(query, "|")
+local function filter(source, tokens)
+  local include = table.concat(tokens, "|")
   local exclude = table.concat(IGNORE_FOLDERS, "|")
 
   local cmd = string.format(FILTER_COMMAND, source, include, exclude)
@@ -103,8 +121,8 @@ local function filter(source, query)
   return result
 end
 
-local function open_picker(token, results)
-  local prompt = table.concat(token, "|")
+local function open_picker(tokens, results)
+  local prompt = table.concat(tokens, "|")
   pickers.new({}, {
     prompt_title = "Jump to `" .. prompt .. "`",
     finder = finders.new_table {
@@ -117,11 +135,11 @@ local function open_picker(token, results)
 end
 
 local function jump_search()
-  local token = build_token()
-  if #token == 0 then return end
+  local tokens = build_tokens()
+  if #tokens == 0 then return end
 
-  local results = filter(command(), token)
-  open_picker(token, results)
+  local results = filter(command(), tokens)
+  open_picker(tokens, results)
 end
 
 local M = {}
