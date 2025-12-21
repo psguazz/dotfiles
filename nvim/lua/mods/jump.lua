@@ -9,9 +9,11 @@ local inflection = require("lib.inflection")
 
 local BLACKLIST = {
   "applications?",
-  "controllers?",
   "components?",
+  "controllers?",
   "jobs?",
+  "policies?",
+  "policy",
   "tests?",
 }
 
