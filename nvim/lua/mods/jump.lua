@@ -8,15 +8,18 @@ local git = require("lib.git")
 local inflection = require("lib.inflection")
 
 local BLACKLIST = {
+  "applications?",
   "controllers?",
   "components?",
   "jobs?",
   "tests?",
 }
 
-local FOLDER_EXTENSIONS = {
-  "erb",
-  "html",
+local USE_FOLDERS = {
+  ".erb",
+  ".html",
+  "index.js",
+  "__init__.py",
 }
 
 local IGNORE_FOLDERS = {
@@ -72,26 +75,26 @@ local function inflect(tokens)
 end
 
 
-local function use_parent_folder(token)
-  local ext = vim.fn.fnamemodify(token, ":e")
-  for _, extension in ipairs(FOLDER_EXTENSIONS) do
-    if ext == extension then
+local function use_parent_folder(name)
+  local basename = vim.fn.fnamemodify(name, ":t")
+  for _, stop in ipairs(USE_FOLDERS) do
+    if basename:find(stop) then
       return true
     end
   end
   return false
 end
 
-local function extract_parent_folder(token)
-  token = vim.fn.fnamemodify(token, ":h")
-  token = vim.fn.fnamemodify(token, ":t")
-  return token
+local function extract_parent_folder(name)
+  name = vim.fn.fnamemodify(name, ":h")
+  name = vim.fn.fnamemodify(name, ":t")
+  return name
 end
 
-local function extract_file_name(token)
-  token = vim.fn.fnamemodify(token, ":t")
-  token = vim.fn.fnamemodify(token, ":r")
-  return token
+local function extract_file_name(name)
+  name = vim.fn.fnamemodify(name, ":t")
+  name = vim.fn.fnamemodify(name, ":r")
+  return name
 end
 
 
