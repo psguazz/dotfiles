@@ -32,7 +32,9 @@ local IGNORE_FOLDERS = {
 local GIT_COMMAND = "git -c core.quotepath=false ls-files --exclude-standard --cached --others"
 local RG_COMMAND = "rg --files ."
 
-local FILTER_COMMAND = [[%s | rg "%s" | rg -v "%s"]]
+local FILTER_COMMAND = [[%s | rg '%s' | rg -v '%s']]
+local FILENAME_PATTERN = [[(%s)[^/]*$]]
+local PARENT_PATTERN = [[(%s)[^/]*/[^/]*$]]
 
 local function command()
   if git.is_git_repo() then
@@ -44,7 +46,7 @@ end
 
 local function normalize(token)
   token = token:lower()
-  token = token:gsub("[-_]", " ")
+  token = token:gsub("[-_/]", " ")
 
   for _, word in ipairs(BLACKLIST) do
     token = token:gsub(word, "")
@@ -107,14 +109,17 @@ local function build_tokens()
 end
 
 local function filter(source, tokens)
-  local include = table.concat(tokens, "|")
+  local pattern = table.concat(tokens, "|")
   local exclude = table.concat(IGNORE_FOLDERS, "|")
+  local include = table.concat({
+    string.format(FILENAME_PATTERN, pattern),
+    string.format(PARENT_PATTERN, pattern),
+  }, "|")
 
   local cmd = string.format(FILTER_COMMAND, source, include, exclude)
   local result = vim.fn.systemlist(cmd)
 
   if vim.v.shell_error ~= 0 then
-    vim.notify("fzf error: " .. vim.v.shell_error)
     return {}
   end
 
