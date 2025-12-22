@@ -1,17 +1,29 @@
 local IRREGULAR = {
-  person = "people",
-  man = "men",
   child = "children",
+  man = "men",
   mouse = "mice",
+  person = "people",
+  woman = "women",
 }
 
 local UNCOUNTABLE = {
-  information = true,
-  rice = true,
-  money = true,
-  species = true,
-  series = true,
   fish = true,
+  information = true,
+  money = true,
+  rice = true,
+  series = true,
+  species = true,
+}
+
+local SINGULAR = {
+  ies = { "[^aeiou]y$" },
+  es = { "[sxz]", "[cs]h$" },
+}
+
+local PLURAL = {
+  ies = { "[^aeiou]ies$" },
+  es = { "[sxz]es$", "[cs]hes$" },
+  s = { "[^s]s$" }
 }
 
 local function detect_inflection(word)
@@ -25,9 +37,11 @@ local function detect_inflection(word)
     if word == p then return "plural" end
   end
 
-  if word:match("ies$") then return "plural" end
-  if word:match("es$") then return "plural" end
-  if word:match("s$") then return "plural" end
+  for _, patterns in ipairs({ PLURAL.ies, PLURAL.es, PLURAL.s }) do
+    for _, pattern in ipairs(patterns) do
+      if word:match(pattern) then return "plural" end
+    end
+  end
 
   return "singular"
 end
@@ -40,12 +54,17 @@ local function pluralize(word)
     return IRREGULAR[word]
   end
 
-  if word:match("y$") then
-    return word:sub(1, -2) .. "ies"
+
+  for _, pattern in ipairs(SINGULAR.ies) do
+    if word:match(pattern) then
+      return word:sub(1, -2) .. "ies"
+    end
   end
 
-  if word:match("[sxz]$") or word:match("[cs]h$") then
-    return word .. "es"
+  for _, pattern in ipairs(SINGULAR.es) do
+    if word:match(pattern) then
+      return word .. "es"
+    end
   end
 
   return word .. "s"
@@ -59,16 +78,22 @@ local function singularize(word)
     if word == p then return s end
   end
 
-  if word:match("ies$") then
-    return word:sub(1, -4) .. "y"
+  for _, pattern in ipairs(PLURAL.ies) do
+    if word:match(pattern) then
+      return word:sub(1, -4) .. "y"
+    end
   end
 
-  if word:match("es$") then
-    return word:sub(1, -3)
+  for _, pattern in ipairs(PLURAL.es) do
+    if word:match(pattern) then
+      return word:sub(1, -3)
+    end
   end
 
-  if word:match("s$") then
-    return word:sub(1, -2)
+  for _, pattern in ipairs(PLURAL.s) do
+    if word:match(pattern) then
+      return word:sub(1, -2)
+    end
   end
 
   return word
