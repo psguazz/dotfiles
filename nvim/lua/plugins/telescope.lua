@@ -22,7 +22,8 @@ return {
       end
     end)
     vim.keymap.set("n", "<leader>m", function()
-      ts.git_files({ git_command = { "git", "ls-files", "-m" } })
+      local curent_buffer_folder = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":h")
+      ts.find_files({ cwd = curent_buffer_folder })
     end)
     vim.keymap.set("n", "<leader>fs", function()
       ts.live_grep({ use_regex = true, })

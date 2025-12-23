@@ -2,8 +2,6 @@ local pickers = require("telescope.pickers")
 local conf = require("telescope.config").values
 local finders = require("telescope.finders")
 local previewers = require("telescope.previewers")
-local actions = require("telescope.actions")
-local action_state = require("telescope.actions.state")
 
 local f = require("lib.format")
 local h = require("mods.hook")
