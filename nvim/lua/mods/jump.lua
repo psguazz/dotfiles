@@ -7,13 +7,14 @@ local make_entry = require("telescope.make_entry")
 local git = require("lib.git")
 local inflection = require("lib.inflection")
 
-local BLACKLIST = {
+local STOPWORDS = {
   "applications?",
   "components?",
   "controllers?",
   "jobs?",
-  "policies?",
+  "policies",
   "policy",
+  "specs?",
   "tests?",
 }
 
@@ -37,7 +38,7 @@ local IGNORE_FOLDERS = {
 local GIT_COMMAND = "git -c core.quotepath=false ls-files --exclude-standard --cached --others"
 local RG_COMMAND = "rg --files ."
 
-local FILTER_COMMAND = [[%s | rg -i '\b(%s)\b' | rg -i -v '\b(%s)\b']]
+local FILTER_COMMAND = [[%s | rg -i '%s' | rg -i -v '%s']]
 
 local function command()
   if git.is_git_repo() then
@@ -51,7 +52,7 @@ local function tokenize(name)
   name = name:lower()
   name = name:gsub("[-_/]", " ")
 
-  for _, word in ipairs(BLACKLIST) do
+  for _, word in ipairs(STOPWORDS) do
     name = name:gsub(word, "")
   end
 
@@ -117,15 +118,17 @@ end
 local function filter(source, tokens)
   local filename_pattern = [[(%s)[^/]*$]]
   local parent_pattern = [[(%s)[^/]*/[^/]*(%s)[^/]*$]]
+  local word_pattern = [[(^|\b|[-_])(%s)([_-]|\b|$)]]
 
-  local pattern = table.concat(tokens, "|")
-  local use_folders = table.concat(USE_FOLDERS, "|")
+  local pattern = string.format(word_pattern, table.concat(tokens, "|"))
+  local use_folders = string.format(word_pattern, table.concat(USE_FOLDERS, "|"))
 
   local exclude = table.concat(IGNORE_FOLDERS, "|")
   local include = table.concat({
     string.format(filename_pattern, pattern),
     string.format(parent_pattern, pattern, use_folders),
   }, "|")
+
 
   local cmd = string.format(FILTER_COMMAND, source, include, exclude)
   local result = vim.fn.systemlist(cmd)

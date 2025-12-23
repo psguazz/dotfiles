@@ -17,7 +17,7 @@ local UNCOUNTABLE = {
 
 local SINGULAR = {
   ies = { "[^aeiou]y$" },
-  es = { "[sxz]", "[cs]h$" },
+  es = { "[sxz]$", "[cs]h$" },
 }
 
 local PLURAL = {
