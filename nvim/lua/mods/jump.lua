@@ -65,18 +65,19 @@ local function tokenize(name)
   return vim.split(name, " ")
 end
 
-local function inflect(tokens)
+local function inflect(name)
+  local tokens = tokenize(name)
+  local first_tokens = table.concat(tokens, "_", 1, #tokens - 1)
+  local last_token = tokens[#tokens]
+
   local inflected = {}
 
-  for _, token in ipairs(tokens) do
-    for _, i in ipairs(inflection.inflections(token)) do
-      table.insert(inflected, i)
-    end
+  for _, i in ipairs(inflection.inflections(last_token)) do
+    table.insert(inflected, first_tokens .. "_" .. i)
   end
 
   return inflected
 end
-
 
 local function use_parent_folder(name)
   local basename = vim.fn.fnamemodify(name, ":t")
@@ -100,8 +101,7 @@ local function extract_file_name(name)
   return name
 end
 
-
-local function build_tokens()
+local function build_names()
   local name = vim.api.nvim_buf_get_name(0)
   if name == "" then return {} end
   if name:match("NvimTree_") then return {} end
@@ -112,15 +112,15 @@ local function build_tokens()
     name = extract_file_name(name)
   end
 
-  return inflect(tokenize(name))
+  return inflect(name)
 end
 
-local function filter(source, tokens)
+local function filter(source, names)
   local filename_pattern = [[(%s)[^/]*$]]
   local parent_pattern = [[(%s)[^/]*/[^/]*(%s)[^/]*$]]
   local word_pattern = [[(^|\b|[-_])(%s)([_-]|\b|$)]]
 
-  local pattern = string.format(word_pattern, table.concat(tokens, "|"))
+  local pattern = string.format(word_pattern, table.concat(names, "|"))
   local use_folders = string.format(word_pattern, table.concat(USE_FOLDERS, "|"))
 
   local exclude = table.concat(IGNORE_FOLDERS, "|")
@@ -128,7 +128,6 @@ local function filter(source, tokens)
     string.format(filename_pattern, pattern),
     string.format(parent_pattern, pattern, use_folders),
   }, "|")
-
 
   local cmd = string.format(FILTER_COMMAND, source, include, exclude)
   local result = vim.fn.systemlist(cmd)
@@ -140,8 +139,8 @@ local function filter(source, tokens)
   return result
 end
 
-local function open_picker(tokens, results)
-  local prompt = table.concat(tokens, "|")
+local function open_picker(names, results)
+  local prompt = table.concat(names, "|")
   pickers.new({}, {
     prompt_title = "Jump to `" .. prompt .. "`",
     finder = finders.new_table {
@@ -154,11 +153,11 @@ local function open_picker(tokens, results)
 end
 
 local function jump_search()
-  local tokens = build_tokens()
-  if #tokens == 0 then return end
+  local names = build_names()
+  if #names == 0 then return end
 
-  local results = filter(command(), tokens)
-  open_picker(tokens, results)
+  local results = filter(command(), names)
+  open_picker(names, results)
 end
 
 local M = {}
