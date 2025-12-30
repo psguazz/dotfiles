@@ -24,6 +24,7 @@ vim.lsp.enable({
   "lua-language-server",
   "pyright",
   "ruff",
+  "rust-analyzer",
   "standardrb",
   "tailwindcss-language-server",
   "typescript-language-server",

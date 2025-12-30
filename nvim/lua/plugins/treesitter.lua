@@ -33,6 +33,7 @@ return {
         "python",
         "ruby",
         "rust",
+        "rust",
         "sql",
         "toml",
         "tsx",

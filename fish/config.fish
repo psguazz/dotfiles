@@ -10,6 +10,8 @@ if status --is-interactive
 	# <<< conda initialize <<<
 end
 
+source "$HOME/.cargo/env.fish"
+
 export FZF_DEFAULT_OPTS="
 	--color=bg+:$palette_bg1,bg:$palette_bg_dim,spinner:$palette_purple,hl:$palette_blue
 	--color=fg:$palette_fg,header:$palette_orange,info:$palette_grey,pointer:$palette_filled_red
