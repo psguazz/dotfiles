@@ -73,7 +73,8 @@ local function inflect(name)
   local inflected = {}
 
   for _, i in ipairs(inflection.inflections(last_token)) do
-    table.insert(inflected, first_tokens .. "_" .. i)
+    if first_tokens ~= "" then first_tokens = first_tokens .. "_" end
+    table.insert(inflected, first_tokens .. i)
   end
 
   return inflected
