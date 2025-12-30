@@ -1,4 +1,4 @@
-vim.api.nvim_create_user_command('LspInfo', ':checkhealth vim.lsp', {})
+vim.api.nvim_create_user_command("LspInfo", ":checkhealth vim.lsp", {})
 
 vim.api.nvim_create_autocmd("LspAttach", {
   desc = "LSP actions",
@@ -16,16 +16,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end
 })
 
-vim.lsp.enable({
-  "elixir-ls",
-  "gdscript",
-  "gdshader-lsp",
-  "gopls",
-  "lua-language-server",
-  "pyright",
-  "ruff",
-  "rust-analyzer",
-  "standardrb",
-  "tailwindcss-language-server",
-  "typescript-language-server",
-})
+local config_dir = vim.fn.stdpath("config") .. "/lsp"
+local lsp_files = vim.fn.globpath(config_dir, "*.lua", false, true)
+
+local lsps = {}
+for _, file in ipairs(lsp_files) do
+  local name = vim.fn.fnamemodify(file, ":t:r")
+  table.insert(lsps, name)
+end
+
+vim.lsp.enable(lsps)
