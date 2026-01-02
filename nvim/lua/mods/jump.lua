@@ -56,9 +56,9 @@ local function tokenize(name)
     name = name:gsub(word, "")
   end
 
+  name = name:gsub("%s+", " ")
   name = name:gsub("^%s+", "")
   name = name:gsub("%s+$", "")
-  name = name:gsub("%s+", " ")
 
   if name == "" then return {} end
 
@@ -67,13 +67,15 @@ end
 
 local function inflect(name)
   local tokens = tokenize(name)
-  local first_tokens = table.concat(tokens, "_", 1, #tokens - 1)
+  if #tokens == 0 then return {} end
+
   local last_token = tokens[#tokens]
+  local first_tokens = table.concat(tokens, "_", 1, #tokens - 1)
+  if first_tokens ~= "" then first_tokens = first_tokens .. "_" end
 
   local inflected = {}
 
   for _, i in ipairs(inflection.inflections(last_token)) do
-    if first_tokens ~= "" then first_tokens = first_tokens .. "_" end
     table.insert(inflected, first_tokens .. i)
   end
 
