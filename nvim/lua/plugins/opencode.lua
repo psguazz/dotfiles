@@ -10,4 +10,14 @@ return {
     { "<leader>op", function() ask() end,          desc = "Ask opencode", },
     { "<leader>oa", function() ask("@this: ") end, desc = "Ask opencode about this" },
   },
+  config = function()
+    vim.g.opencode_opts = {
+      provider = {
+        enabled = "tmux",
+        tmux = {
+          options = "-h -p 30",
+        }
+      }
+    }
+  end
 }
