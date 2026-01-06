@@ -49,8 +49,9 @@ local function command()
 end
 
 local function tokenize(name)
-  name = name:lower()
+  name = name:gsub("(%l)(%u)", "%1_%2")
   name = name:gsub("[-_/]", " ")
+  name = name:lower()
 
   for _, word in ipairs(STOPWORDS) do
     name = name:gsub(word, "")
@@ -69,14 +70,13 @@ local function inflect(name)
   local tokens = tokenize(name)
   if #tokens == 0 then return {} end
 
+  local first_tokens = table.concat(tokens, ".?", 1, #tokens - 1)
   local last_token = tokens[#tokens]
-  local first_tokens = table.concat(tokens, "_", 1, #tokens - 1)
-  if first_tokens ~= "" then first_tokens = first_tokens .. "_" end
 
-  local inflected = {}
+  local inflected = table.concat(inflection.inflections(last_token), "|")
 
-  for _, i in ipairs(inflection.inflections(last_token)) do
-    table.insert(inflected, first_tokens .. i)
+  if first_tokens ~= "" then
+    inflected = first_tokens .. ".?(" .. inflected .. ")"
   end
 
   return inflected
@@ -123,7 +123,7 @@ local function filter(source, names)
   local parent_pattern = [[(%s)[^/]*/[^/]*(%s)[^/]*$]]
   local word_pattern = [[(^|\b|[-_])(%s)([_-]|\b|$)]]
 
-  local pattern = string.format(word_pattern, table.concat(names, "|"))
+  local pattern = string.format(word_pattern, names)
   local use_folders = string.format(word_pattern, table.concat(USE_FOLDERS, "|"))
 
   local exclude = table.concat(IGNORE_FOLDERS, "|")
@@ -143,9 +143,8 @@ local function filter(source, names)
 end
 
 local function open_picker(names, results)
-  local prompt = table.concat(names, "|")
   pickers.new({}, {
-    prompt_title = "Jump to `" .. prompt .. "`",
+    prompt_title = "Jump to `" .. names .. "`",
     finder = finders.new_table {
       entry_maker = make_entry.gen_from_file({}),
       results = results,
