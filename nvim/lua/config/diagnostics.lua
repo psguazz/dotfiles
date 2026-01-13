@@ -13,7 +13,6 @@ vim.keymap.set("n", "dm", function()
   vim.diagnostic.open_float()
 end)
 
-
 vim.keymap.set("n", "<leader>dd", function()
   require("telescope.builtin").diagnostics()
 end)
