@@ -5,6 +5,8 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 vim.keymap.set({ "n", "v" }, "<leader>j", "<c-d>zz")
 vim.keymap.set({ "n", "v" }, "<leader>k", "<c-u>zz")
+vim.keymap.set({ "n", "v" }, "<leader><Down>", "<c-d>zz")
+vim.keymap.set({ "n", "v" }, "<leader><Up>", "<c-u>zz")
 
 vim.keymap.set("n", "<leader>\"", ":split<CR>")
 vim.keymap.set("n", "<leader>%", ":vsplit<CR>")

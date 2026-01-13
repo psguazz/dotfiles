@@ -66,7 +66,7 @@ end
 local M = {}
 
 function M.setup()
-  vim.keymap.set("n", "<leader>n", hook_search)
+  vim.keymap.set("n", "<leader>/", hook_search)
 
   vim.api.nvim_set_hl(0, "PeekPrefixPerm", { fg = palette.red })
   vim.api.nvim_set_hl(0, "PeekPrefixWrit", { fg = palette.orange })

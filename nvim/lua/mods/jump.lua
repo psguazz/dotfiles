@@ -165,7 +165,7 @@ end
 local M = {}
 
 function M.setup()
-  vim.keymap.set("n", "<leader>/", jump_search)
+  vim.keymap.set("n", "<leader>n", jump_search)
 end
 
 return M
