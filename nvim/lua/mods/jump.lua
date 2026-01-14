@@ -8,14 +8,14 @@ local git = require("lib.git")
 local inflection = require("lib.inflection")
 
 local STOPWORDS = {
-  "applications?",
-  "components?",
-  "controllers?",
-  "jobs?",
-  "policies",
-  "policy",
-  "specs?",
-  "tests?",
+  "^applications?$",
+  "^components?$",
+  "^controllers?$",
+  "^jobs?$",
+  "^policies$",
+  "^policy$",
+  "^specs?$",
+  "^tests?$",
 }
 
 local USE_FOLDERS = {
@@ -38,12 +38,32 @@ local IGNORE_FOLDERS = {
 local GIT_COMMAND = "git -c core.quotepath=false ls-files --exclude-standard --cached --others"
 local RG_COMMAND = "rg --files ."
 
-local function command()
+local function base_command()
   if git.is_git_repo() then
     return GIT_COMMAND
   else
     return RG_COMMAND
   end
+end
+
+local function exclude_command(patterns)
+  local cmd = "rg -i -v"
+
+  for _, pattern in ipairs(patterns) do
+    cmd = cmd .. " -e " .. pattern
+  end
+
+  return cmd
+end
+
+local function filter_command(patterns)
+  local cmd = "rg -i"
+
+  for _, name in ipairs(patterns) do
+    cmd = cmd .. " -e " .. name
+  end
+
+  return cmd
 end
 
 local function match_any(name, patterns)
@@ -108,8 +128,6 @@ local function build_names()
   if buf == "" then return {} end
   if buf:match("NvimTree_") then return {} end
 
-  vim.print(buf)
-
   local name = important_name(buf)
   return inflect(name)
 end
@@ -128,16 +146,11 @@ local function filter(raw_results, names)
 end
 
 local function get_raw_results(names)
-  local base_cmd = command()
+  local base_cmd = base_command()
+  local exclude_cmd = exclude_command(IGNORE_FOLDERS)
+  local filter_cmd = filter_command(names)
 
-  local folders = table.concat(IGNORE_FOLDERS, ",")
-  local filter_cmd = "rg -i --glob '!**/{" .. folders .. "}/**'"
-
-  for _, name in ipairs(names) do
-    filter_cmd = filter_cmd .. " -e " .. name
-  end
-
-  local cmd = string.format("%s | %s", base_cmd, filter_cmd)
+  local cmd = string.format("%s | %s | %s", base_cmd, exclude_cmd, filter_cmd)
   return vim.fn.systemlist(cmd)
 end
 
