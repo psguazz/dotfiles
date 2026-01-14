@@ -46,6 +46,6 @@ return {
       }
     })
 
-    vim.keymap.set("n", "<leader>nt", vim.cmd.NvimTreeFocus)
+    vim.keymap.set("n", "<leader>t", vim.cmd.NvimTreeFocus)
   end
 }
