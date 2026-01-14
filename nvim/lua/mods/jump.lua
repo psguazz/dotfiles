@@ -38,8 +38,6 @@ local IGNORE_FOLDERS = {
 local GIT_COMMAND = "git -c core.quotepath=false ls-files --exclude-standard --cached --others"
 local RG_COMMAND = "rg --files ."
 
-local FILTER_COMMAND = [[%s | rg -i '%s' | rg -i -v '%s']]
-
 local function command()
   if git.is_git_repo() then
     return GIT_COMMAND
@@ -48,103 +46,104 @@ local function command()
   end
 end
 
+local function match_any(name, patterns)
+  for _, pattern in ipairs(patterns) do
+    if name:match(pattern) then return true end
+  end
+
+  return false
+end
+
+local function important_name(path)
+  local file = vim.fn.fnamemodify(path, ":t")
+  local name = vim.fn.fnamemodify(path, ":t:r")
+  local parent = vim.fn.fnamemodify(path, ":h:t")
+
+  if match_any(file, USE_FOLDERS) then
+    return parent
+  end
+
+  return name
+end
+
 local function tokenize(name)
   name = name:gsub("(%l)(%u)", "%1_%2")
   name = name:gsub("[-_/]", " ")
   name = name:lower()
-
-  for _, word in ipairs(STOPWORDS) do
-    name = name:gsub(word, "")
-  end
-
   name = name:gsub("%s+", " ")
   name = name:gsub("^%s+", "")
   name = name:gsub("%s+$", "")
 
-  if name == "" then return {} end
+  local tokens = {}
 
-  return vim.split(name, " ")
+  for _, word in ipairs(vim.split(name, " ")) do
+    if not match_any(word, STOPWORDS) then
+      table.insert(tokens, word)
+    end
+  end
+
+  return tokens
 end
 
 local function inflect(name)
   local tokens = tokenize(name)
   if #tokens == 0 then return {} end
 
-  local first_tokens = table.concat(tokens, ".?", 1, #tokens - 1)
   local last_token = tokens[#tokens]
+  local first_tokens = table.concat(tokens, ".?", 1, #tokens - 1)
+  if first_tokens ~= "" then first_tokens = first_tokens .. ".?" end
 
-  local inflected = table.concat(inflection.inflections(last_token), "|")
+  local names = {}
 
-  if first_tokens ~= "" then
-    inflected = first_tokens .. ".?(" .. inflected .. ")"
+  for _, inf in ipairs(inflection.inflections(last_token)) do
+    table.insert(names, first_tokens .. inf)
   end
 
-  return inflected
-end
-
-local function use_parent_folder(name)
-  local basename = vim.fn.fnamemodify(name, ":t")
-  for _, stop in ipairs(USE_FOLDERS) do
-    if basename:find(stop) then
-      return true
-    end
-  end
-  return false
-end
-
-local function extract_parent_folder(name)
-  name = vim.fn.fnamemodify(name, ":h")
-  name = vim.fn.fnamemodify(name, ":t")
-  return name
-end
-
-local function extract_file_name(name)
-  name = vim.fn.fnamemodify(name, ":t")
-  name = vim.fn.fnamemodify(name, ":r")
-  return name
+  return names
 end
 
 local function build_names()
-  local name = vim.api.nvim_buf_get_name(0)
-  if name == "" then return {} end
-  if name:match("NvimTree_") then return {} end
+  local buf = vim.api.nvim_buf_get_name(0)
 
-  if use_parent_folder(name) then
-    name = extract_parent_folder(name)
-  else
-    name = extract_file_name(name)
-  end
+  if buf == "" then return {} end
+  if buf:match("NvimTree_") then return {} end
 
+  vim.print(buf)
+
+  local name = important_name(buf)
   return inflect(name)
 end
 
-local function filter(source, names)
-  local filename_pattern = [[(%s)[^/]*$]]
-  local parent_pattern = [[(%s)[^/]*/[^/]*(%s)[^/]*$]]
-  local word_pattern = [[(^|\b|[-_])(%s)([_-]|\b|$)]]
+local function filter(raw_results, names)
+  local results = {}
 
-  local pattern = string.format(word_pattern, names)
-  local use_folders = string.format(word_pattern, table.concat(USE_FOLDERS, "|"))
-
-  local exclude = table.concat(IGNORE_FOLDERS, "|")
-  local include = table.concat({
-    string.format(filename_pattern, pattern),
-    string.format(parent_pattern, pattern, use_folders),
-  }, "|")
-
-  local cmd = string.format(FILTER_COMMAND, source, include, exclude)
-  local result = vim.fn.systemlist(cmd)
-
-  if vim.v.shell_error ~= 0 then
-    return {}
+  for _, path in ipairs(raw_results) do
+    local name = important_name(path)
+    if match_any(name, names) then
+      table.insert(results, path)
+    end
   end
 
-  return result
+  return results
+end
+
+local function get_raw_results(names)
+  local base_cmd = command()
+
+  local folders = table.concat(IGNORE_FOLDERS, ",")
+  local filter_cmd = "rg -i --glob '!**/{" .. folders .. "}/**'"
+
+  for _, name in ipairs(names) do
+    filter_cmd = filter_cmd .. " -e " .. name
+  end
+
+  local cmd = string.format("%s | %s", base_cmd, filter_cmd)
+  return vim.fn.systemlist(cmd)
 end
 
 local function open_picker(names, results)
   pickers.new({}, {
-    prompt_title = "Jump to `" .. names .. "`",
+    prompt_title = "Jump to `" .. table.concat(names, "|") .. "`",
     finder = finders.new_table {
       entry_maker = make_entry.gen_from_file({}),
       results = results,
@@ -158,7 +157,9 @@ local function jump_search()
   local names = build_names()
   if #names == 0 then return end
 
-  local results = filter(command(), names)
+  local raw_results = get_raw_results(names)
+  local results = filter(raw_results, names)
+
   open_picker(names, results)
 end
 

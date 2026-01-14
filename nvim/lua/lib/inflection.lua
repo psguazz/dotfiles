@@ -54,7 +54,6 @@ local function pluralize(word)
     return IRREGULAR[word]
   end
 
-
   for _, pattern in ipairs(SINGULAR.ies) do
     if word:match(pattern) then
       return word:sub(1, -2) .. "ies"
