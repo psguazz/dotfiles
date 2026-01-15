@@ -7,8 +7,10 @@ local function format_toggle() autoformat = not autoformat end
 local function custom_format(cmd, args)
   local function after_format(res)
     if res.code ~= 0 then
-      local message = string.sub(res.stderr or "", 1, 100)
-      vim.notify("Format failed!\n" .. message, vim.log.levels.ERROR)
+      vim.schedule(function()
+        local message = string.sub(res.stderr or "", 1, 100)
+        vim.notify("Format failed!\n" .. message, vim.log.levels.ERROR)
+      end)
       return
     end
 
