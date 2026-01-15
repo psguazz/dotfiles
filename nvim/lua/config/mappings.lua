@@ -16,6 +16,8 @@ vim.keymap.set("n", "q.", ":cnext<CR>")
 
 vim.keymap.set("n", "<C-o>", ":b#<CR>")
 
+vim.keymap.set("n", "<leader>l", ":noh<CR>")
+
 vim.api.nvim_create_user_command("W", "w", {})
 
 vim.api.nvim_create_user_command("CP", function()
