@@ -37,7 +37,12 @@ local function gdformat_format(name, args)
 end
 
 local function texindent_format(name, args)
-  custom_format({ "latexindent", "-w", name }, args)
+  local yaml = table.concat({
+    "defaultIndent: '  '",
+    "modifyLineBreaks:textWrapOptions:columns:80"
+  }, ",")
+
+  custom_format({ "latexindent", "-m", "-o=" .. name, "-s", "-y=" .. yaml, name }, args)
 end
 
 local custom_formatters = {
@@ -73,6 +78,7 @@ local custom_formatters = {
     callback = texindent_format,
     filetypes = {
       "tex",
+      "plaintex",
     },
   },
 }
