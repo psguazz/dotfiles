@@ -36,21 +36,25 @@ local function gdformat_format(name, args)
   custom_format({ "gdformat", name }, args)
 end
 
+local function texindent_format(name, args)
+  custom_format({ "latexindent", "-w", name }, args)
+end
+
 local custom_formatters = {
   prettier = {
     callback = prettier_format,
     filetypes = {
+      "css",
+      "html",
       "javascript",
       "javascriptreact",
-      "typescript",
-      "typescriptreact",
       "json",
-      "yaml",
-      "html",
-      "css",
-      "scss",
       "markdown",
       "markdown.mdx",
+      "scss",
+      "typescript",
+      "typescriptreact",
+      "yaml",
     },
   },
   erb = {
@@ -63,6 +67,12 @@ local custom_formatters = {
     callback = gdformat_format,
     filetypes = {
       "gdscript",
+    },
+  },
+  texindent = {
+    callback = texindent_format,
+    filetypes = {
+      "tex",
     },
   },
 }

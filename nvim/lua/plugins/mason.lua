@@ -13,6 +13,7 @@ return {
       "lua-language-server",
       "prettier",
       "pyright",
+      "latexindent",
       "ruff",
       "rust-analyzer",
       "standardrb",

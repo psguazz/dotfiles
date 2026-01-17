@@ -27,6 +27,7 @@ return {
         "html",
         "javascript",
         "json",
+        "latex",
         "lua",
         "po",
         "prolog",
