@@ -239,6 +239,13 @@ local function unhook_all_read()
   hook_read()
 end
 
+local function unhook_others()
+  state.hooked_perm = {}
+  state.hooked_writ = {}
+  state.hooked_read = {}
+  hook_read()
+end
+
 -- SESSION
 
 local function hooks_name()
@@ -296,6 +303,7 @@ function M.setup()
   vim.api.nvim_create_user_command("QP", unhook_all_perm, {})
   vim.api.nvim_create_user_command("QW", unhook_all_writ, {})
   vim.api.nvim_create_user_command("QR", unhook_all_read, {})
+  vim.api.nvim_create_user_command("QO", unhook_others, {})
 
   for i = 1, 9 do
     vim.keymap.set("n", "<leader>" .. i, function() go_to(i) end)
