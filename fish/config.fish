@@ -20,5 +20,6 @@ export FZF_DEFAULT_OPTS="
 "
 
 set -x PATH $PATH $HOME/go/bin
+set -x PATH $PATH $HOME/.local/bin
 
 direnv hook fish | source
