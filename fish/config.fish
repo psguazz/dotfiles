@@ -21,5 +21,6 @@ export FZF_DEFAULT_OPTS="
 
 set -x PATH $PATH $HOME/go/bin
 set -x PATH $PATH $HOME/.local/bin
+set -x EDITOR nvim
 
 direnv hook fish | source
