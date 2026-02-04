@@ -1,7 +1,7 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "system",
-  "model": "zen/big-pickle",
+  "model": "zen/kimi-k2.5-free",
   "autoupdate": true,
   "provider": {
     "ollama": {
@@ -13,18 +13,6 @@
       "models": {
         "gpt-oss:20b": {
           "name": "GPT OSS 20b"
-        }
-      }
-    },
-    "zen": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "OpenCode Zen",
-      "options": {
-        "baseURL": "https://opencode.ai/zen/v1"
-      },
-      "models": {
-        "big-pickle": {
-          "name": "Big Pickle"
         }
       }
     }
