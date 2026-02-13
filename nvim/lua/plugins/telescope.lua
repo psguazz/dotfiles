@@ -31,6 +31,9 @@ return {
     vim.keymap.set("n", "<leader>fS", function()
       ts.live_grep({ use_regex = false, })
     end)
+    vim.keymap.set("n", "<leader>gm", function()
+      ts.git_files({ git_command = { "git", "ls-files", "-m" } })
+    end)
 
     require("telescope").load_extension("fzf")
   end
