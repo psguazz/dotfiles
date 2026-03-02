@@ -45,6 +45,7 @@ end
 
 local function send(pane_id, prompt)
   vim.fn.system(string.format("tmux send-keys -t %s '%s'", pane_id, prompt))
+  vim.fn.system(string.format("tmux send-keys -t %s Enter", pane_id))
 end
 
 local function apply(bufnr, patch_file)
@@ -81,6 +82,7 @@ local function feed(raw_prompt)
 
   local prompt, diff_name = parse_prompt(raw_prompt)
 
+  vim.api.nvim_buf_call(bufnr, function() vim.cmd("silent! write") end)
   send(pane_id, prompt)
   poll_diff(bufnr, diff_name, 300000)
 end
