@@ -3,13 +3,15 @@ local function diff_instructions()
   local diff_name = vim.fn.getcwd() .. "/" .. "opencode-" .. diff_id .. ".diff"
 
   return [[
+    Notes about the implementation:
+
     Instead of modifying any file directly, generate a unified diff containing ONLY the changes you propose.
     Write this diff to a file named `]] .. diff_name .. [[` at the project root.
-    Do not rewrite or reformat any unrelated code.
-    The diff must apply cleanly with `git apply opencode.diff`.
+    The diff must apply cleanly with `git apply ]] .. diff_name .. [[`.
     Do NOT run `git apply` yourself.
-    Only include the minimal necessary changes to solve the task.
+    Do NOT modify any other file.
 
+    Only include the minimal necessary changes to solve the task.
     Do NOT touch anything else: all the changes must be localized to the function or block where the comment is.
     If you think the task requires more changes in different places, tell me, but do NOT implement them yet.
   ]], diff_name
@@ -101,7 +103,9 @@ end
 
 local function ask()
   local prompt = vim.fn.input("Ask Opencode: ")
-  feed(prompt)
+  if prompt == "" then return end
+
+  feed("@this: " .. prompt)
 end
 
 local M = {}
