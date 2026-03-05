@@ -119,6 +119,7 @@ local function go_to(number)
   if number > #hooks then number = 1 end
   if #hooks == 0 then number = nil end
 
+  if number == state.current then return end
   state.current = number
 
   if number ~= nil then
