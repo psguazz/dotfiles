@@ -3,13 +3,15 @@ local TIMEOUT_MS = 300000
 
 -- OPENCODE UTILS
 
-local function parse_prompt(prompt, patch_path, marker_path)
+local function parse_prompt(prompt, this_path, marker_path)
   local cursor = vim.api.nvim_win_get_cursor(0)
-  local this_ref = string.format("%s:%d:%d", patch_path, cursor[1], cursor[2])
+  local this_ref = string.format("%s:%d:%d", this_path, cursor[1], cursor[2])
 
-  prompt = prompt .. string.format([[
-    When you're done, create an empty file named `%s`.
-  ]], marker_path)
+  if marker_path then
+    prompt = prompt .. string.format([[
+      When you're done, create an empty file named `%s`.
+    ]], marker_path)
+  end
 
   prompt = prompt:gsub("@this", this_ref)
   prompt = prompt:gsub("'", "'\\''")
@@ -35,6 +37,13 @@ end
 local function send_to_pane(pane_id, prompt)
   vim.fn.system(string.format("tmux send-keys -t %s '%s'", pane_id, prompt))
   vim.fn.system(string.format("tmux send-keys -t %s Enter", pane_id))
+end
+
+local function send_prompt(prompt)
+  local pane_id = find_opencode_pane()
+  if not pane_id then return end
+
+  send_to_pane(pane_id, prompt)
 end
 
 -- FILE OPERATIONS
@@ -94,22 +103,11 @@ end
 -- MAIN FUNCTIONS
 
 local function feed_to_opencode(raw_prompt)
-  local pane_id = find_opencode_pane()
-  if not pane_id then return end
 
-  local bufnr = vim.api.nvim_get_current_buf()
-  local snapshot_path, patch_path, marker_path = generate_diff_paths()
-  local prompt = parse_prompt(raw_prompt, patch_path, marker_path)
-
-  copy_buffer(bufnr, snapshot_path)
-  copy_buffer(bufnr, patch_path)
-
-  send_to_pane(pane_id, prompt)
-  poll_for_changes(bufnr, snapshot_path, patch_path, marker_path, TIMEOUT_MS)
 end
 
 local function complete()
-  local prompt = table.concat({
+  local raw_prompt = table.concat({
     "@this: Implement the missing code in this function or block.",
     "If the function or block is empty, do your best to fill it with the necessary code based on the signature and context.",
     "If it's not empty, look for TODO comments within this function or block, delete it, and follow their instructions.",
@@ -120,14 +118,26 @@ local function complete()
     "If you think the task requires more changes in different places, tell me, but do NOT implement them yet.",
   }, "\n")
 
-  feed_to_opencode(prompt)
+  local bufnr = vim.api.nvim_get_current_buf()
+  local snapshot_path, patch_path, marker_path = generate_diff_paths()
+  local prompt = parse_prompt(raw_prompt, patch_path, marker_path)
+
+  copy_buffer(bufnr, snapshot_path)
+  copy_buffer(bufnr, patch_path)
+
+  send_prompt(prompt)
+  poll_for_changes(bufnr, snapshot_path, patch_path, marker_path, TIMEOUT_MS)
 end
 
 local function ask()
-  local prompt = vim.fn.input("Ask Opencode! @this: ")
-  if prompt == "" then return end
+  local raw_prompt = vim.fn.input("Ask Opencode! @this: ")
+  if raw_prompt == "" then return end
 
-  feed_to_opencode("@this: " .. prompt)
+  local bufnr = vim.api.nvim_get_current_buf()
+  local path = vim.api.nvim_buf_get_name(bufnr)
+  local prompt = parse_prompt("@this: " .. raw_prompt, path)
+
+  send_prompt("@this: " .. prompt)
 end
 
 -- SETUP
