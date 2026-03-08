@@ -102,9 +102,7 @@ end
 
 -- MAIN FUNCTIONS
 
-local function feed_to_opencode(raw_prompt)
 
-end
 
 local function complete()
   local raw_prompt = table.concat({
@@ -137,6 +135,7 @@ local function ask()
   local path = vim.api.nvim_buf_get_name(bufnr)
   local prompt = parse_prompt("@this: " .. raw_prompt, path)
 
+  vim.api.nvim_buf_call(bufnr, function() vim.cmd("silent! write") end)
   send_prompt("@this: " .. prompt)
 end
 
