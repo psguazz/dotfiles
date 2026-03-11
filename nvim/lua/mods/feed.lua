@@ -136,7 +136,7 @@ local function ask()
   local prompt = parse_prompt("@this: " .. raw_prompt, path)
 
   vim.api.nvim_buf_call(bufnr, function() vim.cmd("silent! write") end)
-  send_prompt("@this: " .. prompt)
+  send_prompt(prompt)
 end
 
 -- SETUP
