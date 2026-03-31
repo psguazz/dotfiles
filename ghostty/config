@@ -3,6 +3,8 @@ term = xterm-ghostty
 font-family = "Monaco Nerd Font"
 font-size = 12
 font-thicken
+adjust-cell-width = 1
+
 
 palette = 0=#181819
 palette = 1=#fc5d7c
