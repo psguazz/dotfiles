@@ -11,7 +11,6 @@ return {
   },
   build = ":TSUpdate",
   config = function()
-    local ts = require("nvim-treesitter")
     local parsers = {
       "bash",
       "c",
@@ -49,7 +48,7 @@ return {
     }
 
     for _, parser in ipairs(parsers) do
-      ts.install(parser)
+      require("nvim-treesitter").install(parser)
     end
 
     -- Get filetype patterns for autocmd
@@ -69,53 +68,29 @@ return {
       end,
     })
 
-    -- Setup textobjects
-    require("nvim-treesitter-textobjects").setup({
-      select = {
-        enable = true,
-        lookahead = true,
-        keymaps = {
-          ["aa"] = "@parameter.outer",
-          ["ia"] = "@parameter.inner",
-          ["af"] = "@function.outer",
-          ["if"] = "@function.inner",
-          ["ac"] = "@class.outer",
-          ["ic"] = "@class.inner",
-        },
-      },
-      move = {
-        enable = true,
-        set_jumps = true,
-        goto_next_start = {
-          ["]m"] = "@function.outer",
-          ["]]"] = "@class.outer",
-        },
-        goto_next_end = {
-          ["]M"] = "@function.outer",
-          ["]["] = "@class.outer",
-        },
-        goto_previous_start = {
-          ["[m"] = "@function.outer",
-          ["[["] = "@class.outer",
-        },
-        goto_previous_end = {
-          ["[M"] = "@function.outer",
-          ["[]"] = "@class.outer",
-        },
-      },
-      swap = {
-        enable = true,
-        swap_next = {
-          ["<leader>a"] = "@parameter.inner",
-        },
-        swap_previous = {
-          ["<leader>A"] = "@parameter.inner",
-        },
-      },
-    })
+    -- You can use the capture groups defined in `textobjects.scm`
+    vim.keymap.set({ "x", "o" }, "af", function()
+      require "nvim-treesitter-textobjects.select".select_textobject("@function.outer", "textobjects")
+    end)
+    vim.keymap.set({ "x", "o" }, "if", function()
+      require "nvim-treesitter-textobjects.select".select_textobject("@function.inner", "textobjects")
+    end)
+    vim.keymap.set({ "x", "o" }, "ac", function()
+      require "nvim-treesitter-textobjects.select".select_textobject("@class.outer", "textobjects")
+    end)
+    vim.keymap.set({ "x", "o" }, "ic", function()
+      require "nvim-treesitter-textobjects.select".select_textobject("@class.inner", "textobjects")
+    end)
+    -- You can also use captures from other query groups like `locals.scm`
+    vim.keymap.set({ "x", "o" }, "as", function()
+      require "nvim-treesitter-textobjects.select".select_textobject("@local.scope", "locals")
+    end)
 
-    -- Optional: Enable treesitter-based folding
-    vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-    vim.wo[0][0].foldmethod = "expr"
+    vim.keymap.set("n", "<leader>a", function()
+      require("nvim-treesitter-textobjects.swap").swap_next "@parameter.inner"
+    end)
+    vim.keymap.set("n", "<leader>A", function()
+      require("nvim-treesitter-textobjects.swap").swap_previous "@parameter.outer"
+    end)
   end,
 }
