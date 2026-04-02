@@ -11,10 +11,10 @@ vim.api.nvim_create_autocmd("PackChanged", {
   end,
 })
 
-vim.pack.add({{
+vim.pack.add({ {
   src = "https://github.com/saghen/blink.cmp",
   version = "v1.10.1",
-}})
+} })
 
 require("blink.cmp").setup({
   appearance = {

@@ -1,6 +1,6 @@
 return {
-  cmd = { 'rust-analyzer' },
-  filetypes = { 'rust' },
+  cmd = { "rust-analyzer" },
+  filetypes = { "rust" },
   root_markers = {
     "Cargo.toml",
     ".git",
@@ -10,15 +10,15 @@ return {
       serverStatusNotification = true,
       commands = {
         commands = {
-          'rust-analyzer.showReferences',
-          'rust-analyzer.runSingle',
-          'rust-analyzer.debugSingle',
+          "rust-analyzer.showReferences",
+          "rust-analyzer.runSingle",
+          "rust-analyzer.debugSingle",
         },
       },
     },
   },
   settings = {
-    ['rust-analyzer'] = {
+    ["rust-analyzer"] = {
       lens = {
         debug = { enable = true },
         enable = true,

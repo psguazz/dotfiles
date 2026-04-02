@@ -14,8 +14,6 @@ vim.api.nvim_create_autocmd("PackChanged", {
 vim.pack.add({ "https://github.com/nvim-lua/plenary.nvim" })
 vim.pack.add({ "https://github.com/nvim-telescope/telescope-fzf-native.nvim" })
 
-
-
 vim.pack.add({ "https://github.com/nvim-telescope/telescope.nvim" })
 
 local ts = require("telescope.builtin")

@@ -6,7 +6,7 @@ local function on_attach(bufnr)
 
   local opts = { buffer = bufnr, noremap = true, silent = true, nowait = true }
 
-  vim.keymap.set('n', '<C-k>', ":TmuxNavigateUp<CR>", opts)
+  vim.keymap.set("n", "<C-k>", ":TmuxNavigateUp<CR>", opts)
 end
 
 require("nvim-tree").setup({

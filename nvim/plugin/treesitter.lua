@@ -1,21 +1,23 @@
-vim.api.nvim_create_autocmd('PackChanged', { callback = function(ev)
-  local name, kind = ev.data.spec.name, ev.data.kind
-  if name == 'nvim-treesitter' and kind == 'update' then
-    if not ev.data.active then vim.cmd.packadd('nvim-treesitter') end
-    vim.cmd('TSUpdate')
+vim.api.nvim_create_autocmd("PackChanged", {
+  callback = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+    if name == "nvim-treesitter" and kind == "update" then
+      if not ev.data.active then vim.cmd.packadd("nvim-treesitter") end
+      vim.cmd("TSUpdate")
+    end
   end
-end }) 
+})
 
 vim.pack.add({ "https://github.com/OXY2DEV/markview.nvim" })
-vim.pack.add({{
+vim.pack.add({ {
   src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
   branch = "main"
-}})
+} })
 
-vim.pack.add({{
+vim.pack.add({ {
   src = "https://github.com/nvim-treesitter/nvim-treesitter",
   branch = "main",
-}})
+} })
 
 local parsers = {
   "bash",

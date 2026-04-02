@@ -144,7 +144,7 @@ function M.setup()
   vim.api.nvim_set_hl(0, "TablineSelectedNameDeleted", { fg = palette.red, bg = palette.bg0 })
 
   _G.my_tabline = tabline
-  vim.o.tabline = '%!v:lua.my_tabline()'
+  vim.o.tabline = "%!v:lua.my_tabline()"
 end
 
 return M

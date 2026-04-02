@@ -327,7 +327,7 @@ function M.setup()
   vim.api.nvim_set_hl(0, "StatuslinePillReplaceInverted", { fg = palette.bg0, bg = palette.bg1 })
 
   _G.my_statusline = statusline
-  vim.o.statusline = '%!v:lua.my_statusline()'
+  vim.o.statusline = "%!v:lua.my_statusline()"
 end
 
 return M
