@@ -1,5 +1,6 @@
-return {
-  "lewis6991/gitsigns.nvim",
+vim.pack.add({ "lewis6991/gitsigns.nvim" })
+
+require('gitsigns').setup {
   opts = {
     signs = {
       add = { text = "+" },
