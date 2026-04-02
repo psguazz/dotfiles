@@ -102,8 +102,6 @@ end
 
 -- MAIN FUNCTIONS
 
-
-
 local function complete()
   local raw_prompt = table.concat({
     "@this: Implement the missing code in this function or block.",
@@ -133,7 +131,7 @@ local function ask()
 
   local bufnr = vim.api.nvim_get_current_buf()
   local path = vim.api.nvim_buf_get_name(bufnr)
-  local prompt = parse_prompt("@this: " .. raw_prompt, path)
+  local prompt = parse_prompt(" @this: " .. raw_prompt, path)
 
   vim.api.nvim_buf_call(bufnr, function() vim.cmd("silent! write") end)
   send_prompt(prompt)
