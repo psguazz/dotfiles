@@ -1,6 +1,22 @@
-vim.pack.add({ "nvim-lua/plenary.nvim" })
-vim.pack.add({ "nvim-telescope/telescope-fzf-native.nvim" })
-vim.pack.add({ "nvim-telescope/telescope.nvim" })
+vim.api.nvim_create_autocmd("PackChanged", {
+  callback = function(ev)
+    if ev.data.spec.name == "telescope-fzf-native.nvim" then
+      local res = vim.system({ "make" }, { cwd = ev.data.path })
+      if vim.v.shell_error ~= 0 then
+        vim.notify("Failed to compile fzf: " .. res, vim.log.levels.ERROR)
+      else
+        vim.notify("Successfully compiled fzf", vim.log.levels.INFO)
+      end
+    end
+  end,
+})
+
+vim.pack.add({ "https://github.com/nvim-lua/plenary.nvim" })
+vim.pack.add({ "https://github.com/nvim-telescope/telescope-fzf-native.nvim" })
+
+
+
+vim.pack.add({ "https://github.com/nvim-telescope/telescope.nvim" })
 
 local ts = require("telescope.builtin")
 

@@ -13,7 +13,7 @@ vim.pack.add({{
 }})
 
 vim.pack.add({{
-  src = "nvim-treesitter/nvim-treesitter",
+  src = "https://github.com/nvim-treesitter/nvim-treesitter",
   branch = "main",
 }})
 
