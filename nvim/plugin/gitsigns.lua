@@ -1,7 +1,6 @@
-vim.pack.add({ "lewis6991/gitsigns.nvim" })
+vim.pack.add({ "https://github.com/lewis6991/gitsigns.nvim" })
 
 require('gitsigns').setup {
-  opts = {
     signs = {
       add = { text = "+" },
       change = { text = "~" },
@@ -62,5 +61,4 @@ require('gitsigns').setup {
         end
       end, {})
     end,
-  },
 }

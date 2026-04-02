@@ -1,4 +1,4 @@
-vim.pack.add({ "williamboman/mason.nvim" })
+vim.pack.add({ "https://github.com/williamboman/mason.nvim" })
 
 require("mason").setup()
 

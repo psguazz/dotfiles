@@ -1,5 +1,5 @@
-vim.pack.add({ "nvim-tree/nvim-web-devicons" })
-vim.pack.add({ "nvim-tree/nvim-tree.lua" })
+vim.pack.add({ "https://github.com/nvim-tree/nvim-web-devicons" })
+vim.pack.add({ "https://github.com/nvim-tree/nvim-tree.lua" })
 
 local function on_attach(bufnr)
   require("nvim-tree.api").config.mappings.default_on_attach(bufnr)
