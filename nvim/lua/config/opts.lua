@@ -15,6 +15,7 @@ vim.o.undofile = true
 vim.o.updatetime = 250
 vim.opt.colorcolumn = "80"
 vim.opt.cursorline = true
+vim.opt.foldmethod = "manual"
 vim.opt.mouse = ""
 vim.opt.nu = true
 vim.opt.relativenumber = true
