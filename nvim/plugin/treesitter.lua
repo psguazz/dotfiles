@@ -19,6 +19,8 @@ vim.pack.add({ {
   branch = "main",
 } })
 
+vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/site/pack/core/opt/nvim-treesitter/runtime")
+
 local parsers = {
   "bash",
   "c",
