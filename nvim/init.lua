@@ -1,8 +1,30 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-require("config.opts")
-require("config.diagnostics")
-require("config.lsp")
-require("config.mappings")
-require("config.text-objects")
+vim.o.breakindent = true
+vim.o.clipboard = "unnamedplus"
+vim.o.completeopt = "menuone,noselect"
+vim.o.expandtab = true
+vim.o.hlsearch = true
+vim.o.ignorecase = true
+vim.o.shiftwidth = 2
+vim.o.shortmess = "ltToOCFI"
+vim.o.smartcase = true
+vim.o.smartindent = true
+vim.o.tabstop = 2
+vim.o.termguicolors = true
+vim.o.timeoutlen = 300
+vim.o.undofile = true
+vim.o.updatetime = 250
+vim.opt.colorcolumn = "80"
+vim.opt.cursorline = true
+vim.opt.foldmethod = "manual"
+vim.opt.mouse = ""
+vim.opt.nu = true
+vim.opt.relativenumber = true
+vim.opt.scrolloff = 8
+vim.opt.sidescrolloff = 10
+vim.opt.swapfile = false
+vim.wo.number = true
+vim.wo.signcolumn = "yes"
+vim.wo.wrap = false
