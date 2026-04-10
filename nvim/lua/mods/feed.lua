@@ -4,7 +4,7 @@ local function parse_prompt(prompt)
   local cursor = vim.api.nvim_win_get_cursor(0)
   local this_ref = string.format("%s:%d:%d", this_path, cursor[1], cursor[2])
 
-  prompt = prompt:gsub("@this", this_ref)
+  prompt = prompt:gsub("@this", "at " .. this_ref)
   prompt = prompt:gsub("'", "'\\''")
 
   return prompt
@@ -61,7 +61,7 @@ local function ask()
   local raw_prompt = vim.fn.input("Ask Opencode! @this: ")
   if raw_prompt == "" then return end
 
-  send_prompt(raw_prompt)
+  send_prompt("@this: " .. raw_prompt)
 end
 
 local M = {}
