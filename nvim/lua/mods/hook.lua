@@ -1,6 +1,10 @@
 -- STATE
 
-local global_limit = 9
+local perm_limit = 4
+local writ_limit = 3
+local read_limit = 2
+
+local global_limit = perm_limit + writ_limit + read_limit
 local state = {
   current = nil,
   hooked_perm = {},
@@ -164,9 +168,9 @@ local function unhook_all()
 end
 
 local function trim_hooks()
-  trim(state.hooked_perm, global_limit - 2)
-  trim(state.hooked_writ, global_limit - 1 - #state.hooked_perm)
-  trim(state.hooked_read, global_limit - 0 - #state.hooked_perm - #state.hooked_writ)
+  trim(state.hooked_perm, perm_limit)
+  trim(state.hooked_writ, writ_limit)
+  trim(state.hooked_read, read_limit)
 end
 
 local function unhook()
