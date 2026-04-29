@@ -1,3 +1,5 @@
+local input = require("lib.input")
+
 local function parse_prompt(prompt)
   local bufnr = vim.api.nvim_get_current_buf()
   local this_path = vim.api.nvim_buf_get_name(bufnr)
@@ -58,10 +60,10 @@ local function complete()
 end
 
 local function ask()
-  local raw_prompt = vim.fn.input("Ask Opencode! @this: ")
-  if raw_prompt == "" then return end
-
-  send_prompt("@this: " .. raw_prompt)
+  input.open("Ask OpenCode @this", function(text)
+    if text == "" or text == nil then return end
+    send_prompt("@this: " .. text)
+  end)
 end
 
 local M = {}
