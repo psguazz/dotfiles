@@ -1,4 +1,5 @@
 local ts = require("telescope.builtin")
+local input = require("lib.input")
 
 local function unique_paths(grep_results)
   local seen = {}
@@ -40,34 +41,39 @@ end
 
 local function replace(text)
   local pos = vim.api.nvim_win_get_cursor(0)
-  local replacement = vim.fn.input("Replace " .. text .. " with: ")
 
-  text = "\\V" .. text
-  vim.cmd(".,$s/" .. text .. "/" .. replacement .. "/gce")
+  input.open(function(replacement)
+    replacement = escape(replacement)
 
-  vim.api.nvim_win_set_cursor(0, pos)
+    text = "\\V" .. text
+    vim.cmd(".,$s/" .. text .. "/" .. replacement .. "/gce")
+
+    vim.api.nvim_win_set_cursor(0, pos)
+  end, { prompt = "Replace " .. text .. " with: ", height = 1 })
 end
 
 local function global_replace(text)
   local buf = vim.api.nvim_get_current_buf()
   local pos = vim.api.nvim_win_get_cursor(0)
-  local replacement = vim.fn.input("GLOBAL Replace `" .. text .. "` with: ")
 
-  if #replacement < 1 then return end
+  input.open(function(replacement)
+    if replacement == "" or replacement == nil then return end
 
-  local cmd = { "git", "grep", "-n", "--no-color", text }
-  local results = unique_paths(vim.fn.systemlist(cmd))
+    local cmd = { "git", "grep", "-n", "--no-color", text }
+    local results = unique_paths(vim.fn.systemlist(cmd))
 
-  if #results < 1 then return end
+    if #results < 1 then return end
 
-  text = "\\V" .. text
-  vim.fn.setqflist({}, " ", { title = "Global Replace", lines = results })
-  vim.cmd("copen")
-  vim.cmd("cdo %s/" .. text .. "/" .. replacement .. "/gc")
-  vim.cmd("cclose")
+    text = "\\V" .. text
+    replacement = escape(replacement)
+    vim.fn.setqflist({}, " ", { title = "Global Replace", lines = results })
+    vim.cmd("copen")
+    vim.cmd("cdo %s/" .. text .. "/" .. replacement .. "/gc")
+    vim.cmd("cclose")
 
-  vim.api.nvim_set_current_buf(buf)
-  vim.api.nvim_win_set_cursor(0, pos)
+    vim.api.nvim_set_current_buf(buf)
+    vim.api.nvim_win_set_cursor(0, pos)
+  end, { prompt = "GLOBAL Replace `" .. text .. "` with: ", height = 1 })
 end
 
 local M = {}
