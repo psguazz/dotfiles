@@ -10,8 +10,13 @@ function M.open(callback, opts)
   width = math.min(width, math.floor(vim.o.columns * 0.7))
   height = math.min(height, math.floor(vim.o.lines * 0.5))
 
-  local y_pos = math.floor((vim.o.lines - height) / 2)
-  local x_pos = math.floor((vim.o.columns - width) / 2)
+  local row = opts.row or math.floor((vim.o.lines - height) / 2)
+  local col = opts.col or math.floor((vim.o.columns - width) / 2)
+
+  row = math.max(row, 0)
+  col = math.max(col, 0)
+  row = math.min(row, vim.o.lines - height)
+  col = math.min(col, vim.o.columns - width)
 
   local win = vim.api.nvim_open_win(buf, true, {
     relative = "editor",
@@ -19,8 +24,8 @@ function M.open(callback, opts)
     border = "rounded",
     width = width,
     height = height,
-    row = y_pos,
-    col = x_pos,
+    row = row,
+    col = col,
     title_pos = "center",
     title = " " .. prompt .. " ",
   })
@@ -29,6 +34,11 @@ function M.open(callback, opts)
   vim.bo[buf].bufhidden = "wipe"
   vim.bo[buf].swapfile = false
   vim.bo[buf].filetype = "markdown"
+
+  if opts.default then
+    local lines = vim.split(opts.default, "\n")
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  end
 
   local submit = function()
     local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
@@ -40,7 +50,7 @@ function M.open(callback, opts)
 
   local abort = function()
     vim.api.nvim_win_close(win, true)
-    callback(nil)
+    callback("")
   end
 
   vim.cmd("startinsert")

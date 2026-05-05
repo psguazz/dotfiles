@@ -61,7 +61,7 @@ end
 
 local function ask()
   input.open(function(text)
-    if text == "" or text == nil then return end
+    if text == "" then return end
     send_prompt("@this: " .. text)
   end, { prompt = "Ask OpenCode @this" })
 end

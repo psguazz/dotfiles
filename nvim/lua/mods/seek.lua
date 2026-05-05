@@ -42,6 +42,15 @@ end
 local function replace(text)
   local pos = vim.api.nvim_win_get_cursor(0)
 
+  local opts = {
+    prompt = "Replace",
+    width = math.max(#text, 10) + 10,
+    height = 1,
+    default = text,
+    row = vim.fn.screenrow(),
+    col = vim.fn.screencol()
+  }
+
   input.open(function(replacement)
     replacement = escape(replacement)
 
@@ -49,15 +58,25 @@ local function replace(text)
     vim.cmd(".,$s/" .. text .. "/" .. replacement .. "/gce")
 
     vim.api.nvim_win_set_cursor(0, pos)
-  end, { prompt = "Replace " .. text .. " with: ", height = 1 })
+  end, opts)
 end
 
 local function global_replace(text)
   local buf = vim.api.nvim_get_current_buf()
-  local pos = vim.api.nvim_win_get_cursor(0)
+  local win = vim.api.nvim_get_current_win()
+  local pos = vim.api.nvim_win_get_cursor(win)
+
+  local opts = {
+    prompt = "GLOBAL Replace",
+    width = math.max(#text, 10) + 10,
+    height = 1,
+    default = text,
+    row = vim.fn.screenrow(),
+    col = vim.fn.screencol()
+  }
 
   input.open(function(replacement)
-    if replacement == "" or replacement == nil then return end
+    if replacement == "" then return end
 
     local cmd = { "git", "grep", "-n", "--no-color", text }
     local results = unique_paths(vim.fn.systemlist(cmd))
@@ -72,8 +91,8 @@ local function global_replace(text)
     vim.cmd("cclose")
 
     vim.api.nvim_set_current_buf(buf)
-    vim.api.nvim_win_set_cursor(0, pos)
-  end, { prompt = "GLOBAL Replace `" .. text .. "` with: ", height = 1 })
+    vim.api.nvim_win_set_cursor(win, pos)
+  end, opts)
 end
 
 local M = {}
