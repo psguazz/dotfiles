@@ -60,10 +60,10 @@ local function complete()
 end
 
 local function ask()
-  input.open("Ask OpenCode @this", function(text)
+  input.open(function(text)
     if text == "" or text == nil then return end
     send_prompt("@this: " .. text)
-  end)
+  end, { prompt = "Ask OpenCode @this" })
 end
 
 local M = {}

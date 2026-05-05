@@ -1,10 +1,14 @@
 local M = {}
 
-function M.open(prompt, callback)
+function M.open(callback, opts)
   local buf = vim.api.nvim_create_buf(false, true)
 
-  local width = math.min(80, math.floor(vim.o.columns * 0.7))
-  local height = math.min(8, math.floor(vim.o.lines * 0.5))
+  local prompt = opts.prompt or "Input"
+  local width = opts.width or 80
+  local height = opts.height or 8
+
+  width = math.min(width, math.floor(vim.o.columns * 0.7))
+  height = math.min(height, math.floor(vim.o.lines * 0.5))
 
   local y_pos = math.floor((vim.o.lines - height) / 2)
   local x_pos = math.floor((vim.o.columns - width) / 2)
