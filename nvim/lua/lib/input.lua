@@ -33,11 +33,13 @@ function M.open(callback, opts)
   vim.bo[buf].buftype = "acwrite"
   vim.bo[buf].bufhidden = "wipe"
   vim.bo[buf].swapfile = false
-  vim.bo[buf].filetype = "markdown"
+  vim.bo[buf].filetype = "txt"
 
   if opts.default then
     local lines = vim.split(opts.default, "\n")
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  else
+    vim.cmd("startinsert")
   end
 
   local submit = function()
@@ -53,7 +55,6 @@ function M.open(callback, opts)
     callback("")
   end
 
-  vim.cmd("startinsert")
 
   vim.keymap.set("n", "<CR>", submit, { buffer = buf })
   vim.keymap.set("n", "<Esc>", abort, { buffer = buf })

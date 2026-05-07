@@ -34,7 +34,7 @@
       "src": "https://github.com/norcalli/nvim-colorizer.lua"
     },
     "nvim-tree.lua": {
-      "rev": "3603f069ff783c31986894a56c2a6755331b0802",
+      "rev": "f9bfc0059eca24546b69a7006110463da4808f8f",
       "src": "https://github.com/nvim-tree/nvim-tree.lua"
     },
     "nvim-treesitter": {
@@ -46,7 +46,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
     "nvim-web-devicons": {
-      "rev": "d7462543c9e366c0d196c7f67a945eaaf5d99414",
+      "rev": "4fc505ac7bd7692824a142e96e5f529c133862f8",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "plenary.nvim": {
