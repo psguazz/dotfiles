@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-function memory_load() {
-    local free=$(memory_pressure | awk '/System-wide memory free percentage/ {print $NF}')
-    echo $((100 - ${free%\%}))
-}
+free_pct=$(sysctl -n kern.memorystatus_level)
+pressure=$((100 - free_pct))
 
-printf "%2s%%" "$(memory_load)"
+printf "%2s%%" "$pressure"

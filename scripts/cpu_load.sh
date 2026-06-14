@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-function cpu_load() {
-    local idle=$(top -l 1 | awk '/CPU usage/ { sub(/%/, "", $7); print $7 }')
-    echo $((100 - ${idle%.*}))
-}
+ncpu=$(sysctl -n hw.ncpu)
+load=$(sysctl -n vm.loadavg | awk '{print $2}')
+usage=$(awk -v load="$load" -v ncpu="$ncpu" 'BEGIN { u = (load / ncpu) * 100; if (u > 100) u = 100; printf "%.0f", u }')
 
-printf "%2s%%" "$(cpu_load)"
+printf "%2s%%" "$usage"
