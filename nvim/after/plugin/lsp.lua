@@ -16,6 +16,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end
 })
 
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+    if client and client.name == 'ruby-lsp' then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
+  end,
+})
+
 local config_dir = vim.fn.stdpath("config") .. "/lsp"
 local lsp_files = vim.fn.globpath(config_dir, "*.lua", false, true)
 
