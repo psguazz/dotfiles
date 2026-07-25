@@ -8,11 +8,6 @@
         email = p.sguazz@gmail.com
         name = psguazz
         signingkey = ~/.ssh/id_rsa.pub
-[filter "lfs"]
-        required = true
-        clean = git-lfs clean -- %f
-        smudge = git-lfs smudge -- %f
-        process = git-lfs filter-process
 [gpg]
         format = ssh
 [commit]

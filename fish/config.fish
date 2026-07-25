@@ -22,5 +22,6 @@ export FZF_DEFAULT_OPTS="
 set -x PATH $PATH $HOME/go/bin
 set -x PATH $PATH $HOME/.local/bin
 set -x EDITOR nvim
+set -x PI_CODING_AGENT_DIR $HOME/.config/pi
 
 direnv hook fish | source

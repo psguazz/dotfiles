@@ -17,5 +17,10 @@
 !/sketchybar/
 !/tmux/
 !/yazi/
+!/pi/
+
+/pi/auth.json
+/pi/sessions/
+/pi/bin/
 
 /aerc/accounts.conf
