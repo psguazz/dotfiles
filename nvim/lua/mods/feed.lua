@@ -12,7 +12,7 @@ local function parse_prompt(prompt)
   return prompt
 end
 
-local function find_opencode_pane()
+local function find_pi_pane()
   local cmd = [[tmux list-panes -F "#{pane_id} #{pane_current_command}"]]
   local output = vim.fn.systemlist(cmd)
 
@@ -23,17 +23,25 @@ local function find_opencode_pane()
     end
   end
 
-  vim.notify("No opencode for cwd: " .. vim.fn.getcwd(), vim.log.levels.WARN)
+  vim.notify("No pi for cwd: " .. vim.fn.getcwd(), vim.log.levels.WARN)
   return nil
 end
 
 local function send_to_pane(pane_id, prompt)
-  vim.fn.system(string.format("tmux send-keys -t %s '%s'", pane_id, prompt))
+  local lines = vim.split(prompt, "\n", { plain = true })
+  for i, line in ipairs(lines) do
+    if line ~= "" then
+      vim.fn.system(string.format("tmux send-keys -t %s '%s'", pane_id, line))
+    end
+    if i < #lines then
+      vim.fn.system(string.format("tmux send-keys -t %s S-Enter", pane_id))
+    end
+  end
   vim.fn.system(string.format("tmux send-keys -t %s Enter", pane_id))
 end
 
 local function send_prompt(raw_prompt)
-  local pane_id = find_opencode_pane()
+  local pane_id = find_pi_pane()
   if not pane_id then return end
 
   local prompt = parse_prompt(raw_prompt)
@@ -63,14 +71,14 @@ local function ask()
   input.open(function(text)
     if text == "" then return end
     send_prompt("@this: " .. text)
-  end, { prompt = "Ask OpenCode @this" })
+  end, { prompt = "Ask Pi @this" })
 end
 
 local M = {}
 
 function M.setup()
-  vim.keymap.set("n", "<leader>oa", ask, { desc = "Ask Opencode" })
-  vim.keymap.set("n", "<leader>of", complete, { desc = "Complete with Opencode" })
+  vim.keymap.set("n", "<leader>oa", ask, { desc = "Ask Pi" })
+  vim.keymap.set("n", "<leader>of", complete, { desc = "Complete with Pi" })
 end
 
 return M
