@@ -28,3 +28,5 @@ vim.opt.swapfile = false
 vim.wo.number = true
 vim.wo.signcolumn = "yes"
 vim.wo.wrap = false
+
+vim.opt.shadafile = vim.fn.stdpath("state") .. "/shada-projects/" .. vim.fn.sha256(vim.fn.getcwd()) .. ".shada"

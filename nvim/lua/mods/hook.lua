@@ -4,7 +4,6 @@ local perm_limit = 4
 local writ_limit = 3
 local read_limit = 2
 
-local global_limit = perm_limit + writ_limit + read_limit
 local state = {
   current = nil,
   hooked_perm = {},
@@ -141,14 +140,6 @@ local function restore_hook()
   end
 end
 
-local function go_to_next()
-  go_to((state.current or global_limit) + 1)
-end
-
-local function go_to_prev()
-  go_to((state.current or 0) - 1)
-end
-
 -- STATE MANAGEMENT
 
 local function unhook_all()
@@ -180,7 +171,8 @@ local function unhook()
   remove_hook(state.hooked_perm, hook)
   remove_hook(state.hooked_writ, hook)
   remove_hook(state.hooked_read, hook)
-  go_to_prev()
+
+  go_to((state.current or 0) - 1)
 
   if state.current == nil then vim.cmd("NvimTreeFocus") end
   vim.api.nvim_buf_delete(buf, { force = true })
@@ -313,9 +305,6 @@ function M.setup()
   for i = 1, 9 do
     vim.keymap.set("n", "<leader>" .. i, function() go_to(i) end)
   end
-
-  vim.keymap.set("n", "<leader>,", go_to_prev)
-  vim.keymap.set("n", "<leader>.", go_to_next)
 end
 
 return M
