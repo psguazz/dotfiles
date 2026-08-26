@@ -9,6 +9,7 @@ local servers = {
   "erb-formatter",
   "gdtoolkit",
   "gopls",
+  "herb-language-server",
   "latexindent",
   "lua-language-server",
   "prettier",
