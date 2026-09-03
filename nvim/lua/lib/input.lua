@@ -55,7 +55,6 @@ function M.open(callback, opts)
     callback("")
   end
 
-
   vim.keymap.set("n", "<CR>", submit, { buffer = buf })
   vim.keymap.set("n", "<Esc>", abort, { buffer = buf })
 end
