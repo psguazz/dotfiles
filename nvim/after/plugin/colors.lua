@@ -103,9 +103,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     set_hl("IncSearch", palette.bg0, palette.yellow)
     set_hl("Search", palette.none, palette.bg_yellow)
 
-    set_hl("HlSearchNear", palette.bg0, palette.yellow)
-    set_hl("HlSearchLens", palette.grey, palette.bg_yellow)
-    set_hl("HlSearchLensNear", palette.bg0, palette.yellow)
+    set_hl("MCursorVisual", palette.none, palette.grey_dim)
 
     set_hl("FloatTitle", palette.yellow, palette.bg2)
   end
