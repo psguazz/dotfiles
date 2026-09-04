@@ -1,14 +1,5 @@
 local current_pattern = nil
 
-local function input(keys)
-  vim.api.nvim_input(keys)
-end
-
-local function move(count, dir)
-  if count < 1 then return end
-  input(count .. dir)
-end
-
 local function current_selection()
   local start = vim.fn.getpos("v")
   local finish = vim.fn.getpos(".")
@@ -29,17 +20,16 @@ local function add_cursor()
 
   local n = #current_pattern - 1
 
-  input("<Esc>")
-  input("Q")
-  input("/\\V" .. current_pattern .. "<CR>")
-  input(":noh<CR>")
-
-  input("2q=")
-  move(n, "l")
-  input("1q=")
-  move(n, "h")
-  input("v")
-  move(n, "l")
+  vim.api.nvim_input(table.concat({
+    "o",
+    "<Esc>",
+    "Q",
+    "/\\V" .. current_pattern .. "<CR>",
+    ":noh<CR>",
+    "1q=",
+    "v",
+    n > 1 and n .. "l" or "",
+  }))
 end
 
 local function clear_cursors()
@@ -51,7 +41,7 @@ end
 local M = {}
 
 function M.setup()
-  vim.keymap.set("n", "<C-n>", function() input("viw") end, { noremap = true, silent = true })
+  vim.keymap.set("n", "<C-n>", function() vim.api.nvim_input("viw") end, { noremap = true, silent = true })
   vim.keymap.set("v", "<C-n>", function() add_cursor() end, { noremap = true, silent = true })
 
   vim.keymap.set("n", "<Esc>", clear_cursors)
