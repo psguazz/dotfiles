@@ -21,6 +21,7 @@ export FZF_DEFAULT_OPTS="
 
 set -x PATH $PATH $HOME/go/bin
 set -x PATH $PATH $HOME/.local/bin
+set -x PATH ~/nvim-macos-arm64/bin $PATH
 set -x EDITOR nvim
 set -x PI_CODING_AGENT_DIR $HOME/.config/pi
 
